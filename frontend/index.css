@@ -158,6 +158,10 @@ body {
 	text-decoration: none;
 }
 
+.custom-username {
+    font-style: italic;
+}
+
 /* Footer Section */
 .footer {
 	background: #FFF;

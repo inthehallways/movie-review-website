@@ -59,9 +59,20 @@
 	<!-- Hero Section -->
 	<section id="home" class="hero">
 		<div class="hero-text">
-        	<p id="welcome-message">Welcome back, <span id="username">[Username]</span>!</p>
+        	<p id="welcome-message">Welcome back, <span id="username" class="custom-username"></span> !</p>
 		</div>
 	</section>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username');
+
+        if (username) {
+            document.getElementById('username').textContent = username;
+        } else {
+            window.location.href = 'login.html';
+        }
+    </script>
 
 	<footer class="footer">
 		<div class="footer-container">
