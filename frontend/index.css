@@ -1,0 +1,198 @@
+/* root | all */
+* {
+	font-family: Inter, sans-serif;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Element */
+body {
+	font-family: Inter, sans-serif;
+	background: #F2F2E4;
+	color: white;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	padding-top: 30px;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F49B98;
+    padding: 12px 30px;
+    border-bottom: 1px solid #2c2c2c;
+    position: fixed;
+	top: 0;           
+    left: 0;      
+    width: 100%; 
+    z-index: 9999;    
+}
+
+.navbar-left,
+.navbar-right {
+    flex: 1; 
+    display: flex;
+    align-items: center;
+}
+
+.navbar-left {
+    gap: 10px;
+}
+
+.dashboard-label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #2c2c2c;
+}
+
+.navbar-center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li a {
+    color: #2c2c2c;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+    color: #73578d;
+}
+
+/* Profile container */
+.profile-container {
+    margin-left: auto;
+    position: relative;
+    display: inline-block;
+}
+
+/* Profile image */
+.profile-pic {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1px solid #2c2c2c;
+    cursor: pointer;
+    object-fit: cover;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: #F2F2E4;
+    padding: 15px;
+    border: 1px solid #2c2c2c;
+    border-radius: 10px;
+    box-shadow: 3px 5px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 230px;
+    flex-direction: column; 
+    align-items: center;
+    gap: 10px;
+}
+
+.dropdown-menu a {
+    display: block;
+    width: 100%;
+    background-color: #F49B98;
+    color: #333;
+    padding: 8px 0;
+    border-radius: 20px;
+    border: 1px solid #2c2c2c;
+    text-align: center;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #e98582;
+}
+
+.dropdown-menu.show {
+    display: flex;
+}
+
+/* Hero Section */
+.hero {
+	background-color: #F2F2E4;
+	background-image: url('../frontend/assets/images/try.png');
+	background-size: contain;
+    background-position: center;
+	background-size: cover;
+    background-repeat: no-repeat;
+	height: 100vh; 
+
+	/*
+	border: 1px solid #2C2C2C; 
+  	padding: 50px;           
+  	margin: 50px;              
+  	box-sizing: border-box;
+	*/
+}
+
+.hero-text {
+    color: #2c2c2c; 
+    text-align: center;
+    margin-top: 110px; 
+    font-weight: 500;
+    font-size: 2rem;
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+	text-decoration: none;
+}
+
+/* Footer Section */
+.footer {
+	background: #FFF;
+	color: #2c2c2c;
+	padding: 40px 20px;
+	text-align: center;
+}
+
+.footer-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+}
+
+.footer-logo img {
+	max-width: 150px;
+}
+
+.footer-links {
+	display: flex;
+	gap: 15px;
+}
+
+.social-link img {
+	width: 30px;
+	height: 30px;
+	transition: transform 0.3s;
+}
+
+.social-link img:hover {
+	transform: scale(1.1);
+}
+
+.footer-text {
+	font-size:0.9em;
+	color: #2c2c2c;
+}
