@@ -213,6 +213,36 @@ body {
     min-height: 500px;
 }
 
+.user-stats-cards {
+    display: flex;
+    gap: 60px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.stats-card {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 70px 50px;
+    text-align: center;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15);
+    border: 1px solid #333;
+    min-width: 300px;
+}
+
+.stats-number {
+    font-size: 40px;
+    font-weight: 700;
+    color: #2c2c2c;
+    margin-bottom: 8px;
+}
+
+.stats-label {
+    font-size: 18px;
+    color: #2c2c2c;
+}
+
 /* White section -- upcoming releases */
 .upcoming-releases {
     background-color: #F2F2E4;
