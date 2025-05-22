@@ -232,6 +232,24 @@ body {
     min-height: 500px;
 }
 
+.img-banner-content {
+    position: absolute;
+    top: -170px; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    overflow: hidden; 
+}
+
+.img-banner-content img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    display: block;
+}
 
 /* Footer Section */
 .footer {
