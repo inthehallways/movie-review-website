@@ -15,6 +15,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	padding-top: 30px;
+    overflow-x: hidden;
 }
 
 .navbar {
@@ -173,7 +174,7 @@ body {
     margin-top: 10px;
 }
 
-/* Header texts */
+/* Dashboard header texts */
 .section-header {
     width: 100%;
     max-width: 300px;
@@ -203,7 +204,7 @@ body {
     position: relative;
 }
 
-/* Purple section for stats */
+/* Purple section -- user stats */
 .user-stats {
     background-color: #988bd3;
     z-index: 2;
@@ -212,7 +213,7 @@ body {
     min-height: 500px;
 }
 
-/* White section for upcoming releases */
+/* White section -- upcoming releases */
 .upcoming-releases {
     background-color: #F2F2E4;
     margin-top: -80px;
@@ -221,7 +222,7 @@ body {
     min-height: 600px;
 }
 
-/* Pink section for banner or image */
+/* Pink section -- image banner */
 .img-banner {
     background-color: #f49b98;
     margin-top: -80px;
@@ -247,6 +248,59 @@ body {
 .img-banner-content img {
     max-width: 100%;
     width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Popular Films Section */
+.movie-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.movie-card {
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid #2c2c2c;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+}
+
+.movie-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+.movie-title {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px;
+    color: #2c2c2c;
+}
+
+.decorative-footer-image {
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.decorative-footer-image img {
+    width: 100%;
+    max-width: none;
     height: auto;
     display: block;
 }
