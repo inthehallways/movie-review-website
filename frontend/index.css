@@ -10,7 +10,7 @@
 body {
 	font-family: Inter, sans-serif;
 	background: #F2F2E4;
-	color: white;
+	color: #2c2c2c;
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
@@ -133,19 +133,12 @@ body {
 /* Hero Section */
 .hero {
 	background-color: #F2F2E4;
-	background-image: url('../frontend/assets/images/try.png');
+	background-image: url('../frontend/assets/images/first-home-bg.png');
 	background-size: contain;
     background-position: center;
 	background-size: cover;
     background-repeat: no-repeat;
 	height: 100vh; 
-
-	/*
-	border: 1px solid #2C2C2C; 
-  	padding: 50px;           
-  	margin: 50px;              
-  	box-sizing: border-box;
-	*/
 }
 
 .hero-text {
@@ -161,6 +154,84 @@ body {
 .custom-username {
     font-style: italic;
 }
+
+/* Main dashboard layout */
+.dashboard-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.dashboard-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 0;
+    margin-top: 10px;
+}
+
+/* Header texts */
+.section-header {
+    width: 100%;
+    max-width: 300px;
+    height: 50px;
+    border-radius: 20px;
+    background-color: #fff;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    margin: 0 auto 50px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.section-header p {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Shared section styles */
+.section {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 50px 20px;
+    position: relative;
+}
+
+/* Purple section for stats */
+.user-stats {
+    background-color: #988bd3;
+    z-index: 2;
+    border: 1px solid #000;
+    border-radius: 48px;
+    min-height: 500px;
+}
+
+/* White section for upcoming releases */
+.upcoming-releases {
+    background-color: #F2F2E4;
+    margin-top: -80px;
+    z-index: 2;
+    position: relative;
+    min-height: 600px;
+}
+
+/* Pink section for banner or image */
+.img-banner {
+    background-color: #f49b98;
+    margin-top: -80px;
+    z-index: 1;
+    position: relative;
+    border: 1px solid #000;
+    border-radius: 48px;
+    min-height: 500px;
+}
+
 
 /* Footer Section */
 .footer {
