@@ -245,11 +245,72 @@ body {
 
 /* White section -- upcoming releases */
 .upcoming-releases {
-    background-color: #F2F2E4;
+    background-color: #f2f2e4;
     margin-top: -80px;
     z-index: 2;
     position: relative;
     min-height: 600px;
+    padding: 50px 20px;
+}
+
+.scroll-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.upcoming-movie-cards-scroll {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+
+  /* Hide scrollbar for all browsers */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.upcoming-movie-cards-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.movie-card {
+    flex: 0 0 auto;
+    width: 200px;
+    min-width: 200px;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid #2c2c2c;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.scroll-hover {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 80px;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.left-hover {
+    left: 0;
+    background: linear-gradient(to right, rgba(242, 242, 228, 0.8), transparent);
+}
+
+.right-hover {
+    right: 0;
+    background: linear-gradient(to left, rgba(242, 242, 228, 0.8), transparent);
+}
+
+.movie-card {
+    scroll-snap-align: start;
 }
 
 /* Pink section -- image banner */
@@ -291,6 +352,9 @@ body {
 }
 
 .movie-card {
+    flex: 0 0 auto;
+    width: 200px;
+    min-width: 200px;
     background-color: #fff;
     border-radius: 12px;
     border: 1px solid #2c2c2c;
