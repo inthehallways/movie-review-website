@@ -24,8 +24,13 @@ class SceneItDashboard {
         console.log("SceneIt Dashboard initializing...")
         this.initializeUsername()
         this.initializeScrolling()
+
+        console.log("About to load upcoming movies...")
         this.loadUpcomingMovies()
+
+        console.log("About to load popular movies...")
         this.loadPopularMovies()
+
         console.log("SceneIt Dashboard initialized successfully!")
     }
 
@@ -46,43 +51,76 @@ class SceneItDashboard {
     }
 
     // MOVIE CARDS SCROLLING FUNCTIONALITY
-        initializeScrolling() {
-        const container = document.getElementById("upcoming-movie-cards")
-        const leftScroll = document.getElementById("leftScroll")
-        const rightScroll = document.getElementById("rightScroll")
+    initializeScrolling() {
+   
+        const popularContainer = document.getElementById("popular-movies-scroll")
+        const popularLeftScroll = document.getElementById("popularLeftScroll")
+        const popularRightScroll = document.getElementById("popularRightScroll")
 
-        if (!container || !leftScroll || !rightScroll) {
-        console.warn("Scroll elements not found")
-        return
+        if (popularContainer && popularLeftScroll && popularRightScroll) {
+        // Click-based horizontal scrolling for Popular Films
+        popularLeftScroll.addEventListener("click", () => {
+            popularContainer.scrollLeft -= 300
+        })
+
+        popularRightScroll.addEventListener("click", () => {
+            popularContainer.scrollLeft += 300
+        })
+
+        // Visual feedback on hover for Popular Films
+        popularLeftScroll.addEventListener("mouseenter", () => {
+            popularLeftScroll.style.opacity = "0.8"
+        })
+
+        popularLeftScroll.addEventListener("mouseleave", () => {
+            popularLeftScroll.style.opacity = "1"
+        })
+
+        popularRightScroll.addEventListener("mouseenter", () => {
+            popularRightScroll.style.opacity = "0.8"
+        })
+
+        popularRightScroll.addEventListener("mouseleave", () => {
+            popularRightScroll.style.opacity = "1"
+        })
+
+        console.log("Popular Films scrolling initialized")
         }
 
-        // Click-based horizontal scrolling
-        leftScroll.addEventListener("click", () => {
-        container.scrollLeft -= 300 // Scroll left by 300px
+        // Upcoming Releases scrolling
+        const upcomingContainer = document.getElementById("upcoming-movie-cards")
+        const upcomingLeftScroll = document.getElementById("upcomingLeftScroll")
+        const upcomingRightScroll = document.getElementById("upcomingRightScroll")
+
+        if (upcomingContainer && upcomingLeftScroll && upcomingRightScroll) {
+        // Click-based horizontal scrolling for Upcoming Releases
+        upcomingLeftScroll.addEventListener("click", () => {
+            upcomingContainer.scrollLeft -= 300
         })
 
-        rightScroll.addEventListener("click", () => {
-        container.scrollLeft += 300 // Scroll right by 300px
+        upcomingRightScroll.addEventListener("click", () => {
+            upcomingContainer.scrollLeft += 300
         })
 
-        // Add visual feedback on hover (but no scrolling)
-        leftScroll.addEventListener("mouseenter", () => {
-        leftScroll.style.opacity = "0.8"
+        // Visual feedback on hover for Upcoming Releases
+        upcomingLeftScroll.addEventListener("mouseenter", () => {
+            upcomingLeftScroll.style.opacity = "0.8"
         })
 
-        leftScroll.addEventListener("mouseleave", () => {
-        leftScroll.style.opacity = "1"
+        upcomingLeftScroll.addEventListener("mouseleave", () => {
+            upcomingLeftScroll.style.opacity = "1"
         })
 
-        rightScroll.addEventListener("mouseenter", () => {
-        rightScroll.style.opacity = "0.8"
+        upcomingRightScroll.addEventListener("mouseenter", () => {
+            upcomingRightScroll.style.opacity = "0.8"
         })
 
-        rightScroll.addEventListener("mouseleave", () => {
-        rightScroll.style.opacity = "1"
+        upcomingRightScroll.addEventListener("mouseleave", () => {
+            upcomingRightScroll.style.opacity = "1"
         })
 
-        console.log("Click-based scrolling functionality initialized")
+        console.log("Upcoming Releases scrolling initialized")
+        }
     }
 
     // MOVIE CARDS FUNCTIONALITY
@@ -128,7 +166,7 @@ class SceneItDashboard {
         const data = await response.json()
         console.log("TMDB Popular Movies Response:", data)
 
-        return data.results.slice(0, 6) // Get first 6 movies for the grid
+        return data.results.slice(0, 10) // Get first 10 movies for scrolling
         } catch (error) {
         console.error("Error fetching popular movies:", error)
 
@@ -140,6 +178,10 @@ class SceneItDashboard {
             { title: "Popular Movie 4 (Fallback)", poster: null },
             { title: "Popular Movie 5 (Fallback)", poster: null },
             { title: "Popular Movie 6 (Fallback)", poster: null },
+            { title: "Popular Movie 7 (Fallback)", poster: null },
+            { title: "Popular Movie 8 (Fallback)", poster: null },
+            { title: "Popular Movie 9 (Fallback)", poster: null },
+            { title: "Popular Movie 10 (Fallback)", poster: null },
         ]
         }
     }
@@ -207,14 +249,23 @@ class SceneItDashboard {
     }
 
     async loadPopularMovies() {
-        const container = document.getElementById("popular-movies-grid")
-        if (!container) return
+        const container = document.getElementById("popular-movies-scroll")
+
+        // Add debugging
+        console.log("Looking for popular movies container...")
+        console.log("Container found:", container)
+
+        if (!container) {
+        console.error("Popular movies container not found! Check if ID 'popular-movies-scroll' exists in HTML")
+        return
+        }
 
         // Show loading state
         container.innerHTML = '<div class="loading-message">Loading popular movies...</div>'
 
         try {
         const movies = await this.fetchPopularMovies()
+        console.log("Popular movies fetched:", movies)
 
         // Clear loading message
         container.innerHTML = ""
