@@ -40,6 +40,7 @@
         </div>
     </div>
 
+    <!-- Script for Dropdown Menu -->
     <script>
         function toggleDropdown() {
             const menu = document.getElementById("dropdownMenu");
@@ -62,18 +63,6 @@
         	<p id="welcome-message">Welcome back, <span id="username" class="custom-username"></span> !</p>
 		</div>
 	</section>
-
-    <!-- JavaScript to handle username display -->
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const username = urlParams.get('username');
-
-        if (username) {
-            document.getElementById('username').textContent = username;
-        } else {
-            window.location.href = 'login.html';
-        }
-    </script>
 
     <!-- Dashboard Section -->
     <section id="dashboard-section" class="dashboard section">
@@ -147,91 +136,6 @@
                 </div>
             </div>
 
-            <!-- JavaScript for scrolling effect -->
-            <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                const container = document.getElementById("upcoming-movie-cards")
-                const leftScroll = document.getElementById("leftScroll")
-                const rightScroll = document.getElementById("rightScroll")
-                let scrollInterval = null
-
-                // Immediate initial scroll to make effect noticeable right away
-                function startScroll(direction) {
-                    // Clear any existing interval
-                    stopScroll()
-
-                    // Immediate first scroll to reduce perceived lag
-                    container.scrollLeft += direction === "right" ? 30 : -30
-
-                    // Then continue with regular interval scrolling
-                    scrollInterval = setInterval(() => {
-                    container.scrollLeft += direction === "right" ? 20 : -20
-                    }, 10)
-                }
-
-                function stopScroll() {
-                    if (scrollInterval) {
-                    clearInterval(scrollInterval)
-                    scrollInterval = null
-                    }
-                }
-
-                // Make sure the hover areas are properly set up
-                if (leftScroll) {
-                    leftScroll.addEventListener("mouseenter", () => startScroll("left"))
-                    leftScroll.addEventListener("mouseleave", stopScroll)
-                    leftScroll.addEventListener("click", () => {
-                    container.scrollLeft -= 400
-                    })
-                }
-
-                if (rightScroll) {
-                    rightScroll.addEventListener("mouseenter", () => startScroll("right"))
-                    rightScroll.addEventListener("mouseleave", stopScroll)
-                    rightScroll.addEventListener("click", () => {
-                    container.scrollLeft += 400
-                    })
-                }
-
-                // Add mouse move tracking for more responsive scrolling
-                let isHovering = false
-                let hoverDirection = null
-
-                document.addEventListener("mousemove", (e) => {
-                    const leftRect = leftScroll.getBoundingClientRect()
-                    const rightRect = rightScroll.getBoundingClientRect()
-
-                    if (
-                    e.clientX >= leftRect.left &&
-                    e.clientX <= leftRect.right &&
-                    e.clientY >= leftRect.top &&
-                    e.clientY <= leftRect.bottom
-                    ) {
-                    if (!isHovering || hoverDirection !== "left") {
-                        isHovering = true
-                        hoverDirection = "left"
-                        startScroll("left")
-                    }
-                    } else if (
-                    e.clientX >= rightRect.left &&
-                    e.clientX <= rightRect.right &&
-                    e.clientY >= rightRect.top &&
-                    e.clientY <= rightRect.bottom
-                    ) {
-                    if (!isHovering || hoverDirection !== "right") {
-                        isHovering = true
-                        hoverDirection = "right"
-                        startScroll("right")
-                    }
-                    } else if (isHovering) {
-                    isHovering = false
-                    hoverDirection = null
-                    stopScroll()
-                    }
-                })
-                })
-            </script>
-
             <!-- Decorative image for the section -->
             <div class="section img-banner">
                 <div class="img-banner-content">
@@ -289,6 +193,8 @@
 			
 		</div>
 	</footer>
+
+    <script src="index.js"></script>
 
 </body>
 </html>
