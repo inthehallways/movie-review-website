@@ -18,10 +18,9 @@
     </div>
     <div class="navbar-center">
       <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
+        <li><a href="index.html">Home</a></li>
         <li><a href="resume.html">Watchlist</a></li>
         <li><a href="movie-catalog.html">Movie Catalog</a></li>
-        <li><a href="login.html">Logout</a></li>
       </ul>
     </div>
     <div class="navbar-right">
@@ -39,12 +38,20 @@
 
   <!-- Search bar in top right -->
   <div class="search-bar-container">
-    <label for="search">FIND A FILM</label>
-    <div class="search-wrapper">
-      <input type="text" id="search" placeholder="Search..." />
-      <button><img src="https://img.icons8.com/?size=100&id=132&format=png&color=000000" alt="Search" /></button>
-    </div>
+  <label for="searchInput">FIND A FILM</label>
+  <div class="search-wrapper">
+    <input type="text" id="searchInput" placeholder="Search..." />
+    <button id="searchBtn">
+      <img src="https://img.icons8.com/?size=100&id=132&format=png&color=000000" alt="Search" />
+    </button>
   </div>
+</div>
+
+<!-- Movie Grid -->
+<div class="movie-grid" id="movieGrid"></div>
+
+<!-- Make sure you link your JS file -->
+<script src="movie-catalog.js"></script>
 
   <!-- Movies & Sort -->
   <div class="movies-header">
@@ -87,14 +94,23 @@
     <div class="movie-card"></div>
   </div>
 
-  <footer>
-    <p>© 2025 SceneIt. All rights reserved.</p>
+  <!-- Movie Modal -->
+  <div id="movieModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>This is your modal content. Replace it with movie details or trailer, etc.</p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-logo">
+        <img src="../frontend/assets/icons/sceneit-logo.png" alt="Celesse Aisle Nacpil" width="70"/>
+      </div>
+      <p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
+    </div>
   </footer>
 
-  <script>
-    function toggleDropdown() {
-      document.getElementById('dropdownMenu').classList.toggle('show');
-    }
-  </script>
+  <script src="movie-catalog.js" defer></script>
 </body>
 </html>
