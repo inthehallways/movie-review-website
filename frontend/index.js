@@ -46,7 +46,7 @@ class SceneItDashboard {
     }
 
     // MOVIE CARDS SCROLLING FUNCTIONALITY
-    initializeScrolling() {
+        initializeScrolling() {
         const container = document.getElementById("upcoming-movie-cards")
         const leftScroll = document.getElementById("leftScroll")
         const rightScroll = document.getElementById("rightScroll")
@@ -56,77 +56,33 @@ class SceneItDashboard {
         return
         }
 
-        // Hover-based scrolling
-        leftScroll.addEventListener("mouseenter", () => this.startScroll("left", container))
-        leftScroll.addEventListener("mouseleave", () => this.stopScroll())
+        // Click-based horizontal scrolling
         leftScroll.addEventListener("click", () => {
-        container.scrollLeft -= 400
+        container.scrollLeft -= 300 // Scroll left by 300px
         })
 
-        rightScroll.addEventListener("mouseenter", () => this.startScroll("right", container))
-        rightScroll.addEventListener("mouseleave", () => this.stopScroll())
         rightScroll.addEventListener("click", () => {
-        container.scrollLeft += 400
+        container.scrollLeft += 300 // Scroll right by 300px
         })
 
-        // Enhanced mouse tracking for more responsive scrolling
-        this.initializeMouseTracking(container, leftScroll, rightScroll)
-
-        console.log("Scrolling functionality initialized")
-    }
-
-    startScroll(direction, container) {
-        this.stopScroll()
-
-        // Immediate first scroll to reduce perceived lag
-        container.scrollLeft += direction === "right" ? 30 : -30
-
-        // Continue with regular interval scrolling
-        this.scrollInterval = setInterval(() => {
-        container.scrollLeft += direction === "right" ? 20 : -20
-        }, 10)
-    }
-
-    stopScroll() {
-        if (this.scrollInterval) {
-        clearInterval(this.scrollInterval)
-        this.scrollInterval = null
-        }
-    }
-
-    initializeMouseTracking(container, leftScroll, rightScroll) {
-        document.addEventListener("mousemove", (e) => {
-        const leftRect = leftScroll.getBoundingClientRect()
-        const rightRect = rightScroll.getBoundingClientRect()
-
-        if (
-            e.clientX >= leftRect.left &&
-            e.clientX <= leftRect.right &&
-            e.clientY >= leftRect.top &&
-            e.clientY <= leftRect.bottom
-        ) {
-            if (!this.isHovering || this.hoverDirection !== "left") {
-            this.isHovering = true
-            this.hoverDirection = "left"
-            this.startScroll("left", container)
-            }
-        } else if (
-            e.clientX >= rightRect.left &&
-            e.clientX <= rightRect.right &&
-            e.clientY >= rightRect.top &&
-            e.clientY <= rightRect.bottom
-        ) {
-            if (!this.isHovering || this.hoverDirection !== "right") {
-            this.isHovering = true
-            this.hoverDirection = "right"
-            this.startScroll("right", container)
-            }
-        } else if (this.isHovering) {
-            this.isHovering = false
-            this.hoverDirection = null
-            this.stopScroll()
-        }
+        // Add visual feedback on hover (but no scrolling)
+        leftScroll.addEventListener("mouseenter", () => {
+        leftScroll.style.opacity = "0.8"
         })
+
+        leftScroll.addEventListener("mouseleave", () => {
+        leftScroll.style.opacity = "1"
+        })
+
+        rightScroll.addEventListener("mouseenter", () => {
+        rightScroll.style.opacity = "0.8"
+        })
+
+        rightScroll.addEventListener("mouseleave", () => {
+        rightScroll.style.opacity = "1"
+        })
+
+        console.log("Click-based scrolling functionality initialized")
     }
 
     // MOVIE CARDS FUNCTIONALITY
