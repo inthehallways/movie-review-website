@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/profile.css">
+    <link rel="icon" href="../assets/icons/sceneit-logo.png" type="image/png">
+    <title>SceneIt | My Profile</title>
+</head>
+<body>
+
+	<!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" height="40">
+            <span class="dashboard-label">Dashboard</span>
+        </div>
+
+        <div class="navbar-center">
+            <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="#">Watchlist</a></li>
+            <li><a href="../pages/movie-catalog.html">Movie Catalog</a></li>
+            </ul>
+        </div>
+
+        <div class="navbar-right">
+            <div class="profile-container">
+                <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()" />
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="../pages/profile.html">View Profile</a>
+                    <a href="#">Watched</a>
+                    <a href="#">My Reviews</a>
+                    <a href="../pages/login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for Dropdown Menu -->
+    <script>
+        function toggleDropdown() {
+            const menu = document.getElementById("dropdownMenu");
+            menu.classList.toggle("show");
+        }
+
+        window.addEventListener('click', function(e) {
+            const dropdown = document.getElementById("dropdownMenu");
+            const profileContainer = document.querySelector(".profile-container");
+
+            if (!profileContainer.contains(e.target)) {
+                dropdown.classList.remove("show");
+            }
+        });
+    </script>
+
+    <!-- Profile Section -->
+    <section class="profile-section">
+        
+        <!-- Customizable Header Section -->
+        <header class="custom-header">
+        <div class="header-edit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        </header>
+        
+        <div class="profile-content">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar-wrapper">
+                    <img src="../assets/images/blank-profile.jpg" alt="User Avatar" class="profile-avatar" id="profileAvatar" />
+                    <div class="edit-avatar-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <h1 class="username" id="profileUsername">Username</h1>
+            </div>
+
+            <!-- Stats Buttons -->
+            <div class="profile-stats-container">
+                <div class="profile-stats">
+                    <button class="stats-button watched">Watched</button>
+                    <button class="stats-button reviews">My Reviews</button>
+                    <button class="stats-button watchlist">Watchlist</button>
+                    <button class="stats-button edit-profile">Edit Profile</button>
+                </div>
+            </div>
+
+            <!-- Bio Section -->
+            <div class="profile-bio">
+                <label for="bio">Bio</label>
+                <textarea id="bio" placeholder="Tell us about yourself..."readonly></textarea>
+            </div>
+
+            <!-- Favorites Section -->
+            <section class="favorites-section">
+                <h2 class="section-title">My Top Films</h2>
+                <div class="favorites-container">
+                    <div class="favorites-grid">
+                        <div class="favorite-card">
+                            <div class="add-favorite">+</div>
+                        </div>
+                        <div class="favorite-card">
+                            <div class="add-favorite">+</div>
+                        </div>
+                        <div class="favorite-card">
+                            <div class="add-favorite">+</div>
+                        </div>
+                        <div class="favorite-card">
+                            <div class="add-favorite">+</div>
+                        </div>
+                        <div class="favorite-card">
+                            <div class="add-favorite">+</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+	<footer class="footer">
+		<div class="footer-container">
+			<div class="footer-logo">
+				<img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
+			</div>
+			<p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
+			
+		</div>
+	</footer>
+
+</body>
+</html>

@@ -22,16 +22,17 @@
         <div class="navbar-center">
             <ul class="nav-links">
             <li><a href="#home">Home</a></li>
-            <li><a href="pages/resume.html">Watchlist</a></li>
+            <li><a href="#">Watchlist</a></li>
             <li><a href="../frontend/pages/movie-catalog.html">Movie Catalog</a></li>
             </ul>
         </div>
 
+        <!-- For User Profile and Dropdown Menu-->
         <div class="navbar-right">
             <div class="profile-container">
-                <img src="../frontend/assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" onclick="toggleDropdown()" />
+                <img src="../frontend/assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()"/>
                 <div class="dropdown-menu" id="dropdownMenu">
-                    <a href="#">View Profile</a>
+                    <a href="../frontend/pages/profile.html">View Profile</a>
                     <a href="#">Watched</a>
                     <a href="#">My Reviews</a>
                     <a href="../frontend/pages/login.html">Logout</a>
@@ -40,6 +41,7 @@
         </div>
     </div>
 
+    <!-- Script for Dropdown Menu -->
     <script>
         function toggleDropdown() {
             const menu = document.getElementById("dropdownMenu");
@@ -63,17 +65,6 @@
 		</div>
 	</section>
 
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const username = urlParams.get('username');
-
-        if (username) {
-            document.getElementById('username').textContent = username;
-        } else {
-            window.location.href = 'login.html';
-        }
-    </script>
-
     <!-- Dashboard Section -->
     <section id="dashboard-section" class="dashboard section">
         <div class="dashboard-wrapper">
@@ -81,6 +72,7 @@
                 <p>User Stats</p>
             </div>
 
+            <!-- User Stats Section -->
             <div class="section user-stats">
                 <div class="user-stats-cards">
                     <div class="stats-card">
@@ -98,50 +90,43 @@
                     </div>
             </div>
 
-            <div class="section upcoming-releases">
-                 <div class="section-header">
-                    <p>Upcoming Releases</p>
+            <!-- Popular Films Section  -->
+            <div class="section popular-films">
+                <div class="section-header">
+                    <p>Popular Films</p>
                 </div>
-                <!-- Upcoming Releases -->
+                
+                <div class="scroll-container">
+                    <div class="scroll-hover left-hover" id="popularLeftScroll"></div>
+                    <div class="popular-movie-cards-scroll" id="popular-movies-scroll">   
+                        <!-- Movie cards are to be handled by index.js -->
+                    </div>
+                    <div class="scroll-hover right-hover" id="popularRightScroll"></div>
+                </div>
             </div>
 
+            <!-- Decorative image for the section -->
             <div class="section img-banner">
                 <div class="img-banner-content">
                     <img src="../frontend/assets/images/pink-section.png" alt="Pink Banner"/>
                 </div>
             </div>
 
-            <div class="section popular-films">
-                 <div class="section-header">
-                    <p>Popular Films</p>
+            <!-- Upcoming Releases Section -->
+            <div class="section upcoming-releases">
+                <div class="section-header">
+                    <p>Upcoming Releases</p>
                 </div>
-                <div class="movie-cards-grid">
-                    <div class="movie-card">
-                        <img src="../frontend/assets/images/poster-placeholder.png" alt="Movie Title Poster">
-                        <div class="movie-title">Movie Title</div>
+                
+                <div class="scroll-container">
+                    <div class="scroll-hover left-hover" id="upcomingLeftScroll"></div>
+                    <div class="upcoming-movie-cards-scroll" id="upcoming-movie-cards">
+                        <!-- Movie cards are to be handled by index.js -->
                     </div>
-                    <div class="movie-card">
-                        <img src="../frontend/assets/images/poster-placeholder.png" alt="Movie Title Poster">
-                        <div class="movie-title">Movie Title</div>
-                    </div>
-                    <div class="movie-card">
-                        <img src="../frontend/assets/images/poster-placeholder.png" alt="Movie Title Poster">
-                        <div class="movie-title">Movie Title</div>
-                    </div>
-                    <div class="movie-card">
-                        <img src="../frontend/assets/images/poster-placeholder.png" alt="Movie Title Poster">
-                        <div class="movie-title">Movie Title</div>
-                    </div>
-                    <div class="movie-card">
-                        <img src="../frontend/assets/images/poster-placeholder.png" alt="Movie Title Poster">
-                        <div class="movie-title">Movie Title</div>
-                    </div>
-                    <div class="movie-card">
-                        <img src="../frontend/assets/images/poster-placeholder.png" alt="Movie Title Poster">
-                        <div class="movie-title">Movie Title</div>
-                    </div>
+                    <div class="scroll-hover right-hover" id="upcomingRightScroll"></div>
                 </div>
             </div>
+
         </div>
     </section>
 
@@ -154,12 +139,14 @@
 	<footer class="footer">
 		<div class="footer-container">
 			<div class="footer-logo">
-				<img src="../frontend/assets/icons/sceneit-logo.png" alt="Celesse Aisle Nacpil" width="70"/>
+				<img src="../frontend/assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
 			</div>
 			<p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
 			
 		</div>
 	</footer>
+
+    <script src="index.js"></script>
 
 </body>
 </html>
