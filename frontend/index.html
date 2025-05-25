@@ -22,16 +22,17 @@
         <div class="navbar-center">
             <ul class="nav-links">
             <li><a href="#home">Home</a></li>
-            <li><a href="pages/resume.html">Watchlist</a></li>
+            <li><a href="#">Watchlist</a></li>
             <li><a href="../frontend/pages/movie-catalog.html">Movie Catalog</a></li>
             </ul>
         </div>
 
+        <!-- For User Profile and Dropdown Menu-->
         <div class="navbar-right">
             <div class="profile-container">
-                <img src="../frontend/assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" onclick="toggleDropdown()" />
+                <img src="../frontend/assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()"/>
                 <div class="dropdown-menu" id="dropdownMenu">
-                    <a href="#">View Profile</a>
+                    <a href="../frontend/pages/profile.html">View Profile</a>
                     <a href="#">Watched</a>
                     <a href="#">My Reviews</a>
                     <a href="../frontend/pages/login.html">Logout</a>
@@ -138,7 +139,7 @@
 	<footer class="footer">
 		<div class="footer-container">
 			<div class="footer-logo">
-				<img src="../frontend/assets/icons/sceneit-logo.png" alt="Celesse Aisle Nacpil" width="70"/>
+				<img src="../frontend/assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
 			</div>
 			<p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
 			
