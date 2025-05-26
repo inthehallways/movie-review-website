@@ -6,11 +6,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="movie-catalog.css">
+  <link rel="stylesheet" href="../pages/movie-catalog.css">
   <link rel="icon" href="../assets/icons/sceneit-logo.png" type="image/png">
   <title>SceneIt | Movie Catalog</title>
 </head>
+
 <body>
+  <!-- Navigation Bar -->
   <div class="navbar">
     <div class="navbar-left">
       <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" height="40">
@@ -18,19 +20,19 @@
     </div>
     <div class="navbar-center">
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="resume.html">Watchlist</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../pages/watchlist.html">Watchlist</a></li>
         <li><a href="movie-catalog.html">Movie Catalog</a></li>
       </ul>
     </div>
     <div class="navbar-right">
       <div class="profile-container">
-        <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" onclick="toggleDropdown()" />
+        <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()" />
         <div class="dropdown-menu" id="dropdownMenu">
-          <a href="#">View Profile</a>
+          <a href="../pages/profile.html">View Profile</a>
           <a href="#">Watched</a>
           <a href="#">My Reviews</a>
-          <a href="login.html">Logout</a>
+          <a href="../pages/login.html">Logout</a>
         </div>
       </div>
     </div>
@@ -47,18 +49,12 @@
   </div>
 </div>
 
-<!-- Movie Grid -->
-<div class="movie-grid" id="movieGrid"></div>
-
-<!-- Make sure you link your JS file -->
-<script src="movie-catalog.js"></script>
-
   <!-- Movies & Sort -->
   <div class="movies-header">
     <h2>MOVIES</h2>
     <div class="catalog-sort">
       <span>SORT BY</span>
-      <select class="sort-dropdown genre">
+      <select id ="genreSelect" class="sort-dropdown genre">
         <option disabled selected>GENRE</option>
         <option>Action</option>
         <option>Comedy</option>
@@ -67,7 +63,7 @@
         <option>Sci-Fi</option>
       </select>
 
-      <select class="sort-dropdown year">
+      <select id="yearSelect" class="sort-dropdown year">
         <option disabled selected>RELEASE YEAR</option>
         <option>2020s</option>
         <option>2010s</option>
@@ -75,24 +71,19 @@
         <option>1990s</option>
       </select>
 
-      <select class="sort-dropdown name">
+      <select id="nameSelect" class="sort-dropdown name">
         <option disabled selected>FILM NAME (A-Z)</option>
-        <option>A-Z</option>
-        <option>Z-A</option>
+        <option value="asc">A-Z</option>
+        <option value="desc">Z-A</option>
       </select>
     </div>
   </div>
 
-  <!-- Horizontal Line -->
+   <!-- Horizontal Line -->
   <hr class="divider" />
 
   <!-- Movie Grid -->
-  <div class="movie-grid">
-    <div class="movie-card"></div>
-    <div class="movie-card"></div>
-    <div class="movie-card"></div>
-    <div class="movie-card"></div>
-  </div>
+  <div class="movie-grid" id="movieGrid"></div>
 
   <!-- Movie Modal -->
   <div id="movieModal" class="modal">
@@ -105,12 +96,13 @@
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-logo">
-        <img src="../frontend/assets/icons/sceneit-logo.png" alt="Celesse Aisle Nacpil" width="70"/>
+        <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
       </div>
       <p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
     </div>
   </footer>
 
-  <script src="movie-catalog.js" defer></script>
+  <script src="../pages/movie-catalog.js"></script>
+  
 </body>
 </html>

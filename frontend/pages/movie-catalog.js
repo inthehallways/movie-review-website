@@ -2,6 +2,11 @@ function toggleDropdown() {
   document.getElementById('dropdownMenu').classList.toggle('show');
 }
 
+// TMDB API Configuration
+const API_KEY = '27f5af569d81a9ee09368fca4d1c47ca';
+const BASE_URL = 'https://api.themoviedb.org/3';
+const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+
 const modal = document.getElementById("movieModal");
 const closeBtn = modal.querySelector(".close");
 const modalContent = document.querySelector(".modal-content");
@@ -13,10 +18,6 @@ const searchBtn = document.getElementById('searchBtn');
 const genreSelect = document.getElementById('genreSelect');
 const yearSelect = document.getElementById('yearSelect');
 const nameSelect = document.getElementById('nameSelect');
-
-const API_KEY = 'd2a72fb4b28ccba64124755d66b1b0f1';
-const BASE_URL = 'https://api.themoviedb.org/3';
-const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
 let currentMovies = [];
 
