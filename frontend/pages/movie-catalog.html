@@ -6,6 +6,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <link rel="stylesheet" href="../pages/movie-catalog.css">
   <link rel="icon" href="../assets/icons/sceneit-logo.png" type="image/png">
   <title>SceneIt | Movie Catalog</title>
@@ -85,13 +86,93 @@
   <!-- Movie Grid -->
   <div class="movie-grid" id="movieGrid"></div>
 
-  <!-- Movie Modal -->
-  <div id="movieModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <p>This is your modal content. Replace it with movie details or trailer, etc.</p>
+     <!-- Movie Modal -->
+    <div id="movieModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="movies">
+                <div class="rectangle-471"></div>
+                <img class="rectangle-472" src="/placeholder.svg?height=17&width=46" />
+                <div class="rectangle-292"></div>
+                <div class="rectangle-470"></div>
+                <div class="rectangle-469"></div>
+                <div class="directed-by">Directed by</div>
+                <div class="movie-description">
+                    Death runs in the family.
+                    <br />
+                    <br />
+                    <br />
+                      Placeholder Synopsis
+                </div>
+                <div class="relesease-date">[Release Date]</div>
+                <div class="movie-title">Movie Title</div>
+                <div class="modal-movie-poster"></div>
+                <div class="marked-as-watched" onclick="markAsWatched()">
+                    <div class="watched-icon-container">
+                        <span class="material-symbols-outlined">visibility</span>
+                    </div>
+                    <span class="watched-text">Mark as Watched</span>
+                </div>
+                <div class="add-to-likes" onclick="addToLikes()">
+                    <div class="likes-icon-container">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </div>
+                    <span class="likes-text">Add to Likes</span>
+                </div>
+                <div class="rectangle-267"></div>
+                <div class="rating bottom-rating">
+                    <input value="5" name="bottom-rating" id="bottom-star5" type="radio">
+                    <label for="bottom-star5"></label>
+                    <input value="4" name="bottom-rating" id="bottom-star4" type="radio">
+                    <label for="bottom-star4"></label>
+                    <input value="3" name="bottom-rating" id="bottom-star3" type="radio">
+                    <label for="bottom-star3"></label>
+                    <input value="2" name="bottom-rating" id="bottom-star2" type="radio">
+                    <label for="bottom-star2"></label>
+                    <input value="1" name="bottom-rating" id="bottom-star1" type="radio">
+                    <label for="bottom-star1"></label>
+                </div>
+                <div class="add-to-watchlist" onclick="addToWatchlist()">
+                    <div class="watchlist-icon-container">
+                        <span class="material-symbols-outlined">playlist_add</span>
+                    </div>
+                    <span class="watchlist-text">Add to Watchlist</span>
+                </div>
+                <div class="add-a-review" onclick="addReview()">Add a Review...</div>
+                <div class="ellipse-15"></div>
+                <div class="rectangle-390"></div>
+                <div class="dd-mm-yyyy">DD/MM/YYYY</div>
+                <div class="watched-on">Watched on</div>
+                <img class="rectangle-419" src="/placeholder.svg?height=26&width=40" />
+                <div class="rating top-rating">
+                    <input value="5" name="top-rating" id="top-star5" type="radio">
+                    <label for="top-star5"></label>
+                    <input value="4" name="top-rating" id="top-star4" type="radio">
+                    <label for="top-star4"></label>
+                    <input value="3" name="top-rating" id="top-star3" type="radio">
+                    <label for="top-star3"></label>
+                    <input value="2" name="top-rating" id="top-star2" type="radio">
+                    <label for="top-star2"></label>
+                    <input value="1" name="top-rating" id="top-star1" type="radio">
+                    <label for="top-star1"></label>
+                </div>
+                <div class="line-15"></div>
+                <div class="line-16"></div>
+                <div class="rated">Rated</div>
+                <div class="menu-icon-below-rating" onclick="showMoreOptions()">
+                    <span class="material-symbols-outlined">more_horiz</span>
+                </div>
+                
+                <!-- More Options Modal -->
+                <div id="moreOptionsModal" class="more-options-modal">
+                    <div class="more-options-content">
+                        <div class="more-option" onclick="editMovie()">Edit</div>
+                        <div class="more-option" onclick="deleteMovie()">Delete</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
   <footer class="footer">
     <div class="footer-container">
