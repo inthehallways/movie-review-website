@@ -190,6 +190,7 @@ body {
   line-height: 28.80px;
   word-wrap: break-word;
 }
+
 .catalog-sort {
   display: flex;
   align-items: center;
@@ -252,7 +253,7 @@ body {
   display: block;
 }
 
-/*Movie Modal*/
+/* Movie Modal */
 .modal {
   display: none; /* Hidden by default */
   position: fixed;
@@ -267,10 +268,10 @@ body {
 
 .modal-content {
   background-color: #fefefe;
-  margin: 2% auto;
+  margin: 3% auto;
   padding: 0;
-  width: 800px;
-  height: 560px;
+  width: 850px;
+  height: 580px;
   border-radius: 10px;
   position: relative;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
@@ -292,16 +293,18 @@ body {
 .movies * {
   box-sizing: border-box;
 }
+
 .movies {
   background: #ffffff;
   border-style: solid;
   border-color: #000000;
   border-width: 1px;
-  height: 560px;
+  height: 580px;
   position: relative;
   overflow: hidden;
-  width: 800px;
+  width: 850px;
 }
+
 .rectangle-471 {
   background: #ffffff;
   border-style: solid;
@@ -311,19 +314,20 @@ body {
   height: 26px;
   position: absolute;
   left: 67px;
-  top: 464px;
+  top: 530px;
 }
+
 .rectangle-472 {
   width: 26px;
   height: 10px;
   position: absolute;
   left: 170px;
-  top: 472px;
+  top: 538px;
   object-fit: cover;
 }
+
 .rectangle-292 {
   background: #ffb7b4;
-  border-radius: 8px;
   border-style: solid;
   border-color: #000000;
   border-width: 1px;
@@ -331,8 +335,9 @@ body {
   height: 70px;
   position: absolute;
   left: 67px;
-  top: 366px;
+  top: 415px;
 }
+
 .rectangle-470 {
   background: #d9d9d9;
   border-radius: 8px;
@@ -342,14 +347,16 @@ body {
   left: 369px;
   top: 342px;
 }
+
 .rectangle-469 {
   background: #c3c3c3;
-  width: 800px;
+  width: 850px;
   height: 248px;
   position: absolute;
   left: 0px;
   top: 0px;
 }
+
 .directed-by {
   color: #000000;
   text-align: left;
@@ -362,6 +369,7 @@ body {
   left: 367px;
   top: 84px;
 }
+
 .movie-description {
   color: #000000;
   text-align: left;
@@ -377,6 +385,7 @@ body {
   height: 96px;
   overflow: hidden;
 }
+
 .relesease-date {
   color: #000000;
   text-align: left;
@@ -389,6 +398,7 @@ body {
   left: 580px;
   top: 52px;
 }
+
 .movie-title {
   color: #000000;
   text-align: left;
@@ -401,18 +411,20 @@ body {
   left: 367px;
   top: 52px;
 }
-.rectangle-263 {
+
+.modal-movie-poster {
   background: #d9d9d9;
   border-radius: 8px;
   border-style: solid;
   border-color: #000000;
   border-width: 1px;
   width: 246px;
-  height: 263px;
+  height: 329px;
   position: absolute;
   left: 67px;
   top: 52px;
 }
+
 .marked-as-watched {
   color: #000000;
   text-align: center;
@@ -423,7 +435,7 @@ body {
   font-weight: 300;
   position: absolute;
   left: 67px;
-  top: 366px;
+  top: 415px;
   width: 82px;
   height: 70px;
   cursor: pointer;
@@ -466,7 +478,7 @@ body {
   font-weight: 300;
   position: absolute;
   left: 149px;
-  top: 366px;
+  top: 415px;
   width: 82px;
   height: 70px;
   cursor: pointer;
@@ -498,6 +510,7 @@ body {
   text-align: center;
   line-height: 1;
 }
+
 .rectangle-267 {
   background: #ffffff;
   border-style: solid;
@@ -507,7 +520,7 @@ body {
   height: 45px;
   position: absolute;
   left: 67px;
-  top: 422px;
+  top: 485px;
 }
 
 /* Star Rating System */
@@ -528,7 +541,7 @@ body {
 
 .rating label:before {
   content: "\2605";
-  font-size: 16px;
+  font-size: 22px;
 }
 
 .rating input:checked ~ label,
@@ -542,13 +555,13 @@ body {
 .bottom-rating {
   position: absolute;
   left: 148px;
-  top: 440px;
+  top: 500px;
 }
 
 .top-rating {
   position: absolute;
   left: 423px;
-  top: 295px;
+  top: 277px;
 }
 
 .add-to-watchlist {
@@ -561,7 +574,7 @@ body {
   font-weight: 300;
   position: absolute;
   left: 231px;
-  top: 366px;
+  top: 415px;
   width: 82px;
   height: 70px;
   cursor: pointer;
@@ -607,15 +620,17 @@ body {
   top: 353px;
   cursor: pointer;
 }
+
 .ellipse-15 {
   background: #d9d9d9;
   border-radius: 50%;
   width: 46px;
-  height: 37px;
+  height: 46px;
   position: absolute;
-  left: 369px;
-  top: 294px;
+  left: 365px;
+  top: 275px;
 }
+
 .rectangle-390 {
   background: #d9d9d9;
   border-radius: 3px;
@@ -623,8 +638,9 @@ body {
   height: 19px;
   position: absolute;
   left: 198px;
-  top: 326px;
+  top: 390px;
 }
+
 .dd-mm-yyyy {
   color: #000000;
   text-align: left;
@@ -635,8 +651,9 @@ body {
   font-weight: 300;
   position: absolute;
   left: 204px;
-  top: 329px;
+  top: 393px;
 }
+
 .watched-on {
   color: #000000;
   text-align: left;
@@ -647,14 +664,15 @@ body {
   font-weight: 300;
   position: absolute;
   left: 119px;
-  top: 329px;
+  top: 393px;
 }
+
 .rectangle-419 {
   width: 22px;
   height: 12px;
   position: absolute;
   left: 89px;
-  top: 330px;
+  top: 394px;
   object-fit: cover;
 }
 
@@ -662,26 +680,28 @@ body {
   border-style: solid;
   border-color: #000000;
   border-width: 1px 0 0 0;
-  width: 56px;
+  width: 70px;
   height: 0px;
   position: absolute;
   left: 149px;
-  top: 366px;
+  top: 415px;
   transform-origin: 0 0;
   transform: rotate(90deg) scale(1, 1);
 }
+
 .line-16 {
   border-style: solid;
   border-color: #000000;
   border-width: 1px 0 0 0;
-  width: 56px;
+  width: 70px;
   height: 0px;
   position: absolute;
   left: 231px;
-  top: 366px;
+  top: 415px;
   transform-origin: 0 0;
   transform: rotate(90deg) scale(1, 1);
 }
+
 .rated {
   color: #000000;
   text-align: left;
@@ -692,9 +712,63 @@ body {
   font-weight: 300;
   position: absolute;
   left: 174px;
-  top: 430px;
+  top: 493px;
   width: 22px;
   height: 8px;
+}
+
+.menu-icon-below-rating {
+  position: absolute;
+  left: 67px;
+  top: 533px;
+  width: 246px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-icon-below-rating .material-symbols-outlined {
+  font-size: 16px;
+  color: #666;
+}
+
+/* More Options Modal */
+.more-options-modal {
+  display: none;
+  position: absolute;
+  left: 150px;
+  top: 480px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10002;
+  min-width: 100px;
+}
+
+.more-options-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.more-option {
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  color: #000000;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.3s ease;
+}
+
+.more-option:last-child {
+  border-bottom: none;
+}
+
+.more-option:hover {
+  background-color: #f5f5f5;
 }
 
 /* Hidden date input for calendar functionality */
