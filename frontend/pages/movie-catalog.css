@@ -1,6 +1,6 @@
 /* Root and Resets */
 * {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -408,7 +408,7 @@ body {
   font-size: 29px;
   line-height: 120%;
   letter-spacing: -0.03em;
-  font-weight: 300;
+  font-weight: 800;
   position: absolute;
   left: 367px;
   top: 52px;
@@ -820,3 +820,4 @@ body {
   font-size: 0.9em;
   color: #2c2c2c;
 }
+
