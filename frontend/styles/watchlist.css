@@ -210,6 +210,12 @@ body {
     width: 100%;
 }
 
+.content-divider {
+    border-top: 1px solid #2c2c2c; 
+    margin: 30px 0;              
+    width: 100%;
+}
+
 /* Main Content */
 .main-content {
     flex: 1;
