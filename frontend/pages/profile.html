@@ -40,8 +40,188 @@
         </div>
     </div>
 
-    <!-- Script for Dropdown Menu -->
+    <!-- Profile Section -->
+    <section class="profile-section">
+        
+        <!-- Customizable Header Section -->
+        <header class="custom-header" id="profileHeader">
+            <!-- Header background image will be here -->
+        </header>
+        
+        <div class="profile-content">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar-wrapper">
+                    <img src="../assets/images/blank-profile.jpg" alt="User Avatar" class="profile-avatar" id="profileAvatar" />
+                </div>
+                <div class="username-section">
+                    <h1 class="username" id="profileUsername">Username</h1>
+                    <button class="edit-profile-btn" onclick="openEditModal()">Edit Profile</button>
+                </div>
+            </div>
+
+            <!-- Stats Buttons -->
+            <div class="profile-stats-container">
+                <div class="profile-stats">
+                    <button class="stats-button watched">Watched</button>
+                    <button class="stats-button reviews">My Reviews</button>
+                    <button class="stats-button watchlist">Watchlist</button>
+                </div>
+            </div>
+
+            <!-- Bio Section -->
+            <div class="profile-bio">
+                <label for="bio">Bio</label>
+                <div class="bio-display" id="bioDisplay">Tell us about yourself...</div>
+            </div>
+
+            <!-- Favorites Section -->
+            <section class="favorites-section">
+                <h2 class="section-title">My Top Films</h2>
+                <div class="favorites-container">
+                    <div class="favorites-grid" id="favoritesGrid">
+                        <!-- Favorite movies will be displayed here -->
+                        <div class="favorite-movie">
+                            <img src="../assets/images/poster-placeholder.png" alt="Movie Poster" class="movie-poster">
+                        </div>
+                        <!-- More movies... -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <button class="close-modal" onclick="closeEditModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Header Image Section -->
+                <div class="edit-section">
+                    <label>Header Image</label>
+                    <div class="header-upload-area">
+                        <div class="current-header" id="currentHeaderPreview">
+                            <button class="upload-header-btn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Change Header
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Picture Section -->
+                <div class="edit-section">
+                    <label>Profile Picture</label>
+                    <div class="avatar-upload-area">
+                        <div class="current-avatar">
+                            <img src="../assets/images/blank-profile.jpg" alt="Current Avatar" id="currentAvatarPreview">
+                            <button class="upload-avatar-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Username Section -->
+                <div class="edit-section">
+                    <label for="editUsername">Username</label>
+                    <input type="text" id="editUsername" value="Username" class="edit-input">
+                </div>
+
+                <!-- Bio Section -->
+                <div class="edit-section">
+                    <label for="editBio">Bio</label>
+                    <textarea id="editBio" class="edit-textarea" placeholder="Tell us about yourself..."></textarea>
+                </div>
+
+                <!-- Favorite Movies Section -->
+                <div class="edit-section">
+                    <label>My Top Films</label>
+                    <div class="edit-favorites-grid">
+                        <div class="edit-favorite-card add-movie-card">
+                            <div class="add-movie-btn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Add Movie
+                            </div>
+                        </div>
+                        <div class="edit-favorite-card add-movie-card">
+                            <div class="add-movie-btn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Add Movie
+                            </div>
+                        </div>
+                        <div class="edit-favorite-card add-movie-card">
+                            <div class="add-movie-btn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Add Movie
+                            </div>
+                        </div>
+                        <div class="edit-favorite-card add-movie-card">
+                            <div class="add-movie-btn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Add Movie
+                            </div>
+                        </div>
+                        <div class="edit-favorite-card add-movie-card">
+                            <div class="add-movie-btn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Add Movie
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+                <button class="save-btn" onclick="saveProfile()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+	<footer class="footer">
+		<div class="footer-container">
+			<div class="footer-logo">
+				<img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
+			</div>
+			<p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
+		</div>
+	</footer>
+
+    <!-- JavaScript -->
     <script>
+        // Dropdown functionality
         function toggleDropdown() {
             const menu = document.getElementById("dropdownMenu");
             menu.classList.toggle("show");
@@ -55,107 +235,54 @@
                 dropdown.classList.remove("show");
             }
         });
-    </script>
 
-    <!-- Profile Section -->
-    <section class="profile-section">
-        
-        <!-- Customizable Header Section -->
-        <header class="custom-header">
-        <div class="header-edit-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </div>
-        </header>
-        
-        <div class="profile-content">
-            <!-- Profile Header -->
-            <div class="profile-header">
-                <div class="profile-avatar-wrapper">
-                    <img src="../assets/images/blank-profile.jpg" alt="User Avatar" class="profile-avatar" id="profileAvatar" />
-                    <div class="edit-avatar-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                </div>
-                <h1 class="username" id="profileUsername">Username</h1>
-            </div>
+        // Modal functionality
+        function openEditModal() {
+            document.getElementById("editModal").style.display = "flex";
+            document.body.style.overflow = "hidden";
+        }
 
-            <!-- Stats Buttons -->
-            <div class="profile-stats-container">
-                <div class="profile-stats">
-                    <button class="stats-button watched">Watched</button>
-                    <button class="stats-button reviews">My Reviews</button>
-                    <button class="stats-button watchlist">Watchlist</button>
-                    <button class="stats-button edit-profile">Edit Profile</button>
-                </div>
-            </div>
+        function closeEditModal() {
+            document.getElementById("editModal").style.display = "none";
+            document.body.style.overflow = "auto";
+        }
 
-            <!-- Bio Section -->
-            <div class="profile-bio">
-                <label for="bio">Bio</label>
-                <textarea id="bio" placeholder="Tell us about yourself..."readonly></textarea>
-            </div>
+        function saveProfile() {
+            // Get values from modal inputs
+            const username = document.getElementById("editUsername").value;
+            const bio = document.getElementById("editBio").value;
 
-            <!-- Favorites Section -->
-            <section class="favorites-section">
-                <h2 class="section-title">My Top Films</h2>
-                <div class="favorites-container">
-                    <div class="favorites-grid">
-                        <div class="favorite-card">
-                            <div class="add-favorite">+</div>
-                        </div>
-                        <div class="favorite-card">
-                            <div class="add-favorite">+</div>
-                        </div>
-                        <div class="favorite-card">
-                            <div class="add-favorite">+</div>
-                        </div>
-                        <div class="favorite-card">
-                            <div class="add-favorite">+</div>
-                        </div>
-                        <div class="favorite-card">
-                            <div class="add-favorite">+</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </section>
+            // Update main profile display
+            document.getElementById("profileUsername").textContent = username;
+            document.getElementById("bioDisplay").textContent = bio || "Tell us about yourself...";
 
-    <!-- Footer Section -->
-	<footer class="footer">
-		<div class="footer-container">
-			<div class="footer-logo">
-				<img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
-			</div>
-			<p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
-			
-		</div>
-	</footer>
+            // Close modal
+            closeEditModal();
 
-    <!-- Script for Buttons -->
-    <script>
+            // Here you would typically save to a database
+            console.log("Profile saved:", { username, bio });
+        }
+
+        // Stats button functionality
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelector(".watched").addEventListener("click", function () {
-            window.location.href = "../pages/watched.html";
+                window.location.href = "../pages/watched.html";
             });
 
             document.querySelector(".reviews").addEventListener("click", function () {
-            window.location.href = "#";
+                window.location.href = "#";
             });
 
             document.querySelector(".watchlist").addEventListener("click", function () {
-            window.location.href = "../pages/watchlist.html";
+                window.location.href = "../pages/watchlist.html";
             });
+        });
 
-            document.querySelector(".edit-profile").addEventListener("click", function () {
-            window.location.href = "#";
-            });
+        // Close modal when clicking outside
+        document.getElementById("editModal").addEventListener("click", function(e) {
+            if (e.target === this) {
+                closeEditModal();
+            }
         });
     </script>
 
