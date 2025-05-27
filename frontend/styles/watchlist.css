@@ -307,6 +307,7 @@ body {
     position: relative;
     aspect-ratio: 2 / 3;
     background: #f8f9fa;
+    overflow: hidden;
 }
 
 .movie-controls {
@@ -410,13 +411,26 @@ body {
     font-size: 3rem;
 }
 
-.movie-title {
-    padding: 15px;
+.movie-title-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+    padding: 20px 15px 15px;
     font-size: 1rem;
     font-weight: 600;
-    color: #2c2c2c;
     text-align: center;
-    border-top: 1px solid #f0f0f0;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.movie-poster:hover .movie-title-overlay {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* Footer Section */

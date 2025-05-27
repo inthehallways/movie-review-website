@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/watched.css">
     <link rel="icon" href="../assets/icons/sceneit-logo.png" type="image/png">
     <title>SceneIt | Watched</title>
 </head>
 <body>
-    
-	<!-- Navigation Bar -->
+
+    <!-- Navigation Bar -->
     <div class="navbar">
         <div class="navbar-left">
             <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" height="40">
-            <span class="dashboard-label">Watched</span>
+            <span class="dashboard-label">SceneIt</span>
         </div>
 
         <div class="navbar-center">
             <ul class="nav-links">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="../pages/watchlist.html">Watchlist</a></li>
-            <li><a href="../pages/movie-catalog.html">Movie Catalog</a></li>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../pages/watchlist.html">Watchlist</a></li>
+                <li><a href="../pages/movie-catalog.html">Movie Catalog</a></li>
             </ul>
         </div>
 
@@ -32,7 +32,7 @@
                 <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()" />
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="../pages/profile.html">View Profile</a>
-                    <a href="#">Watched</a>
+                    <a href="../pages/watchlist.html">Watchlist</a>
                     <a href="#">My Reviews</a>
                     <a href="../pages/login.html">Logout</a>
                 </div>
@@ -80,15 +80,67 @@
                 <h1 class="page-title">Watched</h1>
                 <div class="sort-section">
                     <span class="sort-label">SORT BY</span>
-                    <div class="sort-buttons">
-                        <button class="sort-button active" data-sort="genre">GENRE</button>
-                        <button class="sort-button" data-sort="user-rating">USER RATING</button>
-                        <button class="sort-button" data-sort="watch-date">WATCH DATE</button>
+                    <div class="sort-dropdowns">
+                        <!-- Genre Dropdown -->
+                        <div class="dropdown-container">
+                            <button class="dropdown-button" onclick="toggleSortDropdown('genre')">
+                                <span id="genreSelected">All Genres</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu-sort" id="genreDropdown">
+                                <div class="dropdown-item" onclick="selectSort('genre', 'All Genres')">All Genres</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Action')">Action</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Comedy')">Comedy</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Drama')">Drama</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Horror')">Horror</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Romance')">Romance</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Sci-Fi')">Sci-Fi</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Thriller')">Thriller</div>
+                            </div>
+                        </div>
+
+                        <!-- User Rating Dropdown -->
+                        <div class="dropdown-container">
+                            <button class="dropdown-button" onclick="toggleSortDropdown('rating')">
+                                <span id="ratingSelected">All Ratings</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu-sort" id="ratingDropdown">
+                                <div class="dropdown-item" onclick="selectSort('rating', 'All Ratings')">All Ratings</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '5 Stars')">★★★★★</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '4+ Stars')">★★★★☆</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '3+ Stars')">★★★☆☆</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '2+ Stars')">★★☆☆☆</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '1+ Stars')">★☆☆☆☆</div>
+                            </div>
+                        </div>
+
+                        <!-- Watch Date Dropdown -->
+                        <div class="dropdown-container">
+                            <button class="dropdown-button" onclick="toggleSortDropdown('date')">
+                                <span id="dateSelected">All Dates</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu-sort" id="dateDropdown">
+                                <div class="dropdown-item" onclick="selectSort('date', 'All Dates')">All Dates</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'This Week')">This Week</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'This Month')">This Month</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Last 3 Months')">Last 3 Months</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'This Year')">This Year</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Last Year')">Last Year</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Oldest First')">Oldest First</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Newest First')">Newest First</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            <hr class="section-divider"/>
 
             <!-- Movies Grid -->
             <div class="movies-grid" id="moviesGrid">
@@ -115,16 +167,14 @@
                             </div>
                         </div>
                         <div class="poster-placeholder"></div>
+                        <div class="movie-title-overlay">Movie Title 1</div>
                     </div>
-                    <div class="movie-info">
-                        <div class="movie-title">Title</div>
-                        <div class="movie-rating">
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                        </div>
+                    <div class="movie-rating">
+                        <span class="star" data-rating="1" onclick="setRating(this, 1)">☆</span>
+                        <span class="star" data-rating="2" onclick="setRating(this, 2)">☆</span>
+                        <span class="star" data-rating="3" onclick="setRating(this, 3)">☆</span>
+                        <span class="star" data-rating="4" onclick="setRating(this, 4)">☆</span>
+                        <span class="star" data-rating="5" onclick="setRating(this, 5)">☆</span>
                     </div>
                 </div>
 
@@ -151,52 +201,14 @@
                             </div>
                         </div>
                         <div class="poster-placeholder"></div>
+                        <div class="movie-title-overlay">Movie Title 2</div>
                     </div>
-                    <div class="movie-info">
-                        <div class="movie-title">Title</div>
-                        <div class="movie-rating">
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Repeat for more cards... -->
-                <div class="movie-card">
-                    <div class="movie-poster">
-                        <div class="movie-controls">
-                            <button class="heart-button" title="Add to favorites">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
-                            <div class="menu-container">
-                                <button class="menu-button" onclick="toggleMovieMenu(this)">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="12" r="1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <circle cx="19" cy="12" r="1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <circle cx="5" cy="12" r="1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </button>
-                                <div class="movie-menu">
-                                    <button class="remove-button">REMOVE</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="poster-placeholder"></div>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-title">Title</div>
-                        <div class="movie-rating">
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                        </div>
+                    <div class="movie-rating">
+                        <span class="star" data-rating="1" onclick="setRating(this, 1)">☆</span>
+                        <span class="star" data-rating="2" onclick="setRating(this, 2)">☆</span>
+                        <span class="star" data-rating="3" onclick="setRating(this, 3)">☆</span>
+                        <span class="star" data-rating="4" onclick="setRating(this, 4)">☆</span>
+                        <span class="star" data-rating="5" onclick="setRating(this, 5)">☆</span>
                     </div>
                 </div>
 
@@ -222,16 +234,14 @@
                             </div>
                         </div>
                         <div class="poster-placeholder"></div>
+                        <div class="movie-title-overlay">Movie Title 3</div>
                     </div>
-                    <div class="movie-info">
-                        <div class="movie-title">Title</div>
-                        <div class="movie-rating">
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                        </div>
+                    <div class="movie-rating">
+                        <span class="star" data-rating="1" onclick="setRating(this, 1)">☆</span>
+                        <span class="star" data-rating="2" onclick="setRating(this, 2)">☆</span>
+                        <span class="star" data-rating="3" onclick="setRating(this, 3)">☆</span>
+                        <span class="star" data-rating="4" onclick="setRating(this, 4)">☆</span>
+                        <span class="star" data-rating="5" onclick="setRating(this, 5)">☆</span>
                     </div>
                 </div>
 
@@ -257,16 +267,14 @@
                             </div>
                         </div>
                         <div class="poster-placeholder"></div>
+                        <div class="movie-title-overlay">Movie Title 4</div>
                     </div>
-                    <div class="movie-info">
-                        <div class="movie-title">Title</div>
-                        <div class="movie-rating">
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                        </div>
+                    <div class="movie-rating">
+                        <span class="star" data-rating="1" onclick="setRating(this, 1)">☆</span>
+                        <span class="star" data-rating="2" onclick="setRating(this, 2)">☆</span>
+                        <span class="star" data-rating="3" onclick="setRating(this, 3)">☆</span>
+                        <span class="star" data-rating="4" onclick="setRating(this, 4)">☆</span>
+                        <span class="star" data-rating="5" onclick="setRating(this, 5)">☆</span>
                     </div>
                 </div>
 
@@ -292,47 +300,43 @@
                             </div>
                         </div>
                         <div class="poster-placeholder"></div>
+                        <div class="movie-title-overlay">Movie Title 5</div>
                     </div>
-                    <div class="movie-info">
-                        <div class="movie-title">Title</div>
-                        <div class="movie-rating">
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                            <span class="star">☆</span>
-                        </div>
+                    <div class="movie-rating">
+                        <span class="star" data-rating="1" onclick="setRating(this, 1)">☆</span>
+                        <span class="star" data-rating="2" onclick="setRating(this, 2)">☆</span>
+                        <span class="star" data-rating="3" onclick="setRating(this, 3)">☆</span>
+                        <span class="star" data-rating="4" onclick="setRating(this, 4)">☆</span>
+                        <span class="star" data-rating="5" onclick="setRating(this, 5)">☆</span>
                     </div>
                 </div>
-                
             </div>
         </div>
     </main>
 
     <!-- Footer Section -->
-	<footer class="footer">
-		<div class="footer-container">
-			<div class="footer-logo">
-				<img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
-			</div>
-			<p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
-			
-		</div>
-	</footer>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
+            </div>
+            <p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
+        </div>
+    </footer>
 
     <!-- JavaScript for functionality -->
     <script>
         function toggleMovieMenu(button) {
             const menu = button.nextElementSibling;
             const allMenus = document.querySelectorAll('.movie-menu');
-            
+    
             // Close all other menus
             allMenus.forEach(m => {
                 if (m !== menu) {
                     m.classList.remove('show');
                 }
             });
-            
+    
             // Toggle current menu
             menu.classList.toggle('show');
         }
@@ -346,6 +350,102 @@
             }
         });
 
+        // Star rating functionality
+        function setRating(clickedStar, rating) {
+            const movieCard = clickedStar.closest('.movie-card');
+            const stars = movieCard.querySelectorAll('.star');
+    
+            // Update stars display
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.textContent = '★'; // Filled star
+                    star.classList.add('filled');
+                } else {
+                    star.textContent = '☆'; // Empty star
+                    star.classList.remove('filled');
+                }
+            });
+    
+            // Store rating (you can save this to database later)
+            movieCard.setAttribute('data-rating', rating);
+            console.log('Movie rated:', rating, 'stars');
+        }
+
+        // Add hover effect for stars
+        document.addEventListener('DOMContentLoaded', function() {
+            const allStars = document.querySelectorAll('.star');
+    
+            allStars.forEach(star => {
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    const movieCard = this.closest('.movie-card');
+                    const stars = movieCard.querySelectorAll('.star');
+        
+                    // Temporarily show hover state
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.style.color = '#ffed4e';
+                        } else {
+                            s.style.color = '#ddd';
+                        }
+                    });
+                });
+        
+                star.addEventListener('mouseleave', function() {
+                    const movieCard = this.closest('.movie-card');
+                    const stars = movieCard.querySelectorAll('.star');
+        
+                    // Reset to actual rating
+                    stars.forEach(s => {
+                        if (s.classList.contains('filled')) {
+                            s.style.color = '#ffd700';
+                        } else {
+                            s.style.color = '#ddd';
+                        }
+                    });
+                });
+            });
+        });
+
+        // Sort dropdown functionality
+        function toggleSortDropdown(type) {
+            const dropdown = document.getElementById(type + 'Dropdown');
+            const allDropdowns = document.querySelectorAll('.dropdown-menu-sort');
+            
+            // Close all other dropdowns
+            allDropdowns.forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                }
+            });
+            
+            // Toggle current dropdown
+            dropdown.classList.toggle('show');
+        }
+
+        function selectSort(type, value) {
+            const selectedSpan = document.getElementById(type + 'Selected');
+            selectedSpan.textContent = value;
+            
+            // Close dropdown
+            document.getElementById(type + 'Dropdown').classList.remove('show');
+            
+            // Apply sorting logic here
+            console.log(`Sorting by ${type}:`, value);
+            
+            // You can implement actual sorting logic here
+            // For example, filter movies based on the selected criteria
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown-container')) {
+                document.querySelectorAll('.dropdown-menu-sort').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
+        });
+
         // Function to switch to watchlist page
         function switchToWatchlist() {
             window.location.href = '../pages/watchlist.html';
@@ -355,27 +455,16 @@
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', function() {
                 const tab = this.dataset.tab;
-                
+        
                 if (tab === 'watchlist') {
                     window.location.href = '../pages/watchlist.html';
                 } else if (tab === 'watched') {
-                    window.location.href = '../pages/watched.html';
+                    // Already on watched page
                     return;
                 } else if (tab === 'reviews') {
                     // Future: redirect to reviews page
                     console.log('Reviews page not implemented yet');
                 }
-            });
-        });
-
-        // Sort functionality
-        document.querySelectorAll('.sort-button').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.sort-button').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Here you would implement sorting logic
-                console.log('Sorting by:', this.dataset.sort);
             });
         });
     </script>
