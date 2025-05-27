@@ -485,6 +485,46 @@ body {
     background: white;
 }
 
+/* Reset Rating Button */
+.reset-rating {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+}
+
+.reset-rating:hover {
+    background: #f0f0f0;
+    color: #e74c3c;
+    transform: scale(1.1);
+}
+
+.reset-rating svg {
+    width: 16px;
+    height: 16px;
+}
+
+.movie-rating {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.reset-rating {
+    display: none;
+}
+
+.movie-card[data-rating] .movie-rating:hover .reset-rating {
+    display: flex;
+}
+
 .star {
     font-size: 2rem; 
     color: #ddd;
