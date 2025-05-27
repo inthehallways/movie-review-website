@@ -14,7 +14,7 @@ body {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
-    padding-top: 80px; /* Proper padding for fixed navbar */
+    padding-top: 80px; 
     overflow-x: hidden;
 }
 
@@ -174,7 +174,7 @@ body {
 /* Profile Section */
 .profile-section {
     flex: 1;
-    background: #fff;
+    background: #f2f2e4;
     margin-top: -60px;
     position: relative;
     z-index: 2;
@@ -357,7 +357,7 @@ body {
     gap: 1.5rem;
     overflow-x: auto;
     padding-top: 0.5rem;
-    justify-content: center; /* Center the cards */
+    justify-content: center; 
 }
 
 .favorite-card {

@@ -16,13 +16,13 @@
     <div class="navbar">
         <div class="navbar-left">
             <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" height="40">
-            <span class="dashboard-label">Dashboard</span>
+            <span class="dashboard-label">My Profile</span>
         </div>
 
         <div class="navbar-center">
             <ul class="nav-links">
             <li><a href="../index.html">Home</a></li>
-            <li><a href="#">Watchlist</a></li>
+            <li><a href="../pages/watchlist.html">Watchlist</a></li>
             <li><a href="../pages/movie-catalog.html">Movie Catalog</a></li>
             </ul>
         </div>
@@ -32,7 +32,7 @@
                 <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()" />
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="../pages/profile.html">View Profile</a>
-                    <a href="#">Watched</a>
+                    <a href="../pages/watched.html">Watched</a>
                     <a href="#">My Reviews</a>
                     <a href="../pages/login.html">Logout</a>
                 </div>
@@ -137,6 +137,27 @@
 			
 		</div>
 	</footer>
+
+    <!-- Script for Buttons -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelector(".watched").addEventListener("click", function () {
+            window.location.href = "../pages/watched.html";
+            });
+
+            document.querySelector(".reviews").addEventListener("click", function () {
+            window.location.href = "#";
+            });
+
+            document.querySelector(".watchlist").addEventListener("click", function () {
+            window.location.href = "../pages/watchlist.html";
+            });
+
+            document.querySelector(".edit-profile").addEventListener("click", function () {
+            window.location.href = "#";
+            });
+        });
+    </script>
 
 </body>
 </html>

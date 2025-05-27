@@ -6,23 +6,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../styles/watchlist.css">
+    <link rel="stylesheet" href="../styles/watched.css">
     <link rel="icon" href="../assets/icons/sceneit-logo.png" type="image/png">
-    <title>SceneIt | Watchlist</title>
+    <title>SceneIt | Watched</title>
 </head>
 <body>
-
+    
 	<!-- Navigation Bar -->
     <div class="navbar">
         <div class="navbar-left">
             <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" height="40">
-            <span class="dashboard-label">Watchlist</span>
+            <span class="dashboard-label">Watched</span>
         </div>
 
         <div class="navbar-center">
             <ul class="nav-links">
             <li><a href="../index.html">Home</a></li>
-            <li><a href="#">Watchlist</a></li>
+            <li><a href="../pages/watchlist.html">Watchlist</a></li>
             <li><a href="../pages/movie-catalog.html">Movie Catalog</a></li>
             </ul>
         </div>
@@ -32,7 +32,7 @@
                 <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()" />
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="../pages/profile.html">View Profile</a>
-                    <a href="../pages/watched.html">Watched</a>
+                    <a href="#">Watched</a>
                     <a href="#">My Reviews</a>
                     <a href="../pages/login.html">Logout</a>
                 </div>
@@ -65,9 +65,9 @@
                 <span class="username">Username</span>
             </div>
             <div class="profile-tabs">
-                <button class="tab-button active" data-tab="watchlist">WATCHLIST</button>
+                <button class="tab-button" data-tab="watchlist" onclick="switchToWatchlist()">WATCHLIST</button>
                 <button class="tab-button" data-tab="reviews">MY REVIEWS</button>
-                <button class="tab-button" data-tab="watched" onclick="switchToWatched()">WATCHED</button>
+                <button class="tab-button active" data-tab="watched">WATCHED</button>
             </div>
         </div>
     </section>
@@ -77,28 +77,28 @@
         <div class="content-container">
             <!-- Header Section -->
             <div class="content-header">
-                <h1 class="page-title">Watchlist</h1>
+                <h1 class="page-title">Watched</h1>
                 <div class="sort-section">
                     <span class="sort-label">SORT BY</span>
                     <div class="sort-buttons">
-                        <button class="sort-button active" data-sort="newest">NEWEST</button>
-                        <button class="sort-button" data-sort="oldest">OLDEST</button>
+                        <button class="sort-button active" data-sort="genre">GENRE</button>
+                        <button class="sort-button" data-sort="user-rating">USER RATING</button>
+                        <button class="sort-button" data-sort="watch-date">WATCH DATE</button>
                     </div>
                 </div>
             </div>
-
+            
             <hr class="section-divider"/>
 
             <!-- Movies Grid -->
             <div class="movies-grid" id="moviesGrid">
-                <!-- Movie cards will be generated here -->
+                <!-- Sample movie cards for layout -->
                 <div class="movie-card">
                     <div class="movie-poster">
                         <div class="movie-controls">
-                            <button class="eye-button" title="Mark as watched">
+                            <button class="heart-button" title="Add to favorites">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
                             <div class="menu-container">
@@ -116,16 +116,25 @@
                         </div>
                         <div class="poster-placeholder"></div>
                     </div>
-                    <div class="movie-title">Title</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Title</div>
+                        <div class="movie-rating">
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Generate more sample cards -->
                 <div class="movie-card">
                     <div class="movie-poster">
                         <div class="movie-controls">
-                            <button class="eye-button" title="Mark as watched">
+                            <button class="heart-button" title="Add to favorites">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
                             <div class="menu-container">
@@ -143,16 +152,25 @@
                         </div>
                         <div class="poster-placeholder"></div>
                     </div>
-                    <div class="movie-title">Title</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Title</div>
+                        <div class="movie-rating">
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Repeat for more cards... -->
                 <div class="movie-card">
                     <div class="movie-poster">
                         <div class="movie-controls">
-                            <button class="eye-button" title="Mark as watched">
+                            <button class="heart-button" title="Add to favorites">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
                             <div class="menu-container">
@@ -170,16 +188,24 @@
                         </div>
                         <div class="poster-placeholder"></div>
                     </div>
-                    <div class="movie-title">Title</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Title</div>
+                        <div class="movie-rating">
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="movie-card">
                     <div class="movie-poster">
                         <div class="movie-controls">
-                            <button class="eye-button" title="Mark as watched">
+                            <button class="heart-button" title="Add to favorites">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
                             <div class="menu-container">
@@ -197,16 +223,24 @@
                         </div>
                         <div class="poster-placeholder"></div>
                     </div>
-                    <div class="movie-title">Title</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Title</div>
+                        <div class="movie-rating">
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="movie-card">
                     <div class="movie-poster">
                         <div class="movie-controls">
-                            <button class="eye-button" title="Mark as watched">
+                            <button class="heart-button" title="Add to favorites">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
                             <div class="menu-container">
@@ -224,16 +258,24 @@
                         </div>
                         <div class="poster-placeholder"></div>
                     </div>
-                    <div class="movie-title">Title</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Title</div>
+                        <div class="movie-rating">
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="movie-card">
                     <div class="movie-poster">
                         <div class="movie-controls">
-                            <button class="eye-button" title="Mark as watched">
+                            <button class="heart-button" title="Add to favorites">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
                             <div class="menu-container">
@@ -251,9 +293,18 @@
                         </div>
                         <div class="poster-placeholder"></div>
                     </div>
-                    <div class="movie-title">Title</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Title</div>
+                        <div class="movie-rating">
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                            <span class="star">☆</span>
+                        </div>
+                    </div>
                 </div>
-
+                
             </div>
         </div>
     </main>
@@ -269,7 +320,7 @@
 		</div>
 	</footer>
 
-    <!-- JavaScript for menu functionality -->
+    <!-- JavaScript for functionality -->
     <script>
         function toggleMovieMenu(button) {
             const menu = button.nextElementSibling;
@@ -295,12 +346,12 @@
             }
         });
 
-        // Function to switch to watched page
-        function switchToWateched() {
-            window.location.href = '../pages/watched.html';
+        // Function to switch to watchlist page
+        function switchToWatchlist() {
+            window.location.href = '../pages/watchlist.html';
         }
 
-        // Tab functionality
+        // Tab functionality (for future use)
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', function() {
                 const tab = this.dataset.tab;

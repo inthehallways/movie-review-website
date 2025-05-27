@@ -392,6 +392,7 @@ body {
 /* Footer Section */
 .footer {
 	background: #FFF;
+    border-top: 1px solid #2c2c2c;
 	color: #2c2c2c;
 	padding: 40px 20px;
 	text-align: center;
