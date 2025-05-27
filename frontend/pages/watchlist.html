@@ -67,7 +67,7 @@
             <div class="profile-tabs">
                 <button class="tab-button active" data-tab="watchlist">WATCHLIST</button>
                 <button class="tab-button" data-tab="reviews">MY REVIEWS</button>
-                <button class="tab-button" data-tab="watched">WATCHED</button>
+                <button class="tab-button" data-tab="watched" onclick="switchToWatched()">WATCHED</button>
             </div>
         </div>
     </section>
@@ -295,6 +295,11 @@
                 });
             }
         });
+
+        // Function to switch to watchlist page
+        function switchToWatch() {
+            window.location.href = '../pages/watched.html';
+        }
 
         // Tab functionality
         document.querySelectorAll('.tab-button').forEach(button => {

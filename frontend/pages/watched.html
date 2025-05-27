@@ -170,6 +170,12 @@
                         <div class="movie-title-overlay">Movie Title 1</div>
                     </div>
                     <div class="movie-rating">
+                        <button class="reset-rating" onclick="resetRating(this)" title="Reset rating" style="display: none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                         <span class="star" data-rating="1" onclick="setRating(this, 1)">☆</span>
                         <span class="star" data-rating="2" onclick="setRating(this, 2)">☆</span>
                         <span class="star" data-rating="3" onclick="setRating(this, 3)">☆</span>
@@ -204,6 +210,12 @@
                         <div class="movie-title-overlay">Movie Title 2</div>
                     </div>
                     <div class="movie-rating">
+                        <button class="reset-rating" onclick="resetRating(this)" title="Reset rating" style="display: none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                         <span class="star" data-rating="1" onclick="setRating(this, 1)">☆</span>
                         <span class="star" data-rating="2" onclick="setRating(this, 2)">☆</span>
                         <span class="star" data-rating="3" onclick="setRating(this, 3)">☆</span>
@@ -237,6 +249,12 @@
                         <div class="movie-title-overlay">Movie Title 3</div>
                     </div>
                     <div class="movie-rating">
+                        <button class="reset-rating" onclick="resetRating(this)" title="Reset rating" style="display: none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                         <span class="star" data-rating="1" onclick="setRating(this, 1)">☆</span>
                         <span class="star" data-rating="2" onclick="setRating(this, 2)">☆</span>
                         <span class="star" data-rating="3" onclick="setRating(this, 3)">☆</span>
@@ -270,6 +288,12 @@
                         <div class="movie-title-overlay">Movie Title 4</div>
                     </div>
                     <div class="movie-rating">
+                        <button class="reset-rating" onclick="resetRating(this)" title="Reset rating" style="display: none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                         <span class="star" data-rating="1" onclick="setRating(this, 1)">☆</span>
                         <span class="star" data-rating="2" onclick="setRating(this, 2)">☆</span>
                         <span class="star" data-rating="3" onclick="setRating(this, 3)">☆</span>
@@ -303,6 +327,12 @@
                         <div class="movie-title-overlay">Movie Title 5</div>
                     </div>
                     <div class="movie-rating">
+                        <button class="reset-rating" onclick="resetRating(this)" title="Reset rating" style="display: none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                         <span class="star" data-rating="1" onclick="setRating(this, 1)">☆</span>
                         <span class="star" data-rating="2" onclick="setRating(this, 2)">☆</span>
                         <span class="star" data-rating="3" onclick="setRating(this, 3)">☆</span>
@@ -325,18 +355,18 @@
     </footer>
 
     <!-- JavaScript for functionality -->
-    <script>
+     <script>
         function toggleMovieMenu(button) {
             const menu = button.nextElementSibling;
             const allMenus = document.querySelectorAll('.movie-menu');
-    
+
             // Close all other menus
             allMenus.forEach(m => {
                 if (m !== menu) {
                     m.classList.remove('show');
                 }
             });
-    
+
             // Toggle current menu
             menu.classList.toggle('show');
         }
@@ -354,7 +384,8 @@
         function setRating(clickedStar, rating) {
             const movieCard = clickedStar.closest('.movie-card');
             const stars = movieCard.querySelectorAll('.star');
-    
+            const resetButton = movieCard.querySelector('.reset-rating');
+
             // Update stars display
             stars.forEach((star, index) => {
                 if (index < rating) {
@@ -365,43 +396,92 @@
                     star.classList.remove('filled');
                 }
             });
-    
-            // Store rating (you can save this to database later)
+
+            // Store rating
             movieCard.setAttribute('data-rating', rating);
+            
+            // Hide reset button immediately after rating
+            resetButton.style.display = 'none';
+            
             console.log('Movie rated:', rating, 'stars');
         }
 
-        // Add hover effect for stars
+        // Reset rating functionality
+        function resetRating(resetButton) {
+            const movieCard = resetButton.closest('.movie-card');
+            const stars = movieCard.querySelectorAll('.star');
+            
+            // Reset all stars to empty
+            stars.forEach(star => {
+                star.textContent = '☆';
+                star.classList.remove('filled');
+                star.style.color = '#ddd';
+            });
+            
+            // Remove rating data and hide reset button
+            movieCard.removeAttribute('data-rating');
+            resetButton.style.display = 'none';
+            console.log('Rating reset for movie');
+        }
+
+        // Add hover effect for stars and reset button visibility
         document.addEventListener('DOMContentLoaded', function() {
-            const allStars = document.querySelectorAll('.star');
-    
-            allStars.forEach(star => {
-                star.addEventListener('mouseenter', function() {
-                    const rating = parseInt(this.getAttribute('data-rating'));
-                    const movieCard = this.closest('.movie-card');
-                    const stars = movieCard.querySelectorAll('.star');
-        
-                    // Temporarily show hover state
-                    stars.forEach((s, index) => {
-                        if (index < rating) {
-                            s.style.color = '#ffed4e';
-                        } else {
-                            s.style.color = '#ddd';
-                        }
-                    });
+            const allMovieCards = document.querySelectorAll('.movie-card');
+
+            allMovieCards.forEach(movieCard => {
+                const stars = movieCard.querySelectorAll('.star');
+                const resetButton = movieCard.querySelector('.reset-rating');
+                const ratingContainer = movieCard.querySelector('.movie-rating');
+                
+                // Handle mouse enter on rating container
+                ratingContainer.addEventListener('mouseenter', function() {
+                    // Only show reset button if movie has a rating
+                    if (movieCard.hasAttribute('data-rating')) {
+                        resetButton.style.display = 'flex';
+                    }
                 });
-        
-                star.addEventListener('mouseleave', function() {
-                    const movieCard = this.closest('.movie-card');
-                    const stars = movieCard.querySelectorAll('.star');
-        
-                    // Reset to actual rating
-                    stars.forEach(s => {
-                        if (s.classList.contains('filled')) {
-                            s.style.color = '#ffd700';
-                        } else {
-                            s.style.color = '#ddd';
+                
+                // Handle mouse leave on rating container
+                ratingContainer.addEventListener('mouseleave', function() {
+                    // Always hide reset button when not hovering
+                    resetButton.style.display = 'none';
+                });
+                
+                // Star hover effects
+                stars.forEach(star => {
+                    star.addEventListener('mouseenter', function() {
+                        const rating = parseInt(this.getAttribute('data-rating'));
+                        const movieCard = this.closest('.movie-card');
+                        const stars = movieCard.querySelectorAll('.star');
+                        const resetButton = movieCard.querySelector('.reset-rating');
+            
+                        // Show reset button only if movie already has a rating
+                        if (movieCard.hasAttribute('data-rating')) {
+                            resetButton.style.display = 'flex';
                         }
+            
+                        // Show hover preview
+                        stars.forEach((s, index) => {
+                            if (index < rating) {
+                                s.style.color = '#ffed4e';
+                            } else {
+                                s.style.color = '#ddd';
+                            }
+                        });
+                    });
+            
+                    star.addEventListener('mouseleave', function() {
+                        const movieCard = this.closest('.movie-card');
+                        const stars = movieCard.querySelectorAll('.star');
+            
+                        // Reset to actual rating colors
+                        stars.forEach(s => {
+                            if (s.classList.contains('filled')) {
+                                s.style.color = '#ffd700';
+                            } else {
+                                s.style.color = '#ddd';
+                            }
+                        });
                     });
                 });
             });
@@ -432,9 +512,6 @@
             
             // Apply sorting logic here
             console.log(`Sorting by ${type}:`, value);
-            
-            // You can implement actual sorting logic here
-            // For example, filter movies based on the selected criteria
         }
 
         // Close dropdowns when clicking outside
@@ -451,23 +528,20 @@
             window.location.href = '../pages/watchlist.html';
         }
 
-        // Tab functionality (for future use)
+        // Tab functionality
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', function() {
                 const tab = this.dataset.tab;
-        
+
                 if (tab === 'watchlist') {
                     window.location.href = '../pages/watchlist.html';
                 } else if (tab === 'watched') {
-                    // Already on watched page
                     return;
                 } else if (tab === 'reviews') {
-                    // Future: redirect to reviews page
                     console.log('Reviews page not implemented yet');
                 }
             });
         });
     </script>
-
 </body>
 </html>
