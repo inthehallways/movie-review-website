@@ -213,46 +213,63 @@ async function showModal(movie) {
 
 // New modal functionality for the redesigned buttons
 function markAsWatched() {
-  if (currentMovie) {
-    // Create a temporary date input
-    const dateInput = document.createElement("input")
-    dateInput.type = "date"
-    dateInput.className = "hidden-date-input"
-
-    // Add to body temporarily
-    document.body.appendChild(dateInput)
-
-    // Set up the change event
-    dateInput.addEventListener("change", (event) => {
-      const selectedDate = event.target.value
-      if (selectedDate) {
-        // Convert from YYYY-MM-DD to DD/MM/YYYY format
-        const dateObj = new Date(selectedDate)
-        const day = dateObj.getDate().toString().padStart(2, "0")
-        const month = (dateObj.getMonth() + 1).toString().padStart(2, "0")
-        const year = dateObj.getFullYear()
-        const formattedDate = `${day}/${month}/${year}`
-
-        // Update the date display
-        modal.querySelector(".dd-mm-yyyy").textContent = formattedDate
-
-        // Visual feedback for watched button
-        const watchedButton = modal.querySelector(".marked-as-watched")
-        const watchedText = watchedButton.querySelector(".watched-text")
-        watchedButton.classList.add("watched")
-        watchedText.textContent = "Watched"
-
-        alert(`Marked "${currentMovie.title}" as watched on ${formattedDate}!`)
-      }
-
-      // Clean up
-      document.body.removeChild(dateInput)
-    })
-
-    // Trigger the date picker
-    dateInput.focus()
-    dateInput.showPicker()
-  }
+    if (!currentMovie) return;
+    
+    // Check if already watched
+    const watchedButton = modal.querySelector(".marked-as-watched");
+    if (watchedButton.classList.contains("watched")) {
+        // If already watched, reset to unwatched
+        watchedButton.classList.remove("watched");
+        watchedButton.querySelector(".watched-text").textContent = "Mark as Watched";
+        modal.querySelector(".dd-mm-yyyy").textContent = "Not watched";
+        return;
+    }
+    
+    // Create and configure date input
+    const dateInput = document.createElement('input');
+    dateInput.type = 'date';
+    dateInput.style.position = 'fixed';
+    dateInput.style.left = '50%';
+    dateInput.style.top = '50%';
+    dateInput.style.transform = 'translate(-50%, -50%)';
+    dateInput.style.zIndex = '10000';
+    dateInput.style.opacity = '0';
+    
+    // Set max date to today
+    const today = new Date();
+    dateInput.max = today.toISOString().split('T')[0];
+    
+    // Add event listeners
+    dateInput.addEventListener('change', function() {
+        if (!this.value) return;
+        
+        const selectedDate = new Date(this.value);
+        const day = String(selectedDate.getDate()).padStart(2, '0');
+        const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+        const year = selectedDate.getFullYear();
+        const formattedDate = `${day}/${month}/${year}`;
+        
+        // Update UI
+        modal.querySelector(".dd-mm-yyyy").textContent = formattedDate;
+        watchedButton.classList.add("watched");
+        watchedButton.querySelector(".watched-text").textContent = "Watched";
+        
+        // Remove the input
+        document.body.removeChild(dateInput);
+    });
+    
+    dateInput.addEventListener('blur', function() {
+        setTimeout(() => {
+            if (document.body.contains(dateInput)) {
+                document.body.removeChild(dateInput);
+            }
+        }, 100);
+    });
+    
+    // Add to DOM and trigger
+    document.body.appendChild(dateInput);
+    dateInput.focus();
+    dateInput.showPicker();
 }
 
 function addToLikes() {
