@@ -70,8 +70,7 @@ body {
     transition: color 0.3s;
 }
 
-.nav-links li a:hover,
-.nav-links li a.active {
+.nav-links li a:hover {
     color: #73578d;
 }
 
