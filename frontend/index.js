@@ -136,9 +136,11 @@ class SceneItDashboard {
         const movieTitle = movie.title || movie.name || "Unknown Title"
 
         movieCard.innerHTML = `
+        <div class="movie-poster">
         <img src="${posterUrl}" alt="${movieTitle} Poster" onerror="this.src='../frontend/assets/images/poster-placeholder.png'">
-        <div class="movie-title">${movieTitle}</div>
-        `
+        <div class="movie-title-overlay">${movieTitle}</div>
+        </div>
+    `
 
         // Add click event for future movie details functionality
         movieCard.addEventListener("click", () => {
