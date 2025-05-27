@@ -80,9 +80,41 @@
                 <h1 class="page-title">Watchlist</h1>
                 <div class="sort-section">
                     <span class="sort-label">SORT BY</span>
-                    <div class="sort-buttons">
-                        <button class="sort-button active" data-sort="date-added">DATE ADDED</button>
-                        <button class="sort-button" data-sort="oldest">OLDEST</button>
+                    <div class="sort-dropdowns">
+                        <!-- Date Added Dropdown -->
+                        <div class="dropdown-container">
+                            <button class="dropdown-button" onclick="toggleSortDropdown('date')">
+                                <span id="dateSelected">Newest Added</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu-sort" id="dateDropdown">
+                                <div class="dropdown-item" onclick="selectSort('date', 'Newest Added')">Newest Added</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Oldest Added')">Oldest Added</div>
+                            </div>
+                        </div>
+
+                        <!-- Genre Dropdown -->
+                        <div class="dropdown-container">
+                            <button class="dropdown-button" onclick="toggleSortDropdown('genre')">
+                                <span id="genreSelected">All Genres</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu-sort" id="genreDropdown">
+                                <div class="dropdown-item" onclick="selectSort('genre', 'All Genres')">All Genres</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Action')">Action</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Comedy')">Comedy</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Drama')">Drama</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Horror')">Horror</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Romance')">Romance</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Sci-Fi')">Sci-Fi</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Thriller')">Thriller</div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -279,14 +311,43 @@
             });
         });
 
-        // Sort functionality
-        document.querySelectorAll('.sort-button').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.sort-button').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                console.log('Sorting by:', this.dataset.sort);
+        // Sort dropdown functionality
+        function toggleSortDropdown(type) {
+            const dropdown = document.getElementById(type + 'Dropdown');
+            const allDropdowns = document.querySelectorAll('.dropdown-menu-sort');
+            
+            // Close all other dropdowns
+            allDropdowns.forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                }
             });
+            
+            // Toggle current dropdown
+            dropdown.classList.toggle('show');
+        }
+
+        function selectSort(type, value) {
+            const selectedSpan = document.getElementById(type + 'Selected');
+            selectedSpan.textContent = value;
+            
+            // Close dropdown
+            document.getElementById(type + 'Dropdown').classList.remove('show');
+            
+            // Apply sorting logic here
+            console.log(`Sorting by ${type}:`, value);
+            
+            // You can implement actual sorting logic here
+            // For example, filter movies based on the selected criteria
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown-container')) {
+                document.querySelectorAll('.dropdown-menu-sort').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+            }
         });
     </script>
 
