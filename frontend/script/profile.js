@@ -14,6 +14,56 @@ let avatarTransform = { scale: 1, x: 0, y: 0 };
 let currentMovieSlot = null;
 let favoriteMovies = Array(5).fill(null);
 
+async function loadUserProfile() {
+    try {
+        const userId = getCurrentUserId()
+        const profileData = await fetchUserProfile(userId)
+        
+        // Update UI with loaded data
+        document.getElementById("profileUsername").textContent = profileData.username || "Username"
+        document.getElementById("bioDisplay").textContent = profileData.bio || "Tell us about yourself..."
+        
+        // Load header image if exists
+        if (profileData.headerImage) {
+        uploadedHeaderImage = profileData.headerImage
+        const profileHeader = document.getElementById("profileHeader")
+        profileHeader.style.backgroundImage = `url(${profileData.headerImage})`
+        }
+        
+        // Load avatar image if exists  
+        if (profileData.avatarImage) {
+        uploadedAvatarImage = profileData.avatarImage
+        document.getElementById("profileAvatar").src = profileData.avatarImage
+        document.getElementById("profilePicture").src = profileData.avatarImage
+        }
+        
+        // Load favorite movies
+        if (profileData.favoriteMovies) {
+        favoriteMovies = profileData.favoriteMovies
+        updateMainProfileFavorites()
+        }
+        
+    } catch (error) {
+        console.error('Error loading profile:', error)
+    }
+}
+
+// Mock API function
+async function fetchUserProfile(userId) {
+    // Backend will implement: GET /api/users/{userId}/profile
+    return {
+        username: "Username",
+        bio: "Movie enthusiast and critic",
+        headerImage: null,
+        avatarImage: null,
+        favoriteMovies: Array(5).fill(null)
+    }
+}
+
+function getCurrentUserId() {
+    return localStorage.getItem("userId") || "1"
+}
+
 // Initialize favorite movies grid
 function initializeFavoriteMovies() {
     const grid = document.getElementById('editFavoritesGrid');
@@ -535,6 +585,7 @@ function showSuccessMessage(message) {
 // Stats button functionality
 document.addEventListener("DOMContentLoaded", function () {
     // Initialize main profile favorites
+    loadUserProfile() // Add this line
     updateMainProfileFavorites();
 
     // Movie search on Enter key
@@ -549,7 +600,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.querySelector(".reviews").addEventListener("click", function () {
-        window.location.href = "#";
+        window.location.href = "../pages/reviews.html";
     });
 
     document.querySelector(".watchlist").addEventListener("click", function () {

@@ -1,9 +1,9 @@
 // This JavaScript file handles dummy data as a guide for Backend integration.
 
 export const API_CONFIG = {
-  TMDB_API_KEY: "YOUR_TMDB_API_KEY", // Replace with your actual TMDB API key
-  TMDB_BASE_URL: "https://api.themoviedb.org/3",
-  TMDB_IMAGE_BASE: "https://image.tmdb.org/t/p/w500",
+    TMDB_API_KEY: '8064455f5d0fa492a57d3904df2b0045', // Backend dev should replace this with their own API key
+    TMDB_BASE_URL: "https://api.themoviedb.org/3",
+    TMDB_IMAGE_BASE: "https://image.tmdb.org/t/p/w500",
 }
 
 // Mock watched movies data for testing
