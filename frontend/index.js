@@ -8,7 +8,7 @@ class SceneItDashboard {
         this.hoverDirection = null
 
         // TMDB API Configuration
-        this.TMDB_API_KEY = "8064455f5d0fa492a57d3904df2b0045" // Backend dev should replace this with their own API key
+        this.TMDB_API_KEY = "27f5af569d81a9ee09368fca4d1c47ca"
         this.TMDB_BASE_URL = "https://api.themoviedb.org/3"
         this.TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500" // For movie posters
 
