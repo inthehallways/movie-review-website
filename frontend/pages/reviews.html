@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/reviews.css">
+    <link rel="icon" href="../assets/icons/sceneit-logo.png" type="image/png">
+    <title>SceneIt | My Reviews</title>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" height="40">
+            <span class="dashboard-label">SceneIt</span>
+        </div>
+
+        <div class="navbar-center">
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../pages/watchlist.html">Watchlist</a></li>
+                <li><a href="../pages/movie-catalog.html">Movie Catalog</a></li>
+            </ul>
+        </div>
+
+        <div class="navbar-right">
+            <div class="profile-container">
+                <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()" />
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="../pages/profile.html">View Profile</a>
+                    <a href="../pages/watchlist.html">Watchlist</a>
+                    <a href="../pages/my-reviews.html" class="active">My Reviews</a>
+                    <a href="../pages/login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Section -->
+    <section class="user-profile-section">
+        <div class="user-profile-container">
+            <div class="user-info">
+                <img src="../assets/images/blank-profile.jpg" alt="User Profile" class="user-avatar">
+                <span class="username">Username</span>
+            </div>
+            <div class="profile-tabs">
+                <button class="tab-button" data-tab="watchlist" onclick="switchToWatchlist()">WATCHLIST</button>
+                <button class="tab-button active" data-tab="reviews">MY REVIEWS</button>
+                <button class="tab-button" data-tab="watched" onclick="switchToWatched()">WATCHED</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Header Section -->
+            <div class="content-header">
+                <h1 class="page-title">My Reviews</h1>
+                <div class="sort-section">
+                    <span class="sort-label">SORT BY</span>
+                    <div class="sort-dropdowns">
+                        <!-- Date Added Dropdown -->
+                        <div class="dropdown-container">
+                            <button class="dropdown-button" onclick="toggleSortDropdown('date')">
+                                <span id="dateSelected">Latest Added</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu-sort" id="dateDropdown">
+                                <div class="dropdown-item" onclick="selectSort('date', 'Latest Added')">Latest Added</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Oldest Added')">Oldest Added</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Highest Rated')">Highest Rated</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Lowest Rated')">Lowest Rated</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="content-divider">
+            
+            <!-- Reviews List -->
+            <div class="reviews-list" id="reviewsList">
+                <!-- Reviews will be dynamically loaded here -->
+                <div class="no-reviews-message" id="noReviewsMessage" style="display: none;">
+                    <div class="no-reviews-content">
+                        <h3>No reviews yet</h3>
+                        <p>Start reviewing movies from the <a href="../pages/movie-catalog.html">Movie Catalog</a> to see them here!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Review Modal -->
+    <div id="editReviewModal" class="edit-modal">
+        <div class="edit-modal-content">
+            <div class="edit-modal-header">
+                <h3 id="editMovieTitle">Edit Review</h3>
+                <span class="edit-close" onclick="closeEditModal()">&times;</span>
+            </div>
+            <div class="edit-modal-body">
+                <div class="edit-rating-section">
+                    <label>Rating:</label>
+                    <div class="edit-star-rating" id="editStarRating">
+                        <input type="radio" name="edit-rating" value="5" id="edit-star5">
+                        <label for="edit-star5">★</label>
+                        <input type="radio" name="edit-rating" value="4" id="edit-star4">
+                        <label for="edit-star4">★</label>
+                        <input type="radio" name="edit-rating" value="3" id="edit-star3">
+                        <label for="edit-star3">★</label>
+                        <input type="radio" name="edit-rating" value="2" id="edit-star2">
+                        <label for="edit-star2">★</label>
+                        <input type="radio" name="edit-rating" value="1" id="edit-star1">
+                        <label for="edit-star1">★</label>
+                    </div>
+                </div>
+                <div class="edit-review-section">
+                    <label for="editReviewText">Review:</label>
+                    <textarea id="editReviewText" placeholder="Write your review..." rows="6"></textarea>
+                </div>
+            </div>
+            <div class="edit-modal-footer">
+                <button class="edit-cancel-btn" onclick="closeEditModal()">Cancel</button>
+                <button class="edit-save-btn" onclick="saveEditedReview()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
+            </div>
+            <p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
+        </div>
+    </footer>
+
+    <script src="reviews.js"></script>
+
+</body>
+</html>
