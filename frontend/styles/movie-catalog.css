@@ -154,28 +154,37 @@ body {
 }
 
 .search-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 5px;
 }
 
 .search-wrapper input {
-  padding: 8px 12px;
+  padding: 8px 40px 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  width: 250px;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.search-wrapper button {
-  background-color: #ccc;
-  border: none;
-  padding: 6px;
-  cursor: pointer;
-  border-radius: 4px;
+.search-wrapper input:focus {
+  outline: none;
+  border-color: #f49b98;
+  box-shadow: 0 0 0 2px rgba(244, 155, 152, 0.2);
 }
 
-.search-wrapper img {
-  height: 16px;
-  width: 16px;
+.search-wrapper::after {
+  content: "🔍";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #000;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* Movies and Sorting */
@@ -285,27 +294,11 @@ body {
   max-width: 150px;
 }
 
-.footer-links {
-  display: flex;
-  gap: 15px;
-}
-
-.social-link img {
-  width: 30px;
-  height: 30px;
-  transition: transform 0.3s;
-}
-
-.social-link img:hover {
-  transform: scale(1.1);
-}
 
 .footer-text {
   font-size: 0.9em;
   color: #2c2c2c;
 }
-
-/* ===== MODAL STYLES - ENHANCED AESTHETICS ===== */
 
 .modal {
   display: none;
@@ -390,16 +383,20 @@ body {
   color: #2c2c2c;
   text-align: left;
   font-family: "Inter", sans-serif;
-  font-size: 32px;
+  font-size: 28px;
   line-height: 120%;
   letter-spacing: -0.03em;
   font-weight: 600;
   position: absolute;
   left: 367px;
-  top: 52px;
-  max-width: 450px;
+  top: 40px;
+  width: 450px;
   word-wrap: break-word;
   hyphens: auto;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .release-date {
@@ -411,8 +408,8 @@ body {
   letter-spacing: -0.03em;
   font-weight: 300;
   position: absolute;
-  left: 580px;
-  top: 52px;
+  left: 367px;
+  top: 100px;
   opacity: 0.8;
 }
 
@@ -426,8 +423,10 @@ body {
   font-weight: 400;
   position: absolute;
   left: 367px;
-  top: 84px;
+  top: 120px;
   opacity: 0.9;
+  width: 450px;
+  word-wrap: break-word;
 }
 
 .movie-description {
@@ -440,13 +439,15 @@ body {
   font-weight: 300;
   position: absolute;
   left: 367px;
-  top: 125px;
-  width: 420px;
-  max-height: 96px;
+  top: 145px;
+  width: 450px;
+  max-height: 85px;
   overflow-y: auto;
   opacity: 0.9;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .movie-description::-webkit-scrollbar {
@@ -484,14 +485,14 @@ body {
 .horizontal-line {
   width: 100%;
   height: 1px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #000;
   flex-shrink: 0;
+  margin: 0;
+  border: none;
 }
 
 .action-buttons-section {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
   height: 65px;
   background: #f49b98;
   position: relative;
@@ -508,7 +509,7 @@ body {
   justify-content: center;
   gap: 5px;
   cursor: pointer;
-  width: 82px;
+  flex: 1;
   height: 100%;
   transition: background-color 0.2s ease;
   position: relative;
@@ -520,18 +521,9 @@ body {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-.with-border {
-  position: relative;
-}
-
-.with-border::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 12px;
-  height: calc(100% - 24px);
-  width: 1px;
-  background-color: rgba(0, 0, 0, 0.2);
+.add-to-likes {
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
 }
 
 .watched-icon-container,
@@ -603,7 +595,6 @@ body {
   cursor: pointer;
   transition: color 0.3s ease, transform 0.2s ease;
   -webkit-text-stroke: 1px #333;
-  text-stroke: 1px #333;
   line-height: 1;
 }
 
@@ -611,7 +602,6 @@ body {
   transform: scale(1.1);
   color: #ffc107;
   -webkit-text-stroke: 1px #e6a800;
-  text-stroke: 1px #e6a800;
 }
 
 .star-rating label:hover,
@@ -619,7 +609,6 @@ body {
 .star-rating input:checked ~ label {
   color: #ffc107;
   -webkit-text-stroke: 1px #e6a800;
-  text-stroke: 1px #e6a800;
 }
 
 .rating-label {

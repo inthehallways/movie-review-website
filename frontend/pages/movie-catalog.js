@@ -14,7 +14,6 @@ const moreOptionsModal = document.getElementById("moreOptionsModal")
 
 const movieGrid = document.getElementById("movieGrid")
 const searchInput = document.getElementById("searchInput")
-const searchBtn = document.getElementById("searchBtn")
 
 const genreSelect = document.getElementById("genreSelect")
 const yearSelect = document.getElementById("yearSelect")
@@ -108,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
-  // Enhanced Date picker functionality
   const dateContainer = document.querySelector(".date-container")
   const dateDisplay = document.querySelector(".dd-mm-yyyy")
   const hiddenDateInput = document.querySelector(".hidden-date-input")
@@ -147,14 +145,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 })
 
-searchBtn.addEventListener("click", (e) => {
-  e.preventDefault()
-  const query = searchInput.value.trim()
-  if (query !== "") {
-    searchMovies(query)
-  } else {
-    fetchPopularMovies()
+searchInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault()
+    const query = searchInput.value.trim()
+    if (query !== "") {
+      searchMovies(query)
+    } else {
+      fetchPopularMovies()
+    }
   }
+})
+
+let searchTimeout
+searchInput.addEventListener("input", (e) => {
+  clearTimeout(searchTimeout)
+  const query = e.target.value.trim()
+
+  searchTimeout = setTimeout(() => {
+    if (query !== "") {
+      searchMovies(query)
+    } else {
+      fetchPopularMovies()
+    }
+  }, 500) // 500ms debounce
 })
 
 async function fetchPopularMovies() {
@@ -167,7 +181,7 @@ async function fetchPopularMovies() {
 
     const [data1, data2] = await Promise.all([page1.json(), page2.json()])
 
-    // Number of movie posters that will show up
+    // Number of movie posters that will show up on screen
     currentMovies = [...data1.results, ...data2.results].slice(0, 36)
     displayMovies(currentMovies)
   } catch (err) {
@@ -177,7 +191,6 @@ async function fetchPopularMovies() {
 
 async function searchMovies(query) {
   try {
-    // Fetch from multiple pages for search results too
     const [page1, page2] = await Promise.all([
       fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=en-US&page=1`),
       fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=en-US&page=2`),
@@ -185,7 +198,7 @@ async function searchMovies(query) {
 
     const [data1, data2] = await Promise.all([page1.json(), page2.json()])
 
-    // Combine results and take first 24
+    // Number of movies that will how up when you search
     currentMovies = [...data1.results, ...data2.results].slice(0, 24)
     displayMovies(currentMovies)
   } catch (err) {
@@ -252,7 +265,6 @@ async function applyFilters() {
 
     const [data1, data2] = await Promise.all([res1.json(), res2.json()])
 
-    // Combine and limit to 24 movies
     currentMovies = [...(data1.results || []), ...(data2.results || [])].slice(0, 24)
     applyNameSort()
   } catch (err) {
@@ -413,7 +425,6 @@ function markAsWatched() {
 
       dateDisplay.textContent = formattedDate
 
-      // Mark as watched automatically
       const watchedButton = modal.querySelector(".marked-as-watched")
       const watchedText = watchedButton.querySelector(".watched-text")
       watchedButton.classList.add("watched")
@@ -505,7 +516,6 @@ document.addEventListener("change", (e) => {
   }
 })
 
-// Handle rating removal (click on selected star)
 document.addEventListener("click", (e) => {
   if (e.target.matches(".star-rating label")) {
     const input = document.getElementById(e.target.getAttribute("for"))
@@ -590,7 +600,6 @@ function submitReview() {
     const reviewTextarea = modal.querySelector(".add-a-review")
     const review = reviewTextarea.value.trim()
 
-    // Get selected rating
     const selectedRating = modal.querySelector('input[name="movie-rating"]:checked')
     if (!selectedRating) {
       showNotification("Please select a rating before submitting your review.")
@@ -599,14 +608,12 @@ function submitReview() {
 
     const rating = Number.parseInt(selectedRating.value)
 
-    // Check if movie is marked as watched
     const watchedButton = modal.querySelector(".marked-as-watched")
     if (!watchedButton.classList.contains("watched")) {
       showNotification("Please mark the movie as watched before submitting a review.")
       return
     }
 
-    // Validate review text
     if (!review) {
       showNotification("Please write a review before submitting.")
       reviewTextarea.focus()
@@ -619,7 +626,6 @@ function submitReview() {
       return
     }
 
-    // Get watch date from display or use current date
     const dateDisplay = modal.querySelector(".dd-mm-yyyy")
     let watchDate = dateDisplay ? dateDisplay.textContent : null
 
@@ -669,7 +675,6 @@ function showNotification(message, type = "info") {
     animation: "fadeIn 0.3s ease",
   })
 
-  // Add to body
   document.body.appendChild(notification)
 
   // Remove after 3 seconds
@@ -681,7 +686,6 @@ function showNotification(message, type = "info") {
   }, 3000)
 }
 
-// Add this to your existing modal display code
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && modal.style.display === "block") {
     modal.style.display = "none"
