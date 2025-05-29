@@ -159,9 +159,16 @@ searchBtn.addEventListener("click", (e) => {
 
 async function fetchPopularMovies() {
   try {
-    const res = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`)
-    const data = await res.json()
-    currentMovies = data.results
+    // Fetch from multiple pages to get more movies
+    const [page1, page2] = await Promise.all([
+      fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`),
+      fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=2`),
+    ])
+
+    const [data1, data2] = await Promise.all([page1.json(), page2.json()])
+
+    // Combine results from both pages and take first 20 movies
+    currentMovies = [...data1.results, ...data2.results].slice(0, 20)
     displayMovies(currentMovies)
   } catch (err) {
     console.error("Error fetching popular movies:", err)
@@ -170,11 +177,16 @@ async function fetchPopularMovies() {
 
 async function searchMovies(query) {
   try {
-    const res = await fetch(
-      `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=en-US&page=1`,
-    )
-    const data = await res.json()
-    currentMovies = data.results
+    // Fetch from multiple pages for search results too
+    const [page1, page2] = await Promise.all([
+      fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=en-US&page=1`),
+      fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=en-US&page=2`),
+    ])
+
+    const [data1, data2] = await Promise.all([page1.json(), page2.json()])
+
+    // Combine results and take first 20
+    currentMovies = [...data1.results, ...data2.results].slice(0, 20)
     displayMovies(currentMovies)
   } catch (err) {
     console.error("Error searching for movies:", err)
@@ -219,16 +231,29 @@ async function applyFilters() {
     }
   }
 
-  let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1`
+  let url1 = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1`
+  let url2 = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=2`
 
-  if (genreId) url += `&with_genres=${genreId}`
-  if (primaryReleaseGte) url += `&primary_release_date.gte=${primaryReleaseGte}`
-  if (primaryReleaseLte) url += `&primary_release_date.lte=${primaryReleaseLte}`
+  if (genreId) {
+    url1 += `&with_genres=${genreId}`
+    url2 += `&with_genres=${genreId}`
+  }
+  if (primaryReleaseGte) {
+    url1 += `&primary_release_date.gte=${primaryReleaseGte}`
+    url2 += `&primary_release_date.gte=${primaryReleaseGte}`
+  }
+  if (primaryReleaseLte) {
+    url1 += `&primary_release_date.lte=${primaryReleaseLte}`
+    url2 += `&primary_release_date.lte=${primaryReleaseLte}`
+  }
 
   try {
-    const res = await fetch(url)
-    const data = await res.json()
-    currentMovies = data.results || []
+    const [res1, res2] = await Promise.all([fetch(url1), fetch(url2)])
+
+    const [data1, data2] = await Promise.all([res1.json(), res2.json()])
+
+    // Combine and limit to 20 movies
+    currentMovies = [...(data1.results || []), ...(data2.results || [])].slice(0, 20)
     applyNameSort()
   } catch (err) {
     console.error("Error applying filters:", err)
@@ -420,12 +445,13 @@ function adjustModalLayout() {
   const descriptionBottom = descriptionTop + Math.min(96, naturalHeight) + 20
 
   // Adjust background height based on content
-  const minBackgroundHeight = Math.max(248, descriptionBottom)
+  const minBackgroundHeight = Math.max(220, descriptionBottom)
+
   backgroundElement.style.minHeight = `${minBackgroundHeight}px`
   backgroundElement.style.height = `${minBackgroundHeight}px`
 
   // Calculate spacing after description background for profile/username
-  const profileTop = minBackgroundHeight + 32
+  const profileTop = minBackgroundHeight + 20
   const usernameTop = profileTop + 15
   const reviewBoxTop = profileTop + 50
 
@@ -439,7 +465,7 @@ function adjustModalLayout() {
   if (reviewBoxElement) reviewBoxElement.style.top = `${reviewBoxTop}px`
 
   // Calculate minimum modal height based on new positions
-  const minModalHeight = Math.max(580, reviewBoxTop + 140 + 100)
+  const minModalHeight = Math.max(520, reviewBoxTop + 140 + 60)
 
   modalContentElement.style.minHeight = `${minModalHeight}px`
   modalContentElement.style.height = `${minModalHeight}px`
@@ -447,8 +473,8 @@ function adjustModalLayout() {
   moviesElement.style.height = `${minModalHeight}px`
 
   // Adjust other elements if modal height increased
-  if (minModalHeight > 580) {
-    const heightDifference = minModalHeight - 580
+  if (minModalHeight > 520) {
+    const heightDifference = minModalHeight - 520
 
     const elementsToMove = [
       ".modal-movie-poster",
@@ -545,9 +571,11 @@ function addToWatchlist() {
 }
 
 function addReview() {
-  const reviewTextarea = modal.querySelector(".add-a-review")
-  if (reviewTextarea) {
-    reviewTextarea.focus()
+  if (currentMovie) {
+    const reviewTextarea = modal.querySelector(".add-a-review")
+    if (reviewTextarea) {
+      reviewTextarea.focus()
+    }
   }
 }
 
