@@ -91,17 +91,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (reviewTextarea && characterCounter) {
     reviewTextarea.addEventListener("input", function () {
-      const remaining = this.value.length
-      characterCounter.textContent = `${remaining}/${MAX_CHARS}`
+      const remaining = MAX_CHARS - this.value.length
+      characterCounter.textContent = `${this.value.length}/${MAX_CHARS}`
       characterCounter.style.display = "block"
 
-      if (remaining > MAX_CHARS - 50) {
+      if (remaining <= 50) {
         characterCounter.classList.add("limit")
       } else {
         characterCounter.classList.remove("limit")
       }
 
-      if (remaining > MAX_CHARS) {
+      if (this.value.length > MAX_CHARS) {
         this.value = this.value.substring(0, MAX_CHARS)
         characterCounter.textContent = `${MAX_CHARS}/${MAX_CHARS}`
       }
@@ -167,8 +167,8 @@ async function fetchPopularMovies() {
 
     const [data1, data2] = await Promise.all([page1.json(), page2.json()])
 
-    // Combine results from both pages and take first 20 movies
-    currentMovies = [...data1.results, ...data2.results].slice(0, 20)
+    // Number of movie posters that will show up
+    currentMovies = [...data1.results, ...data2.results].slice(0, 36)
     displayMovies(currentMovies)
   } catch (err) {
     console.error("Error fetching popular movies:", err)
@@ -185,8 +185,8 @@ async function searchMovies(query) {
 
     const [data1, data2] = await Promise.all([page1.json(), page2.json()])
 
-    // Combine results and take first 20
-    currentMovies = [...data1.results, ...data2.results].slice(0, 20)
+    // Combine results and take first 24
+    currentMovies = [...data1.results, ...data2.results].slice(0, 24)
     displayMovies(currentMovies)
   } catch (err) {
     console.error("Error searching for movies:", err)
@@ -252,8 +252,8 @@ async function applyFilters() {
 
     const [data1, data2] = await Promise.all([res1.json(), res2.json()])
 
-    // Combine and limit to 20 movies
-    currentMovies = [...(data1.results || []), ...(data2.results || [])].slice(0, 20)
+    // Combine and limit to 24 movies
+    currentMovies = [...(data1.results || []), ...(data2.results || [])].slice(0, 24)
     applyNameSort()
   } catch (err) {
     console.error("Error applying filters:", err)
@@ -341,10 +341,6 @@ async function showModal(movie) {
 
   modal.style.display = "block"
 
-  setTimeout(() => {
-    adjustModalLayout()
-  }, 50)
-
   modal.querySelector(".close").onclick = () => {
     modal.style.display = "none"
     moreOptionsModal.style.display = "none"
@@ -394,114 +390,6 @@ function loadExistingReview() {
   }
 }
 
-// ENHANCED adjustModalLayout function for proper description handling
-function adjustModalLayout() {
-  const titleElement = modal.querySelector(".movie-title")
-  const directedByElement = modal.querySelector(".directed-by")
-  const descriptionElement = modal.querySelector(".movie-description")
-  const backgroundElement = modal.querySelector(".modal-movie-description-background")
-  const modalContentElement = modal.querySelector(".modal-content")
-  const moviesElement = modal.querySelector(".movies")
-
-  // Get the actual height of the title
-  const titleHeight = titleElement.offsetHeight
-  const titleBottom = 52 + titleHeight
-
-  // Adjust directed by position based on title height
-  const directedByTop = Math.max(84, titleBottom + 10)
-  directedByElement.style.top = `${directedByTop}px`
-
-  // Adjust description position based on directed by position
-  const descriptionTop = directedByTop + 25
-  descriptionElement.style.top = `${descriptionTop}px`
-
-  // Calculate the actual height needed for the description
-  const tempDiv = document.createElement("div")
-  tempDiv.style.position = "absolute"
-  tempDiv.style.visibility = "hidden"
-  tempDiv.style.width = "420px"
-  tempDiv.style.fontSize = "14px"
-  tempDiv.style.lineHeight = "150%"
-  tempDiv.style.fontFamily = "Inter-Light, sans-serif"
-  tempDiv.textContent = descriptionElement.textContent
-  document.body.appendChild(tempDiv)
-
-  const naturalHeight = tempDiv.offsetHeight
-  document.body.removeChild(tempDiv)
-
-  // Set description height and scrolling
-  if (naturalHeight > 96) {
-    descriptionElement.style.height = "96px"
-    descriptionElement.style.overflowY = "auto"
-    descriptionElement.style.display = "block"
-    descriptionElement.style.webkitLineClamp = "unset"
-    descriptionElement.style.webkitBoxOrient = "unset"
-  } else {
-    descriptionElement.style.height = `${naturalHeight}px`
-    descriptionElement.style.overflowY = "visible"
-  }
-
-  // Calculate the bottom of the description
-  const descriptionBottom = descriptionTop + Math.min(96, naturalHeight) + 20
-
-  // Adjust background height based on content
-  const minBackgroundHeight = Math.max(220, descriptionBottom)
-
-  backgroundElement.style.minHeight = `${minBackgroundHeight}px`
-  backgroundElement.style.height = `${minBackgroundHeight}px`
-
-  // Calculate spacing after description background for profile/username
-  const profileTop = minBackgroundHeight + 20
-  const usernameTop = profileTop + 15
-  const reviewBoxTop = profileTop + 50
-
-  // Update profile and username positions
-  const profileElement = modal.querySelector(".profile-modal")
-  const usernameElement = modal.querySelector(".username-display")
-  const reviewBoxElement = modal.querySelector(".review-box")
-
-  if (profileElement) profileElement.style.top = `${profileTop}px`
-  if (usernameElement) usernameElement.style.top = `${usernameTop}px`
-  if (reviewBoxElement) reviewBoxElement.style.top = `${reviewBoxTop}px`
-
-  // Calculate minimum modal height based on new positions
-  const minModalHeight = Math.max(520, reviewBoxTop + 140 + 60)
-
-  modalContentElement.style.minHeight = `${minModalHeight}px`
-  modalContentElement.style.height = `${minModalHeight}px`
-  moviesElement.style.minHeight = `${minModalHeight}px`
-  moviesElement.style.height = `${minModalHeight}px`
-
-  // Adjust other elements if modal height increased
-  if (minModalHeight > 520) {
-    const heightDifference = minModalHeight - 520
-
-    const elementsToMove = [
-      ".modal-movie-poster",
-      ".button-container-modal",
-      ".watched-on",
-      ".date-container",
-      ".dd-mm-yyyy",
-    ]
-
-    elementsToMove.forEach((selector) => {
-      const element = modal.querySelector(selector)
-      if (element) {
-        const currentTop = Number.parseInt(getComputedStyle(element).top)
-        if (currentTop > 248) {
-          element.style.top = `${currentTop + heightDifference}px`
-        }
-      }
-    })
-
-    // Update more options modal position
-    const moreOptionsModal = document.getElementById("moreOptionsModal")
-    const currentModalTop = Number.parseInt(getComputedStyle(moreOptionsModal).top) || 400
-    moreOptionsModal.style.top = `${currentModalTop + heightDifference}px`
-  }
-}
-
-// ENHANCED markAsWatched function for immediate calendar visibility
 function markAsWatched() {
   if (currentMovie) {
     const hiddenDateInput = document.querySelector(".hidden-date-input")

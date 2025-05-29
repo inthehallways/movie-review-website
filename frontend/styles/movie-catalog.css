@@ -305,7 +305,7 @@ body {
   color: #2c2c2c;
 }
 
-/* ===== MODAL STYLES - ENHANCED WITH ALL FIXES ===== */
+/* ===== MODAL STYLES - ENHANCED AESTHETICS ===== */
 
 .modal {
   display: none;
@@ -326,7 +326,7 @@ body {
   margin: 3% auto;
   padding: 0;
   width: 850px;
-  min-height: 580px;
+  height: 580px;
   border-radius: 20px;
   position: relative;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -370,12 +370,9 @@ body {
 
 .movies {
   background: #ffffff;
-  border-style: solid;
-  border-color: #000000;
-  border-width: 1px;
-  min-height: 580px;
+  border: 1px solid #000000;
+  height: 580px;
   position: relative;
-  overflow: hidden;
   width: 850px;
   border-radius: 20px;
 }
@@ -383,7 +380,7 @@ body {
 .modal-movie-description-background {
   background: linear-gradient(to bottom, #f49b98, #d78986);
   width: 850px;
-  min-height: 248px;
+  height: 248px;
   position: absolute;
   left: 0px;
   top: 0px;
@@ -408,7 +405,7 @@ body {
 .release-date {
   color: #2c2c2c;
   text-align: left;
-  font-family: "Inter-Light", sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 14px;
   line-height: 120%;
   letter-spacing: -0.03em;
@@ -422,7 +419,7 @@ body {
 .directed-by {
   color: #2c2c2c;
   text-align: left;
-  font-family: "Inter-Light", sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 14px;
   line-height: 120%;
   letter-spacing: -0.03em;
@@ -436,7 +433,7 @@ body {
 .movie-description {
   color: #2c2c2c;
   text-align: left;
-  font-family: "Inter-Light", sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 14px;
   line-height: 150%;
   letter-spacing: -0.01em;
@@ -459,9 +456,7 @@ body {
 .modal-movie-poster {
   background: #d9d9d9;
   border-radius: 12px;
-  border-style: solid;
-  border-color: #000000;
-  border-width: 1px;
+  border: 1px solid #000000;
   width: 246px;
   height: 329px;
   position: absolute;
@@ -477,54 +472,66 @@ body {
   left: 67px;
   background: #fff;
   border: 1px solid #000;
-  border-radius: 8px;
+  border-radius: 10px;
   width: 246px;
+  height: 130px;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }
 
 .horizontal-line {
   width: 100%;
   height: 1px;
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
 }
 
 .action-buttons-section {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 70px;
-  background: #f49b98; /* Changed from #fff to pink */
-  position: relative; /* Added for proper positioning of vertical lines */
+  height: 65px;
+  background: #f49b98;
+  position: relative;
+  flex-shrink: 0;
 }
 
 .marked-as-watched,
 .add-to-likes,
 .add-to-watchlist {
-  font-size: 9px;
+  font-size: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
   cursor: pointer;
   width: 82px;
-  height: 100%; /* Ensure full height */
+  height: 100%;
+  transition: background-color 0.2s ease;
+  position: relative;
+}
+
+.marked-as-watched:hover,
+.add-to-likes:hover,
+.add-to-watchlist:hover {
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .with-border {
-  position: relative; /* For positioning the pseudo-element */
+  position: relative;
 }
 
 .with-border::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 0;
-  height: 100%;
+  top: 12px;
+  height: calc(100% - 24px);
   width: 1px;
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .watched-icon-container,
@@ -561,32 +568,29 @@ body {
 .watched-text,
 .likes-text,
 .watchlist-text {
-  font-size: 9px;
+  font-size: 10px;
   text-align: center;
   line-height: 1;
   font-weight: 500;
 }
 
-.section-separator {
-  width: 100%;
-  height: 1px;
-  background-color: #000000;
-}
-
 .modal-rating-container {
-  background: #fff; /* Keeping rating section white */
-  padding: 6px 0; /* Reduced from 8px to 6px */
+  background: #fff;
+  padding: 12px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px; /* Reduced from 4px to 2px */
+  justify-content: center;
+  gap: 6px;
+  height: 64px;
+  flex-shrink: 0;
 }
 
 .star-rating {
   display: flex;
   flex-direction: row-reverse;
   justify-content: center;
-  gap: 6px;
+  gap: 10px;
 }
 
 .star-rating input {
@@ -594,37 +598,47 @@ body {
 }
 
 .star-rating label {
-  color: #ccc;
-  font-size: 22px;
+  color: transparent;
+  font-size: 20px;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.2s ease;
+  -webkit-text-stroke: 1px #333;
+  text-stroke: 1px #333;
+  line-height: 1;
 }
 
 .star-rating label:hover {
   transform: scale(1.1);
+  color: #ffc107;
+  -webkit-text-stroke: 1px #e6a800;
+  text-stroke: 1px #e6a800;
 }
 
 .star-rating label:hover,
 .star-rating label:hover ~ label,
 .star-rating input:checked ~ label {
   color: #ffc107;
+  -webkit-text-stroke: 1px #e6a800;
+  text-stroke: 1px #e6a800;
 }
 
 .rating-label {
   font-size: 13px;
   font-weight: 500;
-  margin-top: 2px; /* Reduced from 4px to 2px */
+  color: #2c2c2c;
+  margin-top: 2px;
+  text-align: center;
 }
 
 .review-box {
   background: #f0f0f0;
   border-radius: 12px;
   width: 387px;
-  height: 140px;
+  height: 120px;
   position: absolute;
   left: 369px;
-  top: 345px; /* Adjusted to create space between profile and review box */
-  padding: 15px;
+  top: 350px;
+  padding: 12px;
   border: 1px solid #ddd;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
@@ -639,7 +653,7 @@ body {
 
 .add-a-review {
   width: 100%;
-  height: 80px;
+  height: 70px;
   background: transparent;
   border: none;
   color: #000000;
@@ -650,10 +664,9 @@ body {
   font-weight: 400;
   resize: none;
   outline: none;
-  padding: 0 0 0 0;
+  padding: 0;
   padding-right: 30px;
-  margin: 0;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .add-a-review::placeholder {
@@ -666,23 +679,13 @@ body {
   border: none;
 }
 
-.review-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
-  height: 30px;
-  width: 100%;
-}
-
 .character-counter {
-  font-size: 12px;
+  font-size: 11px;
   color: #888;
   font-family: "Inter", sans-serif;
-  flex-shrink: 0;
   position: absolute;
-  bottom: 15px;
-  left: 15px;
+  bottom: 12px;
+  left: 12px;
 }
 
 .character-counter.limit {
@@ -694,17 +697,16 @@ body {
   color: #000;
   border: none;
   border-radius: 6px;
-  padding: 8px 16px;
+  padding: 6px 14px;
   font-family: "Inter", sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0;
   position: absolute;
-  bottom: 15px;
-  right: 15px;
+  bottom: 12px;
+  right: 12px;
 }
 
 .submit-review-btn:hover {
@@ -717,10 +719,10 @@ body {
 
 .menu-icon-review-area {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 30px;
-  height: 30px;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -747,7 +749,7 @@ body {
   height: 46px;
   position: absolute;
   left: 365px;
-  top: 280px;
+  top: 275px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   border: 2px solid #fff;
@@ -763,7 +765,7 @@ body {
   font-weight: 500;
   position: absolute;
   left: 420px;
-  top: 295px;
+  top: 290px;
 }
 
 .date-container {
