@@ -24,6 +24,7 @@ class SceneItDashboard {
         console.log("SceneIt Dashboard initializing...")
         this.initializeUsername()
         this.initializeScrolling()
+        this.loadUserStats() 
 
         console.log("About to load upcoming movies...")
         this.loadUpcomingMovies()
@@ -136,9 +137,11 @@ class SceneItDashboard {
         const movieTitle = movie.title || movie.name || "Unknown Title"
 
         movieCard.innerHTML = `
+        <div class="movie-poster">
         <img src="${posterUrl}" alt="${movieTitle} Poster" onerror="this.src='../frontend/assets/images/poster-placeholder.png'">
-        <div class="movie-title">${movieTitle}</div>
-        `
+        <div class="movie-title-overlay">${movieTitle}</div>
+        </div>
+    `
 
         // Add click event for future movie details functionality
         movieCard.addEventListener("click", () => {
@@ -281,6 +284,52 @@ class SceneItDashboard {
         console.error("Error loading popular movies:", error)
         container.innerHTML = '<div class="error-message">Failed to load popular movies</div>'
         }
+    }
+
+    // Handles user stats 
+    async loadUserStats() {
+    try {
+        const userId = this.getCurrentUserId()
+        
+        // These would be real API calls
+        const [reviewsCount, watchedCount, watchlistCount] = await Promise.all([
+        this.fetchUserReviewsCount(userId),
+        this.fetchUserWatchedCount(userId), 
+        this.fetchUserWatchlistCount(userId)
+        ])
+        
+        // Update the UI
+        document.getElementById('reviews-count').textContent = reviewsCount
+        document.getElementById('watched-count').textContent = watchedCount
+        document.getElementById('watchlist-count').textContent = watchlistCount
+        
+    } catch (error) {
+        console.error('Error loading user stats:', error)
+        // Show fallback values
+        document.getElementById('reviews-count').textContent = '0'
+        document.getElementById('watched-count').textContent = '0'
+        document.getElementById('watchlist-count').textContent = '0'
+    }
+    }
+
+    // Mock API functions for backend dev
+    async fetchUserReviewsCount(userId) {
+    // Backend will implement: GET /api/users/{userId}/reviews/count
+    return 12 // Mock data
+    }
+
+    async fetchUserWatchedCount(userId) {
+    // Backend will implement: GET /api/users/{userId}/watched/count  
+    return 45 // Mock data
+    }
+
+    async fetchUserWatchlistCount(userId) {
+    // Backend will implement: GET /api/users/{userId}/watchlist/count
+    return 8 // Mock data
+    }
+
+    getCurrentUserId() {
+    return localStorage.getItem("userId") || "1" // Temporary
     }
 }
 

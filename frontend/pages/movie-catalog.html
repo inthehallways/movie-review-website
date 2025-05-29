@@ -1,191 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link rel="stylesheet" href="../pages/movie-catalog.css">
-  <link rel="icon" href="../assets/icons/sceneit-logo.png" type="image/png">
-  <title>SceneIt | Movie Catalog</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/movie-catalog.css">
+    <title>SceneIt | Movie Catalog</title>
 </head>
-
 <body>
-  <!-- Navigation Bar -->
-  <div class="navbar">
-    <div class="navbar-left">
-      <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" height="40">
-      <span class="dashboard-label">SceneIt</span>
-    </div>
-    <div class="navbar-center">
-      <ul class="nav-links">
-        <li><a href="../index.html">Home</a></li>
-        <li><a href="../pages/watchlist.html">Watchlist</a></li>
-        <li><a href="movie-catalog.html">Movie Catalog</a></li>
-      </ul>
-    </div>
-    <div class="navbar-right">
-      <div class="profile-container">
-        <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()" />
-        <div class="dropdown-menu" id="dropdownMenu">
-          <a href="../pages/profile.html">View Profile</a>
-          <a href="#">Watched</a>
-          <a href="#">My Reviews</a>
-          <a href="../pages/login.html">Logout</a>
+  
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" height="40">
+            <span class="dashboard-label">SceneIt</span>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Search bar in top right -->
-  <div class="search-bar-container">
-  <label for="searchInput">FIND A FILM</label>
-  <div class="search-wrapper">
-    <input type="text" id="searchInput" placeholder="Search..." />
-    <button id="searchBtn">
-      <img src="https://img.icons8.com/?size=100&id=132&format=png&color=000000" alt="Search" />
-    </button>
-  </div>
-</div>
+        <div class="navbar-center">
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../pages/watchlist.html">Watchlist</a></li>
+                <li><a href="../pages/movie-catalog.html">Movie Catalog</a></li>
+            </ul>
+        </div>
 
-  <!-- Movies & Sort -->
-  <div class="movies-header">
-    <h2>MOVIES</h2>
-    <div class="catalog-sort">
-      <span>SORT BY</span>
-      <select id ="genreSelect" class="sort-dropdown genre">
-        <option disabled selected>GENRE</option>
-        <option>Action</option>
-        <option>Comedy</option>
-        <option>Drama</option>
-        <option>Horror</option>
-        <option>Sci-Fi</option>
-      </select>
-
-      <select id="yearSelect" class="sort-dropdown year">
-        <option disabled selected>RELEASE YEAR</option>
-        <option>2020s</option>
-        <option>2010s</option>
-        <option>2000s</option>
-        <option>1990s</option>
-      </select>
-
-      <select id="nameSelect" class="sort-dropdown name">
-        <option disabled selected>FILM NAME (A-Z)</option>
-        <option value="asc">A-Z</option>
-        <option value="desc">Z-A</option>
-      </select>
-    </div>
-  </div>
-
-   <!-- Horizontal Line -->
-  <hr class="divider" />
-
-  <!-- Movie Grid -->
-  <div class="movie-grid" id="movieGrid"></div>
-
-     <!-- Movie Modal -->
-    <div id="movieModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="movies">
-                <div class="rectangle-471"></div>
-                <img class="rectangle-472" src="/placeholder.svg?height=17&width=46" />
-                <div class="rectangle-292"></div>
-                <div class="rectangle-470"></div>
-                <div class="rectangle-469"></div>
-                <div class="directed-by">Directed by</div>
-                <div class="movie-description">
-                    Death runs in the family.
-                    <br />
-                    <br />
-                    <br />
-                      Placeholder Synopsis
-                </div>
-                <div class="relesease-date">[Release Date]</div>
-                <div class="movie-title">Movie Title</div>
-                <div class="modal-movie-poster"></div>
-               <div class="marked-as-watched" onclick="markAsWatched()">
-                  <div class="watched-icon-container">
-                      <span class="material-symbols-outlined">visibility</span>
-                  </div>
-                  <span class="watched-text">Mark as Watched</span>
-              </div>
-                <div class="add-to-likes" onclick="addToLikes()">
-                    <div class="likes-icon-container">
-                        <span class="material-symbols-outlined">favorite</span>
-                    </div>
-                    <span class="likes-text">Add to Likes</span>
-                </div>
-
-                <div class="add-to-watchlist" onclick="addToWatchlist()">
-                    <div class="watchlist-icon-container">
-                        <span class="material-symbols-outlined">playlist_add</span>
-                    </div>
-                    <span class="watchlist-text">Add to Watchlist</span>
-                </div>
-
-                <!-- Position this form container near your button -->
-<div id="reviewFormContainer" class="review-form-container">
-  <div class="review-form">
-    <h3 id="reviewTitle">Review <span id="movieTitlePlaceholder"></span></h3>
-    
-    <!-- Star Rating System -->
-    <div class="rating-form">
-      <div class="rating">
-        <input value="5" name="review-rating" id="review-star5" type="radio">
-        <label for="review-star5"></label>
-        <input value="4" name="review-rating" id="review-star4" type="radio">
-        <label for="review-star4"></label>
-        <input value="3" name="review-rating" id="review-star3" type="radio">
-        <label for="review-star3"></label>
-        <input value="2" name="review-rating" id="review-star2" type="radio">
-        <label for="review-star2"></label>
-        <input value="1" name="review-rating" id="review-star1" type="radio">
-        <label for="review-star1"></label>
-      </div>
-    </div>
-    
-    <textarea id="reviewText" rows="5" placeholder="Write your review here..."></textarea>
-    <div class="review-buttons">
-      <button onclick="submitReview()">Submit</button>
-      <button onclick="resetReviewForm()">Cancel</button>
-    </div>
-  </div>
-</div>
-                <div class="ellipse-15"></div>
-                <div class="rectangle-390"></div>
-                <div class="dd-mm-yyyy">DD/MM/YYYY</div>
-                <div class="watched-on">Watched on</div>
-                <div class="line-15"></div>
-                <div class="line-16"></div>
-                <div class="menu-icon" onclick="showMoreOptions()">
-                    <span class="material-symbols-outlined">more_horiz</span>
-                </div>
-                
-                <!-- More Options Modal -->
-                <div id="moreOptionsModal" class="more-options-modal">
-                    <div class="more-options-content">
-                        <div class="more-option" onclick="editMovie()">Edit</div>
-                        <div class="more-option" onclick="deleteMovie()">Delete</div>
-                    </div>
+        <div class="navbar-right">
+            <div class="profile-container">
+                <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()" />
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="../pages/profile.html">View Profile</a>
+                    <a href="../pages/watchlist.html">Watchlist</a>
+                    <a href="../pages/my-reviews.html" class="active">My Reviews</a>
+                    <a href="../pages/login.html">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
-  <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-logo">
-        <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
-      </div>
-      <p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
+    <!-- Search Bar -->
+    <div class="search-bar-container">
+        <label for="searchInput">Search for movies:</label>
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Enter movie title...">
+        </div>
     </div>
-  </footer>
 
-  <script src="../pages/movie-catalog.js"></script>
-  
+    <!-- Movies Header and Sorting -->
+    <div class="movies-header">
+        <h2>Movies</h2>
+        <div class="catalog-sort">
+            <span>Sort by:</span>
+            <select id="genreSelect" class="sort-dropdown genre">
+                <option value="">All Genres</option>
+                <option value="Action">Action</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Drama">Drama</option>
+                <option value="Horror">Horror</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+            </select>
+            <select id="yearSelect" class="sort-dropdown year">
+                <option value="">All Years</option>
+                <option value="2020s">2020s</option>
+                <option value="2010s">2010s</option>
+                <option value="2000s">2000s</option>
+                <option value="1990s">1990s</option>
+            </select>
+            <select id="nameSelect" class="sort-dropdown name">
+                <option value="">Default</option>
+                <option value="asc">A-Z</option>
+                <option value="desc">Z-A</option>
+            </select>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Movie Grid -->
+    <div class="movie-grid" id="movieGrid">
+    </div>
+
+<!-- Movie Modal -->
+<div id="movieModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div class="movies">
+      <div class="modal-movie-description-background"></div>
+
+      <div class="movie-title">Movie Title</div>
+      <div class="release-date">Release Date</div>
+      <div class="directed-by">Directed by</div>
+      <div class="movie-description">Movie description goes here...</div>
+
+      <div class="modal-movie-poster"></div>
+
+      <div class="button-container-modal">
+        <!-- Action Buttons -->
+        <div class="action-buttons-section">
+          <div class="marked-as-watched">
+            <div class="watched-icon-container">
+              <span class="material-symbols-outlined">visibility</span>
+            </div>
+            <div class="watched-text">Mark as Watched</div>
+          </div>
+
+          <div class="add-to-likes with-border">
+            <div class="likes-icon-container">
+              <span class="material-symbols-outlined">favorite</span>
+            </div>
+            <div class="likes-text">Add to Likes</div>
+          </div>
+
+          <div class="add-to-watchlist with-border">
+            <div class="watchlist-icon-container">
+              <span class="material-symbols-outlined">bookmark</span>
+            </div>
+            <div class="watchlist-text">Add to Watchlist</div>
+          </div>
+        </div>
+
+        <!-- Separator Line -->
+        <div class="horizontal-line"></div>
+
+        <!-- Rating Section -->
+        <div class="modal-rating-container">
+          <div class="star-rating">
+            <input type="radio" name="movie-rating" value="5" id="star5"><label for="star5">★</label>
+            <input type="radio" name="movie-rating" value="4" id="star4"><label for="star4">★</label>
+            <input type="radio" name="movie-rating" value="3" id="star3"><label for="star3">★</label>
+            <input type="radio" name="movie-rating" value="2" id="star2"><label for="star2">★</label>
+            <input type="radio" name="movie-rating" value="1" id="star1"><label for="star1">★</label>
+          </div>
+          <div class="rating-label" id="ratingLabel">Rating</div>
+        </div>
+
+        <!-- Bottom Line -->
+        <div class="horizontal-line"></div>
+      </div>
+
+      <div class="review-box">
+        <textarea class="add-a-review" placeholder="Add a Review..."></textarea>
+        <button class="submit-review-btn" onclick="submitReview()">Submit Review</button>
+        <div class="character-counter" style="display: none;">0/500</div>
+        <div class="menu-icon-review-area" onclick="showMoreOptions()">
+          <span class="material-symbols-outlined">more_horiz</span>
+        </div>
+      </div>
+
+      <div class="profile-modal"></div>
+      <div class="username-display">Username</div>
+
+      <div class="date-container"></div>
+      <div class="dd-mm-yyyy">DD/MM/YYYY</div>
+      <div class="watched-on">Watched on</div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- More Options Modal -->
+  <div id="moreOptionsModal" class="more-options-modal">
+    <div class="more-options-content">
+      <div class="more-option" onclick="editMovie()">Edit</div>
+      <div class="more-option" onclick="deleteMovie()">Delete</div>
+    </div>
+  </div>
+
+
+  <input type="date" class="hidden-date-input">
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
+            </div>
+            <p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
+        </div>
+    </footer>
+
+    <script src="movie-catalog.js"></script>
 </body>
 </html>

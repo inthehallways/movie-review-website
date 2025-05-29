@@ -6,9 +6,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../styles/watchlist.css">
+    <link rel="stylesheet" href="../styles/watched.css">
     <link rel="icon" href="../assets/icons/sceneit-logo.png" type="image/png">
-    <title>SceneIt | Watchlist</title>
+    <title>SceneIt | Watched</title>
 </head>
 <body>
 
@@ -22,7 +22,7 @@
         <div class="navbar-center">
             <ul class="nav-links">
                 <li><a href="../index.html">Home</a></li>
-                <li><a href="../pages/watchlist.html" class="active">Watchlist</a></li>
+                <li><a href="../pages/watchlist.html">Watchlist</a></li>
                 <li><a href="../pages/movie-catalog.html">Movie Catalog</a></li>
             </ul>
         </div>
@@ -48,9 +48,9 @@
                 <span class="username">Username</span>
             </div>
             <div class="profile-tabs">
-                <button class="tab-button active" data-tab="watchlist">WATCHLIST</button>
+                <button class="tab-button" data-tab="watchlist" onclick="switchToWatchlist()">WATCHLIST</button>
                 <button class="tab-button" data-tab="reviews" onclick="switchToReviews()">MY REVIEWS</button>
-                <button class="tab-button" data-tab="watched" onclick="switchToWatched()">WATCHED</button>
+                <button class="tab-button active" data-tab="watched">WATCHED</button>
             </div>
         </div>
     </section>
@@ -61,24 +61,10 @@
 
             <!-- Header Section -->
             <div class="content-header">
-                <h1 class="page-title">Watchlist</h1>
+                <h1 class="page-title">Watched</h1>
                 <div class="sort-section">
                     <span class="sort-label">SORT BY</span>
                     <div class="sort-dropdowns">
-                        <!-- Date Added Dropdown -->
-                        <div class="dropdown-container">
-                            <button class="dropdown-button" onclick="toggleSortDropdown('date')">
-                                <span id="dateSelected">Newest Added</span>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
-                            <div class="dropdown-menu-sort" id="dateDropdown">
-                                <div class="dropdown-item" onclick="selectSort('date', 'Newest Added')">Newest Added</div>
-                                <div class="dropdown-item" onclick="selectSort('date', 'Oldest Added')">Oldest Added</div>
-                            </div>
-                        </div>
-
                         <!-- Genre Dropdown -->
                         <div class="dropdown-container">
                             <button class="dropdown-button" onclick="toggleSortDropdown('genre')">
@@ -99,6 +85,43 @@
                             </div>
                         </div>
 
+                        <!-- User Rating Dropdown -->
+                        <div class="dropdown-container">
+                            <button class="dropdown-button" onclick="toggleSortDropdown('rating')">
+                                <span id="ratingSelected">All Ratings</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu-sort" id="ratingDropdown">
+                                <div class="dropdown-item" onclick="selectSort('rating', 'All Ratings')">All Ratings</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '5 Stars')">★★★★★</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '4 Stars')">★★★★☆</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '3 Stars')">★★★☆☆</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '2 Stars')">★★☆☆☆</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '1 Stars')">★☆☆☆☆</div>
+                            </div>
+                        </div>
+
+                        <!-- Watch Date Dropdown -->
+                        <div class="dropdown-container">
+                            <button class="dropdown-button" onclick="toggleSortDropdown('date')">
+                                <span id="dateSelected">All Dates</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu-sort" id="dateDropdown">
+                                <div class="dropdown-item" onclick="selectSort('date', 'All Dates')">All Dates</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'This Week')">This Week</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'This Month')">This Month</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Last 3 Months')">Last 3 Months</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'This Year')">This Year</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Last Year')">Last Year</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Oldest First')">Oldest First</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Newest First')">Newest First</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -107,33 +130,8 @@
             
             <!-- Movies Grid -->
             <div class="movies-grid" id="moviesGrid">
-                <!-- MOVIE CARDS SAMPLE || This is only a comment because this is already handled by the JS file. 
-                <div class="movie-card">
-                    <div class="movie-poster">
-                        <div class="movie-controls">
-                            <button class="eye-button" title="Mark as watched">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
-                            <div class="menu-container">
-                                <button class="menu-button" onclick="toggleMovieMenu(this)">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="12" r="1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <circle cx="19" cy="12" r="1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <circle cx="5" cy="12" r="1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </button>
-                                <div class="movie-menu">
-                                    <button class="remove-button">REMOVE</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="poster-placeholder"></div>
-                        <div class="movie-title-overlay">Movie Title 1</div>
-                    </div>
-                </div> -->
+                <!-- Movie cards will be dynamically generated by watched.js -->
+                 
             </div>
 
         </div>
@@ -149,7 +147,7 @@
         </div>
     </footer>
 
-    <!-- Script for Dropdown Menu-->
+    <!-- Script for Dropdown Menu -->
     <script>
         function toggleDropdown() {
             const menu = document.getElementById("dropdownMenu");
@@ -181,8 +179,8 @@
             dropdown.classList.toggle('show');
         }
         
-        function switchToWatched() {
-            window.location.href = '../pages/watched.html';
+        function switchToWatchlist() {
+            window.location.href = '../pages/watchlist.html';
         }
 
         function switchToReviews() {
@@ -191,7 +189,7 @@
     </script>
 
     <!-- JavaScript file for functionality -->
-    <script type="module" src="../script/watchlist.js"></script>
+    <script type="module" src="../script/watched.js"></script>
 
 </body>
 </html>
