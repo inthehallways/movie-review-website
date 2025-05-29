@@ -1,27 +1,33 @@
-function toggleDropdown() {
-  document.getElementById("dropdownMenu").classList.toggle("show")
-}
-
 // TMDB API Configuration
 const API_KEY = "d2a72fb4b28ccba64124755d66b1b0f1"
-const BASE_URL = "https://api.themoviedb.org/3"
 const IMG_URL = "https://image.tmdb.org/t/p/w500"
 
-const modal = document.getElementById("movieModal")
-const closeBtn = modal.querySelector(".close")
-const modalContent = document.querySelector(".modal-content")
-const moreOptionsModal = document.getElementById("moreOptionsModal")
+let currentEditingReview = null
 
-const movieGrid = document.getElementById("movieGrid")
-const searchInput = document.getElementById("searchInput")
-const searchBtn = document.getElementById("searchBtn")
+// Dropdown functionality for profile menu
+function toggleDropdown() {
+  const menu = document.getElementById("dropdownMenu")
+  menu.classList.toggle("show")
+}
 
-const genreSelect = document.getElementById("genreSelect")
-const yearSelect = document.getElementById("yearSelect")
-const nameSelect = document.getElementById("nameSelect")
+// Close dropdown when clicking outside
+window.addEventListener("click", (e) => {
+  const dropdown = document.getElementById("dropdownMenu")
+  const profileContainer = document.querySelector(".profile-container")
 
-let currentMovies = []
-let currentMovie = null
+  if (!profileContainer.contains(e.target)) {
+    dropdown.classList.remove("show")
+  }
+})
+
+// Tab navigation functions
+function switchToWatchlist() {
+  window.location.href = "../pages/watchlist.html"
+}
+
+function switchToWatched() {
+  window.location.href = "../pages/watched.html"
+}
 
 // Review System - Load reviews from localStorage
 function loadReviews() {
@@ -34,773 +40,414 @@ function saveReviews(reviews) {
   localStorage.setItem("movieReviews", JSON.stringify(reviews))
 }
 
-// Review System - Save a new review
-function saveReview(movieData, rating, reviewText, watchDate) {
-  const reviews = loadReviews()
-  const existingReviewIndex = reviews.findIndex((review) => review.movieId === movieData.id)
+// Sort dropdown functionality
+function toggleSortDropdown(type) {
+  const dropdown = document.getElementById(type + "Dropdown")
+  const allDropdowns = document.querySelectorAll(".dropdown-menu-sort")
 
-  const newReview = {
-    id: existingReviewIndex !== -1 ? reviews[existingReviewIndex].id : Date.now(),
-    movieId: movieData.id,
-    title: movieData.title,
-    posterPath: movieData.poster_path,
-    rating: rating,
-    reviewText: reviewText,
-    watchDate: watchDate,
-    dateAdded: existingReviewIndex !== -1 ? reviews[existingReviewIndex].dateAdded : new Date().toISOString(),
-    dateModified: new Date().toISOString(),
-  }
-
-  if (existingReviewIndex !== -1) {
-    reviews[existingReviewIndex] = newReview
-  } else {
-    reviews.unshift(newReview)
-  }
-
-  saveReviews(reviews)
-  return newReview
-}
-
-// Review System - Get review for current movie
-function getCurrentMovieReview() {
-  if (!currentMovie) return null
-  const reviews = loadReviews()
-  return reviews.find((review) => review.movieId === currentMovie.id)
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  fetchPopularMovies()
-
-  genreSelect.addEventListener("change", applyFilters)
-  yearSelect.addEventListener("change", applyNameSort)
-
-  // Character counter for review
-  const reviewTextarea = document.querySelector(".add-a-review")
-  const characterCounter = document.querySelector(".character-counter")
-  const MAX_CHARS = 500
-
-  if (reviewTextarea && characterCounter) {
-    reviewTextarea.addEventListener("input", function () {
-      const remaining = this.value.length
-      characterCounter.textContent = `${remaining}/${MAX_CHARS}`
-
-      if (remaining > MAX_CHARS - 50) {
-        characterCounter.classList.add("limit")
-      } else {
-        characterCounter.classList.remove("limit")
-      }
-
-      if (remaining > MAX_CHARS) {
-        this.value = this.value.substring(0, MAX_CHARS)
-        characterCounter.textContent = `${MAX_CHARS}/${MAX_CHARS}`
-      }
-    })
-  }
-
-  // Enhanced Date picker functionality
-  const dateContainer = document.querySelector(".date-container")
-  const dateDisplay = document.querySelector(".dd-mm-yyyy")
-  const hiddenDateInput = document.querySelector(".hidden-date-input")
-
-  if (dateContainer && dateDisplay && hiddenDateInput) {
-    dateContainer.addEventListener("click", () => {
-      // Set today's date as default
-      const today = new Date()
-      const todayString = today.toISOString().split("T")[0]
-      hiddenDateInput.value = todayString
-
-      hiddenDateInput.focus()
-      hiddenDateInput.showPicker()
-    })
-
-    hiddenDateInput.addEventListener("change", (event) => {
-      const selectedDate = event.target.value
-      if (selectedDate) {
-        const dateObj = new Date(selectedDate)
-        const day = dateObj.getDate().toString().padStart(2, "0")
-        const month = (dateObj.getMonth() + 1).toString().padStart(2, "0")
-        const year = dateObj.getFullYear()
-        const formattedDate = `${day}/${month}/${year}`
-
-        dateDisplay.textContent = formattedDate
-
-        // Mark as watched automatically
-        const watchedButton = modal.querySelector(".marked-as-watched")
-        const watchedText = watchedButton.querySelector(".watched-text")
-        watchedButton.classList.add("watched")
-        watchedText.textContent = "Watched"
-
-        showNotification(`Marked "${currentMovie.title}" as watched on ${formattedDate}!`)
-      }
-    })
-  }
-
-  // Create the combined container structure dynamically
-  createCombinedActionContainer()
-})
-
-// Function to create the combined action container structure
-function createCombinedActionContainer() {
-  const buttonContainer = document.querySelector(".button-container-modal")
-  if (buttonContainer) {
-    // Clear existing content
-    buttonContainer.innerHTML = ""
-
-    // Create action buttons section
-    const actionSection = document.createElement("div")
-    actionSection.className = "action-buttons-section"
-
-    // Move existing action buttons into the section
-    const watchedBtn = document.querySelector(".marked-as-watched")
-    const likesBtn = document.querySelector(".add-to-likes")
-    const watchlistBtn = document.querySelector(".add-to-watchlist")
-
-    if (watchedBtn) actionSection.appendChild(watchedBtn)
-    if (likesBtn) actionSection.appendChild(likesBtn)
-    if (watchlistBtn) actionSection.appendChild(watchlistBtn)
-
-    // Create separator lines
-    const line1 = document.createElement("div")
-    line1.className = "line-15"
-    const line2 = document.createElement("div")
-    line2.className = "line-16"
-
-    actionSection.appendChild(line1)
-    actionSection.appendChild(line2)
-
-    // Create main separator
-    const mainSeparator = document.createElement("div")
-    mainSeparator.className = "section-separator"
-
-    // Move rating container
-    const ratingContainer = document.querySelector(".modal-rating-container")
-
-    // Append everything to button container
-    buttonContainer.appendChild(actionSection)
-    buttonContainer.appendChild(mainSeparator)
-    if (ratingContainer) {
-      buttonContainer.appendChild(ratingContainer)
+  // Close all other dropdowns
+  allDropdowns.forEach((d) => {
+    if (d !== dropdown) {
+      d.classList.remove("show")
     }
-  }
+  })
+
+  // Toggle current dropdown
+  dropdown.classList.toggle("show")
 }
 
-searchBtn.addEventListener("click", (e) => {
-  e.preventDefault()
-  const query = searchInput.value.trim()
-  if (query !== "") {
-    searchMovies(query)
-  } else {
-    fetchPopularMovies()
+function selectSort(type, value) {
+  const selectedSpan = document.getElementById(type + "Selected")
+  selectedSpan.textContent = value
+
+  // Close dropdown
+  document.getElementById(type + "Dropdown").classList.remove("show")
+
+  // Apply sorting logic
+  console.log(`Sorting by ${type}:`, value)
+  sortReviews(value)
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".dropdown-container")) {
+    document.querySelectorAll(".dropdown-menu-sort").forEach((dropdown) => {
+      dropdown.classList.remove("show")
+    })
   }
 })
 
-async function fetchPopularMovies() {
-  try {
-    const res = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`)
-    const data = await res.json()
-    currentMovies = data.results
-    displayMovies(currentMovies)
-  } catch (err) {
-    console.error("Error fetching popular movies:", err)
-  }
-}
+// Sample reviews data (in a real app, this would come from a database)
+const reviewsData = [
+  {
+    id: 1,
+    title: "The Dark Knight",
+    rating: 5,
+    watchDate: "15/01/2025",
+    reviewText:
+      "An absolutely masterful piece of cinema. Christopher Nolan's direction combined with Heath Ledger's iconic performance as the Joker creates an unforgettable experience. The film perfectly balances action, drama, and psychological thriller elements.",
+    dateAdded: new Date("2025-01-15"),
+  },
+  {
+    id: 2,
+    title: "Inception",
+    rating: 4,
+    watchDate: "12/01/2025",
+    reviewText:
+      "A mind-bending journey through dreams within dreams. Nolan's complex narrative structure keeps you engaged throughout, though it can be confusing at times. The visual effects and cinematography are stunning.",
+    dateAdded: new Date("2025-01-12"),
+  },
+  {
+    id: 3,
+    title: "Parasite",
+    rating: 5,
+    watchDate: "08/01/2025",
+    reviewText:
+      "Bong Joon-ho delivers a brilliant social commentary wrapped in a thrilling narrative. The film's exploration of class divide is both subtle and powerful. Every scene is meticulously crafted.",
+    dateAdded: new Date("2025-01-08"),
+  },
+  {
+    id: 4,
+    title: "Interstellar",
+    rating: 4,
+    watchDate: "05/01/2025",
+    reviewText:
+      "An emotional and visually spectacular space epic. While the science can be overwhelming, the human story at its core is deeply moving. Hans Zimmer's score is absolutely phenomenal.",
+    dateAdded: new Date("2025-01-05"),
+  },
+]
 
-async function searchMovies(query) {
-  try {
-    const res = await fetch(
-      `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=en-US&page=1`,
-    )
-    const data = await res.json()
-    currentMovies = data.results
-    displayMovies(currentMovies)
-  } catch (err) {
-    console.error("Error searching for movies:", err)
-  }
-}
+// Function to render reviews
+function renderReviews(reviews) {
+  const reviewsList = document.getElementById("reviewsList")
+  const noReviewsMessage = document.getElementById("noReviewsMessage")
 
-async function applyFilters() {
-  const genreValue = genreSelect.value
-  const yearValue = yearSelect.value
-
-  const genreMap = {
-    Action: 28,
-    Comedy: 35,
-    Drama: 18,
-    Horror: 27,
-    "Sci-Fi": 878,
-  }
-
-  const genreId = genreMap[genreValue] || ""
-
-  let primaryReleaseGte = ""
-  let primaryReleaseLte = ""
-
-  if (yearValue) {
-    switch (yearValue) {
-      case "2020s":
-        primaryReleaseGte = "2020-01-01"
-        primaryReleaseLte = "2029-12-31"
-        break
-      case "2010s":
-        primaryReleaseGte = "2010-01-01"
-        primaryReleaseLte = "2019-12-31"
-        break
-      case "2000s":
-        primaryReleaseGte = "2000-01-01"
-        primaryReleaseLte = "2009-12-31"
-        break
-      case "1990s":
-        primaryReleaseGte = "1990-01-01"
-        primaryReleaseLte = "1999-12-31"
-        break
-    }
-  }
-
-  let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=1`
-
-  if (genreId) url += `&with_genres=${genreId}`
-  if (primaryReleaseGte) url += `&primary_release_date.gte=${primaryReleaseGte}`
-  if (primaryReleaseLte) url += `&primary_release_date.lte=${primaryReleaseLte}`
-
-  try {
-    const res = await fetch(url)
-    const data = await res.json()
-    currentMovies = data.results || []
-    applyNameSort()
-  } catch (err) {
-    console.error("Error applying filters:", err)
-  }
-}
-
-function applyNameSort() {
-  const sortValue = nameSelect.value
-
-  if (sortValue === "asc") {
-    currentMovies.sort((a, b) => a.title.localeCompare(b.title))
-  } else if (sortValue === "desc") {
-    currentMovies.sort((a, b) => b.title.localeCompare(a.title))
-  }
-
-  displayMovies(currentMovies)
-}
-
-function displayMovies(movies) {
-  movieGrid.innerHTML = ""
-
-  if (!movies.length) {
-    movieGrid.innerHTML = "<p>No movies found.</p>"
+  if (!reviews || reviews.length === 0) {
+    reviewsList.innerHTML = ""
+    noReviewsMessage.style.display = "block"
     return
   }
 
-  movies.forEach((movie) => {
-    const posterURL = movie.poster_path
-      ? `${IMG_URL}${movie.poster_path}`
-      : "https://via.placeholder.com/300x450?text=No+Image"
+  noReviewsMessage.style.display = "none"
 
-    const card = document.createElement("div")
-    card.classList.add("movie-card")
+  reviewsList.innerHTML = reviews
+    .map((review) => {
+      const posterUrl = review.posterPath ? `${IMG_URL}${review.posterPath}` : null
 
-    card.innerHTML = `
-    <img src="${posterURL}" alt="${movie.title} Poster" style="width: 100%; height: 100%; border-radius: 12px; object-fit: cover;" />
-  `
-
-    card.addEventListener("click", () => {
-      showModal(movie)
+      return `
+            <div class="review-card" data-review-id="${review.id}">
+                <div class="movie-poster-small">
+                    ${
+                      posterUrl
+                        ? `<img src="${posterUrl}" alt="${review.title} Poster" />`
+                        : '<div class="poster-placeholder-small"></div>'
+                    }
+                </div>
+                <div class="review-content">
+                    <div class="review-header">
+                        <h3 class="movie-title">${review.title}</h3>
+                        <div class="review-meta">
+                            <div class="star-rating">
+                                ${generateStarRating(review.rating)}
+                            </div>
+                            <span class="watch-date">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Watched ${review.watchDate}
+                            </span>
+                        </div>
+                    </div>
+                    <p class="review-text">${review.reviewText}</p>
+                </div>
+                <div class="review-actions">
+                    <button class="review-action-btn edit-btn" onclick="openEditReview(${review.id})" title="Edit Review">
+                        ✏️
+                    </button>
+                    <button class="review-action-btn delete-btn" onclick="openDeleteReview(${review.id})" title="Delete Review">
+                        🗑️
+                    </button>
+                </div>
+            </div>
+        `
     })
+    .join("")
+}
 
-    movieGrid.appendChild(card)
+// Function to generate star rating HTML
+function generateStarRating(rating) {
+  let stars = ""
+  for (let i = 1; i <= 5; i++) {
+    if (i <= rating) {
+      stars += '<span class="star filled">★</span>'
+    } else {
+      stars += '<span class="star">★</span>'
+    }
+  }
+  return stars
+}
+
+// Function to sort reviews
+function sortReviews(sortType) {
+  const reviews = loadReviews()
+  const sortedReviews = [...reviews]
+
+  switch (sortType) {
+    case "Latest Added":
+      sortedReviews.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
+      break
+    case "Oldest Added":
+      sortedReviews.sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded))
+      break
+    case "Highest Rated":
+      sortedReviews.sort((a, b) => b.rating - a.rating)
+      break
+    case "Lowest Rated":
+      sortedReviews.sort((a, b) => a.rating - b.rating)
+      break
+    default:
+      // Default to latest added
+      sortedReviews.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
+  }
+
+  renderReviews(sortedReviews)
+}
+
+// Function to add a new review (for future use)
+function addReview(movieTitle, rating, watchDate, reviewText) {
+  const newReview = {
+    id: reviewsData.length + 1,
+    title: movieTitle,
+    rating: rating,
+    watchDate: watchDate,
+    reviewText: reviewText,
+    dateAdded: new Date(),
+  }
+
+  reviewsData.unshift(newReview) // Add to beginning of array
+  renderReviews(reviewsData)
+}
+
+// Function to edit a review (for future use)
+function editReview(reviewId, updatedData) {
+  const reviewIndex = reviewsData.findIndex((review) => review.id === reviewId)
+  if (reviewIndex !== -1) {
+    reviewsData[reviewIndex] = { ...reviewsData[reviewIndex], ...updatedData }
+    renderReviews(reviewsData)
+  }
+}
+
+// Edit Review Functions
+function openEditReview(reviewId) {
+  const reviews = loadReviews()
+  const review = reviews.find((r) => r.id === reviewId)
+
+  if (!review) {
+    alert("Review not found!")
+    return
+  }
+
+  currentEditingReview = review
+
+  // Populate edit modal
+  document.getElementById("editMovieTitle").textContent = `Edit Review - ${review.title}`
+  document.getElementById("editReviewText").value = review.reviewText
+
+  // Set rating
+  const ratingInput = document.querySelector(`input[name="edit-rating"][value="${review.rating}"]`)
+  if (ratingInput) {
+    ratingInput.checked = true
+  }
+
+  // Show modal
+  document.getElementById("editReviewModal").style.display = "block"
+}
+
+function closeEditModal() {
+  document.getElementById("editReviewModal").style.display = "none"
+  currentEditingReview = null
+
+  // Reset form
+  document.getElementById("editReviewText").value = ""
+  document.querySelectorAll('input[name="edit-rating"]').forEach((input) => {
+    input.checked = false
   })
 }
 
-async function fetchMovieDetails(movieId) {
-  try {
-    const res = await fetch(`${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&append_to_response=credits`)
-    const data = await res.json()
-    return data
-  } catch (err) {
-    console.error("Error fetching movie details:", err)
-    return null
+function saveEditedReview() {
+  if (!currentEditingReview) {
+    alert("No review selected for editing!")
+    return
   }
-}
 
-async function showModal(movie) {
-  currentMovie = movie
-  resetModalState()
+  const newReviewText = document.getElementById("editReviewText").value.trim()
+  const newRating = document.querySelector('input[name="edit-rating"]:checked')
 
-  const movieDetails = await fetchMovieDetails(movie.id)
-
-  const posterURL = movie.poster_path ? `${IMG_URL}${movie.poster_path}` : "/placeholder.svg?height=329&width=308"
-
-  const director =
-    movieDetails && movieDetails.credits && movieDetails.credits.crew
-      ? movieDetails.credits.crew.find((person) => person.job === "Director")
-      : null
-
-  const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : "Unknown"
-
-  modal.querySelector(".movie-title").textContent = `${movie.title} (${releaseYear})`
-  modal.querySelector(".release-date").textContent = ""
-
-  modal.querySelector(".directed-by").textContent = director ? `Directed by ${director.name}` : "Director Unknown"
-  modal.querySelector(".movie-description").textContent = movie.overview || "No description available."
-
-  modal.querySelector(".modal-movie-poster").style.backgroundImage = `url(${posterURL})`
-  modal.querySelector(".modal-movie-poster").style.backgroundSize = "cover"
-  modal.querySelector(".modal-movie-poster").style.backgroundPosition = "center"
-
-  // Load existing review if any
-  loadExistingReview()
-
-  modal.style.display = "block"
-
-  setTimeout(() => {
-    adjustModalLayout()
-  }, 50)
-
-  modal.querySelector(".close").onclick = () => {
-    modal.style.display = "none"
-    moreOptionsModal.style.display = "none"
+  // Validation
+  if (!newReviewText) {
+    alert("Please write a review before saving.")
+    return
   }
-}
 
-// Load existing review for current movie
-function loadExistingReview() {
-  const existingReview = getCurrentMovieReview()
-  if (existingReview) {
-    // Set the rating
-    const ratingInput = modal.querySelector(`input[name="movie-rating"][value="${existingReview.rating}"]`)
-    const ratingLabel = document.getElementById("ratingLabel")
+  if (newReviewText.length < 10) {
+    alert("Please write a more detailed review (at least 10 characters).")
+    return
+  }
 
-    if (ratingInput) {
-      ratingInput.checked = true
-      ratingLabel.textContent = "Rated"
+  if (!newRating) {
+    alert("Please select a rating before saving.")
+    return
+  }
+
+  // Update review
+  const reviews = loadReviews()
+  const reviewIndex = reviews.findIndex((r) => r.id === currentEditingReview.id)
+
+  if (reviewIndex !== -1) {
+    reviews[reviewIndex] = {
+      ...reviews[reviewIndex],
+      rating: Number.parseInt(newRating.value),
+      reviewText: newReviewText,
+      dateModified: new Date().toISOString(),
     }
 
-    // Set the review text
-    const reviewTextarea = modal.querySelector(".add-a-review")
-    if (reviewTextarea) {
-      reviewTextarea.value = existingReview.reviewText
-      reviewTextarea.placeholder = "Edit your review..."
+    saveReviews(reviews)
+    renderReviews(reviews)
+    closeEditModal()
 
-      // Update character counter
-      const characterCounter = document.querySelector(".character-counter")
-      if (characterCounter) {
-        characterCounter.textContent = `${existingReview.reviewText.length}/500`
-      }
-    }
-
-    // Set watched status if available
-    if (existingReview.watchDate && existingReview.watchDate !== "Not watched") {
-      const watchedButton = modal.querySelector(".marked-as-watched")
-      const watchedText = watchedButton.querySelector(".watched-text")
-      watchedButton.classList.add("watched")
-      watchedText.textContent = "Watched"
-
-      // Update the watched date display
-      const dateDisplay = modal.querySelector(".dd-mm-yyyy")
-      if (dateDisplay) {
-        dateDisplay.textContent = existingReview.watchDate
-      }
-    }
-  }
-}
-
-// ENHANCED adjustModalLayout function for proper description handling
-function adjustModalLayout() {
-  const titleElement = modal.querySelector(".movie-title")
-  const directedByElement = modal.querySelector(".directed-by")
-  const descriptionElement = modal.querySelector(".movie-description")
-  const backgroundElement = modal.querySelector(".modal-movie-description-background")
-  const modalContentElement = modal.querySelector(".modal-content")
-  const moviesElement = modal.querySelector(".movies")
-
-  // Get the actual height of the title
-  const titleHeight = titleElement.offsetHeight
-  const titleBottom = 52 + titleHeight
-
-  // Adjust directed by position based on title height
-  const directedByTop = Math.max(84, titleBottom + 10)
-  directedByElement.style.top = `${directedByTop}px`
-
-  // Adjust description position based on directed by position
-  const descriptionTop = directedByTop + 25
-  descriptionElement.style.top = `${descriptionTop}px`
-
-  // Calculate the actual height needed for the description
-  const tempDiv = document.createElement("div")
-  tempDiv.style.position = "absolute"
-  tempDiv.style.visibility = "hidden"
-  tempDiv.style.width = "420px"
-  tempDiv.style.fontSize = "14px"
-  tempDiv.style.lineHeight = "150%"
-  tempDiv.style.fontFamily = "Inter-Light, sans-serif"
-  tempDiv.textContent = descriptionElement.textContent
-  document.body.appendChild(tempDiv)
-
-  const naturalHeight = tempDiv.offsetHeight
-  document.body.removeChild(tempDiv)
-
-  // Set description height and scrolling
-  if (naturalHeight > 96) {
-    descriptionElement.style.height = "96px"
-    descriptionElement.style.overflowY = "auto"
+    alert(`Review for "${currentEditingReview.title}" has been updated!`)
   } else {
-    descriptionElement.style.height = `${naturalHeight}px`
-    descriptionElement.style.overflowY = "visible"
+    alert("Error updating review. Please try again.")
+  }
+}
+
+// Delete Review Function
+function openDeleteReview(reviewId) {
+  const reviews = loadReviews()
+  const review = reviews.find((r) => r.id === reviewId)
+
+  if (!review) {
+    alert("Review not found!")
+    return
   }
 
-  // Calculate the bottom of the description
-  const descriptionBottom = descriptionTop + Math.min(96, naturalHeight) + 20
+  const confirmDelete = confirm(`Are you sure you want to delete your review for "${review.title}"?`)
 
-  // Adjust background height based on content
-  const minBackgroundHeight = Math.max(248, descriptionBottom)
-  backgroundElement.style.minHeight = `${minBackgroundHeight}px`
-  backgroundElement.style.height = `${minBackgroundHeight}px`
+  if (confirmDelete) {
+    const updatedReviews = reviews.filter((r) => r.id !== reviewId)
+    saveReviews(updatedReviews)
+    renderReviews(updatedReviews)
 
-  // Calculate spacing after description background for profile/username
-  const profileTop = minBackgroundHeight + 32
-  const usernameTop = profileTop + 15
-  const reviewBoxTop = profileTop + 50
+    alert(`Review for "${review.title}" has been deleted!`)
+  }
+}
 
-  // Update profile and username positions
-  const profileElement = modal.querySelector(".profile-modal")
-  const usernameElement = modal.querySelector(".username-display")
-  const reviewBoxElement = modal.querySelector(".review-box")
+// Close edit modal when clicking outside
+window.addEventListener("click", (e) => {
+  const modal = document.getElementById("editReviewModal")
+  if (e.target === modal) {
+    closeEditModal()
+  }
+})
 
-  if (profileElement) profileElement.style.top = `${profileTop}px`
-  if (usernameElement) usernameElement.style.top = `${usernameTop}px`
-  if (reviewBoxElement) reviewBoxElement.style.top = `${reviewBoxTop}px`
+// Initialize the page
+document.addEventListener("DOMContentLoaded", () => {
+  // Check if there are existing reviews, if not, add sample data
+  let reviews = loadReviews()
 
-  // Calculate minimum modal height based on new positions
-  const minModalHeight = Math.max(650, reviewBoxTop + 140 + 100) // Increased for combined container
-
-  modalContentElement.style.minHeight = `${minModalHeight}px`
-  modalContentElement.style.height = `${minModalHeight}px`
-  moviesElement.style.minHeight = `${minModalHeight}px`
-  moviesElement.style.height = `${minModalHeight}px`
-
-  // Adjust other elements if modal height increased
-  if (minModalHeight > 650) {
-    const heightDifference = minModalHeight - 650
-
-    const elementsToMove = [
-      ".modal-movie-poster",
-      ".button-container-modal",
-      ".watched-on",
-      ".date-container",
-      ".dd-mm-yyyy",
+  if (reviews.length === 0) {
+    // Add sample reviews for demonstration
+    const sampleReviews = [
+      {
+        id: Date.now() + 1,
+        movieId: 155,
+        title: "The Dark Knight",
+        posterPath: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+        rating: 5,
+        reviewText:
+          "An absolutely masterful piece of cinema. Christopher Nolan's direction combined with Heath Ledger's iconic performance as the Joker creates an unforgettable experience. The film perfectly balances action, drama, and psychological thriller elements.",
+        watchDate: "15/01/2025",
+        dateAdded: new Date("2025-01-15").toISOString(),
+        dateModified: new Date("2025-01-15").toISOString(),
+      },
+      {
+        id: Date.now() + 2,
+        movieId: 27205,
+        title: "Inception",
+        posterPath: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
+        rating: 4,
+        reviewText:
+          "A mind-bending journey through dreams within dreams. Nolan's complex narrative structure keeps you engaged throughout, though it can be confusing at times. The visual effects and cinematography are stunning.",
+        watchDate: "12/01/2025",
+        dateAdded: new Date("2025-01-12").toISOString(),
+        dateModified: new Date("2025-01-12").toISOString(),
+      },
+      {
+        id: Date.now() + 3,
+        movieId: 496243,
+        title: "Parasite",
+        posterPath: "/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+        rating: 5,
+        reviewText:
+          "Bong Joon-ho delivers a brilliant social commentary wrapped in a thrilling narrative. The film's exploration of class divide is both subtle and powerful. Every scene is meticulously crafted.",
+        watchDate: "08/01/2025",
+        dateAdded: new Date("2025-01-08").toISOString(),
+        dateModified: new Date("2025-01-08").toISOString(),
+      },
     ]
 
-    elementsToMove.forEach((selector) => {
-      const element = modal.querySelector(selector)
-      if (element) {
-        const currentTop = Number.parseInt(getComputedStyle(element).top)
-        if (currentTop > 248) {
-          element.style.top = `${currentTop + heightDifference}px`
-        }
+    // Save sample reviews to localStorage
+    saveReviews(sampleReviews)
+    reviews = sampleReviews
+  }
+
+  // Load and render reviews
+  renderReviews(reviews)
+
+  // Add keyboard shortcuts for edit modal
+  document.addEventListener("keydown", (e) => {
+    const modal = document.getElementById("editReviewModal")
+    if (modal.style.display === "block") {
+      if (e.key === "Escape") {
+        closeEditModal()
+      } else if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+        saveEditedReview()
       }
-    })
-
-    // Update more options modal position
-    const moreOptionsModal = document.getElementById("moreOptionsModal")
-    const currentModalTop = Number.parseInt(getComputedStyle(moreOptionsModal).top) || 400
-    moreOptionsModal.style.top = `${currentModalTop + heightDifference}px`
-  }
-}
-
-// ENHANCED markAsWatched function for immediate calendar visibility
-function markAsWatched() {
-  if (currentMovie) {
-    const hiddenDateInput = document.querySelector(".hidden-date-input")
-    const dateDisplay = document.querySelector(".dd-mm-yyyy")
-
-    if (hiddenDateInput && dateDisplay) {
-      // Set today's date as default
-      const today = new Date()
-      const todayString = today.toISOString().split("T")[0]
-      hiddenDateInput.value = todayString
-
-      // Show calendar immediately
-      hiddenDateInput.focus()
-      hiddenDateInput.showPicker()
-
-      // Auto-format and display today's date
-      const day = today.getDate().toString().padStart(2, "0")
-      const month = (today.getMonth() + 1).toString().padStart(2, "0")
-      const year = today.getFullYear()
-      const formattedDate = `${day}/${month}/${year}`
-
-      dateDisplay.textContent = formattedDate
-
-      // Mark as watched automatically
-      const watchedButton = modal.querySelector(".marked-as-watched")
-      const watchedText = watchedButton.querySelector(".watched-text")
-      watchedButton.classList.add("watched")
-      watchedText.textContent = "Watched"
-
-      showNotification(`Marked "${currentMovie.title}" as watched on ${formattedDate}!`)
     }
-  }
-}
-
-function addToLikes() {
-  if (currentMovie) {
-    const likesButton = modal.querySelector(".add-to-likes")
-    const likesText = likesButton.querySelector(".likes-text")
-
-    if (likesButton.classList.contains("liked")) {
-      likesButton.classList.remove("liked")
-      likesText.textContent = "Add to Likes"
-      showNotification(`Removed "${currentMovie.title}" from likes!`)
-    } else {
-      likesButton.classList.add("liked")
-      likesText.textContent = "Liked"
-      showNotification(`Added "${currentMovie.title}" to likes!`)
-    }
-  }
-}
-
-function addToWatchlist() {
-  if (currentMovie) {
-    const watchlistButton = modal.querySelector(".add-to-watchlist")
-    const watchlistText = watchlistButton.querySelector(".watchlist-text")
-
-    if (watchlistButton.classList.contains("in-watchlist")) {
-      watchlistButton.classList.remove("in-watchlist")
-      watchlistText.textContent = "Add to Watchlist"
-      showNotification(`Removed "${currentMovie.title}" from watchlist!`)
-    } else {
-      watchlistButton.classList.add("in-watchlist")
-      watchlistText.textContent = "In Watchlist"
-      showNotification(`Added "${currentMovie.title}" to watchlist!`)
-    }
-  }
-}
-
-function addReview() {
-  const reviewTextarea = modal.querySelector(".add-a-review")
-  if (reviewTextarea) {
-    reviewTextarea.focus()
-  }
-}
-
-function showMoreOptions() {
-  if (currentMovie) {
-    const isVisible = moreOptionsModal.style.display === "block"
-    moreOptionsModal.style.display = isVisible ? "none" : "block"
-  }
-}
-
-function editMovie() {
-  if (currentMovie) {
-    showNotification(`Edit functionality for "${currentMovie.title}" would go here!`)
-    moreOptionsModal.style.display = "none"
-  }
-}
-
-function deleteMovie() {
-  if (currentMovie) {
-    const confirmDelete = confirm(`Are you sure you want to delete "${currentMovie.title}"?`)
-    if (confirmDelete) {
-      showNotification(`"${currentMovie.title}" has been deleted!`)
-      moreOptionsModal.style.display = "none"
-      modal.style.display = "none"
-    }
-  }
-}
-
-// Handle rating selection and text change
-document.addEventListener("change", (e) => {
-  if (e.target.name === "movie-rating") {
-    const rating = e.target.value
-    const ratingLabel = document.getElementById("ratingLabel")
-
-    if (rating) {
-      ratingLabel.textContent = "Rated"
-      console.log(`Rating selected: ${rating} stars`)
-    }
-  }
-})
-
-// Handle rating removal (click on selected star)
-document.addEventListener("click", (e) => {
-  if (e.target.matches(".star-rating label")) {
-    const input = document.getElementById(e.target.getAttribute("for"))
-    const ratingLabel = document.getElementById("ratingLabel")
-
-    // If clicking on already selected star, remove the rating
-    if (input && input.checked) {
-      setTimeout(() => {
-        input.checked = false
-        ratingLabel.textContent = "Rating"
-        console.log("Rating removed")
-      }, 100)
-    }
-  }
-
-  if (!e.target.closest(".menu-icon-review-area") && !e.target.closest(".more-options-modal")) {
-    moreOptionsModal.style.display = "none"
-  }
-})
-
-closeBtn.addEventListener("click", () => {
-  modal.style.display = "none"
-  moreOptionsModal.style.display = "none"
-})
-
-window.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.style.display = "none"
-    moreOptionsModal.style.display = "none"
-  }
-})
-
-function resetModalState() {
-  const watchedButton = modal.querySelector(".marked-as-watched")
-  const watchedText = watchedButton.querySelector(".watched-text")
-  watchedButton.classList.remove("watched")
-  watchedText.textContent = "Mark as Watched"
-
-  const likesButton = modal.querySelector(".add-to-likes")
-  const likesText = likesButton.querySelector(".likes-text")
-  likesButton.classList.remove("liked")
-  likesText.textContent = "Add to Likes"
-
-  const watchlistButton = modal.querySelector(".add-to-watchlist")
-  const watchlistText = watchlistButton.querySelector(".watchlist-text")
-  watchlistButton.classList.remove("in-watchlist")
-  watchlistText.textContent = "Add to Watchlist"
-
-  // Reset rating
-  const ratingInputs = modal.querySelectorAll('input[name="movie-rating"]')
-  ratingInputs.forEach((input) => (input.checked = false))
-
-  const ratingLabel = document.getElementById("ratingLabel")
-  if (ratingLabel) {
-    ratingLabel.textContent = "Rating"
-  }
-
-  // Reset watched date display
-  const dateDisplay = modal.querySelector(".dd-mm-yyyy")
-  if (dateDisplay) {
-    dateDisplay.textContent = "DD/MM/YYYY"
-  }
-
-  moreOptionsModal.style.display = "none"
-
-  const reviewTextarea = modal.querySelector(".add-a-review")
-  const characterCounter = document.querySelector(".character-counter")
-  if (reviewTextarea) {
-    reviewTextarea.value = ""
-    reviewTextarea.placeholder = "Add a Review..."
-  }
-  if (characterCounter) {
-    characterCounter.textContent = "0/500"
-    characterCounter.classList.remove("limit")
-  }
-}
-
-// Submit review function
-function submitReview() {
-  if (currentMovie) {
-    const reviewTextarea = modal.querySelector(".add-a-review")
-    const review = reviewTextarea.value.trim()
-
-    // Get selected rating
-    const selectedRating = modal.querySelector('input[name="movie-rating"]:checked')
-    if (!selectedRating) {
-      showNotification("Please select a rating before submitting your review.")
-      return
-    }
-
-    const rating = Number.parseInt(selectedRating.value)
-
-    // Check if movie is marked as watched
-    const watchedButton = modal.querySelector(".marked-as-watched")
-    if (!watchedButton.classList.contains("watched")) {
-      showNotification("Please mark the movie as watched before submitting a review.")
-      return
-    }
-
-    // Validate review text
-    if (!review) {
-      showNotification("Please write a review before submitting.")
-      reviewTextarea.focus()
-      return
-    }
-
-    if (review.length < 10) {
-      showNotification("Please write a more detailed review (at least 10 characters).")
-      reviewTextarea.focus()
-      return
-    }
-
-    // Get watch date from display or use current date
-    const dateDisplay = modal.querySelector(".dd-mm-yyyy")
-    let watchDate = dateDisplay ? dateDisplay.textContent : null
-
-    if (!watchDate || watchDate === "DD/MM/YYYY") {
-      const currentDate = new Date()
-      const day = currentDate.getDate().toString().padStart(2, "0")
-      const month = (currentDate.getMonth() + 1).toString().padStart(2, "0")
-      const year = currentDate.getFullYear()
-      watchDate = `${day}/${month}/${year}`
-    }
-
-    // Save the review
-    const savedReview = saveReview(currentMovie, rating, review, watchDate)
-
-    if (savedReview) {
-      const existingReview = getCurrentMovieReview()
-      const message =
-        existingReview && existingReview.id !== savedReview.id
-          ? `Review updated for "${currentMovie.title}"!`
-          : `Review saved for "${currentMovie.title}"!`
-
-      showNotification(message, "success")
-      reviewTextarea.placeholder = "Review saved! Edit or add another..."
-    }
-  }
-}
-
-// Show notification instead of alert
-function showNotification(message, type = "info") {
-  // Create notification element
-  const notification = document.createElement("div")
-  notification.className = `notification ${type}`
-  notification.textContent = message
-
-  // Style the notification
-  Object.assign(notification.style, {
-    position: "fixed",
-    bottom: "20px",
-    right: "20px",
-    padding: "12px 20px",
-    background: type === "success" ? "#4CAF50" : "#f49b98",
-    color: "#fff",
-    borderRadius: "8px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-    zIndex: "10000",
-    maxWidth: "300px",
-    animation: "fadeIn 0.3s ease",
   })
+})
 
-  // Add to body
-  document.body.appendChild(notification)
-
-  // Remove after 3 seconds
-  setTimeout(() => {
-    notification.style.animation = "fadeOut 0.3s ease"
-    setTimeout(() => {
-      document.body.removeChild(notification)
-    }, 300)
-  }, 3000)
+// Utility function to format date
+function formatDate(dateString) {
+  const date = new Date(dateString)
+  const day = date.getDate().toString().padStart(2, "0")
+  const month = (date.getMonth() + 1).toString().padStart(2, "0")
+  const year = date.getFullYear()
+  return `${day}/${month}/${year}`
 }
 
-// Add this to your existing modal display code
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && modal.style.display === "block") {
-    modal.style.display = "none"
-    moreOptionsModal.style.display = "none"
+// Function to get review statistics (for future use)
+function getReviewStats() {
+  const reviews = loadReviews()
+
+  if (reviews.length === 0) {
+    return {
+      totalReviews: 0,
+      averageRating: 0,
+      mostRecentReview: null,
+      favoriteGenre: null,
+    }
   }
-})
+
+  const totalReviews = reviews.length
+  const averageRating = reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews
+  const mostRecentReview = reviews.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))[0]
+
+  return {
+    totalReviews,
+    averageRating: Math.round(averageRating * 10) / 10,
+    mostRecentReview,
+    favoriteGenre: null, // Could be implemented with genre data
+  }
+}
