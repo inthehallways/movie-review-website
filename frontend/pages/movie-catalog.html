@@ -119,48 +119,49 @@
                     </div>
                     <span class="likes-text">Add to Likes</span>
                 </div>
-                <div class="rectangle-267"></div>
-                <div class="rating bottom-rating">
-                    <input value="5" name="bottom-rating" id="bottom-star5" type="radio">
-                    <label for="bottom-star5"></label>
-                    <input value="4" name="bottom-rating" id="bottom-star4" type="radio">
-                    <label for="bottom-star4"></label>
-                    <input value="3" name="bottom-rating" id="bottom-star3" type="radio">
-                    <label for="bottom-star3"></label>
-                    <input value="2" name="bottom-rating" id="bottom-star2" type="radio">
-                    <label for="bottom-star2"></label>
-                    <input value="1" name="bottom-rating" id="bottom-star1" type="radio">
-                    <label for="bottom-star1"></label>
-                </div>
+
                 <div class="add-to-watchlist" onclick="addToWatchlist()">
                     <div class="watchlist-icon-container">
                         <span class="material-symbols-outlined">playlist_add</span>
                     </div>
                     <span class="watchlist-text">Add to Watchlist</span>
                 </div>
-                <div class="add-a-review" onclick="addReview()">Add a Review...
-                </div>
+
+                <!-- Position this form container near your button -->
+<div id="reviewFormContainer" class="review-form-container">
+  <div class="review-form">
+    <h3 id="reviewTitle">Review <span id="movieTitlePlaceholder"></span></h3>
+    
+    <!-- Star Rating System -->
+    <div class="rating-form">
+      <div class="rating">
+        <input value="5" name="review-rating" id="review-star5" type="radio">
+        <label for="review-star5"></label>
+        <input value="4" name="review-rating" id="review-star4" type="radio">
+        <label for="review-star4"></label>
+        <input value="3" name="review-rating" id="review-star3" type="radio">
+        <label for="review-star3"></label>
+        <input value="2" name="review-rating" id="review-star2" type="radio">
+        <label for="review-star2"></label>
+        <input value="1" name="review-rating" id="review-star1" type="radio">
+        <label for="review-star1"></label>
+      </div>
+    </div>
+    
+    <textarea id="reviewText" rows="5" placeholder="Write your review here..."></textarea>
+    <div class="review-buttons">
+      <button onclick="submitReview()">Submit</button>
+      <button onclick="resetReviewForm()">Cancel</button>
+    </div>
+  </div>
+</div>
                 <div class="ellipse-15"></div>
                 <div class="rectangle-390"></div>
                 <div class="dd-mm-yyyy">DD/MM/YYYY</div>
                 <div class="watched-on">Watched on</div>
-                <img class="rectangle-419" src="/placeholder.svg?height=26&width=40" />
-                <div class="rating top-rating">
-                    <input value="5" name="top-rating" id="top-star5" type="radio">
-                    <label for="top-star5"></label>
-                    <input value="4" name="top-rating" id="top-star4" type="radio">
-                    <label for="top-star4"></label>
-                    <input value="3" name="top-rating" id="top-star3" type="radio">
-                    <label for="top-star3"></label>
-                    <input value="2" name="top-rating" id="top-star2" type="radio">
-                    <label for="top-star2"></label>
-                    <input value="1" name="top-rating" id="top-star1" type="radio">
-                    <label for="top-star1"></label>
-                </div>
                 <div class="line-15"></div>
                 <div class="line-16"></div>
-                <div class="rated">Rated</div>
-                <div class="menu-icon-below-rating" onclick="showMoreOptions()">
+                <div class="menu-icon" onclick="showMoreOptions()">
                     <span class="material-symbols-outlined">more_horiz</span>
                 </div>
                 

@@ -158,9 +158,9 @@ function displayMovies(movies) {
   })
 }
 
-async function fetchMovieDetails(movieId) {
+async function fetchMovieDetails(movie_id) {
   try {
-    const res = await fetch(`${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&append_to_response=credits`)
+    const res = await fetch(`${BASE_URL}/movie/${movie_id}?api_key=${API_KEY}&append_to_response=credits`)
     const data = await res.json()
     return data
   } catch (err) {
@@ -310,14 +310,62 @@ function addToWatchlist() {
   }
 }
 
-function addReview() {
+function setCurrentMovie(movie) {
+  currentMovie = movie;
+  updateReviewFormTitle();
+}
+
+// Update the form title with current movie
+function updateReviewFormTitle() {
   if (currentMovie) {
-    const review = prompt(`Add a review for "${currentMovie.title}":`)
-    if (review) {
-      alert(`Review added: "${review}"`)
-      // Here you would typically save the review
-    }
+    document.getElementById('movieTitlePlaceholder').textContent = currentMovie.title;
   }
+}
+
+// Initialize the form when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+  updateReviewFormTitle();
+  document.getElementById('reviewText').focus();
+});
+
+function resetReviewForm() {
+  document.getElementById('reviewText').value = '';
+  const ratingInputs = document.querySelectorAll('input[name="review-rating"]');
+  ratingInputs.forEach(input => input.checked = false);
+}
+
+function submitReview() {
+  const review = document.getElementById('reviewText').value.trim();
+  const ratingInput = document.querySelector('input[name="review-rating"]:checked');
+  const rating = ratingInput ? ratingInput.value : null;
+
+  // Allow submission if at least one field is filled (rating or review)
+  if (!ratingInput && !review) {
+    alert("Please provide at least a star rating or a written review.");
+    return;
+  }
+
+  // Submit the review (with rating, review, or both)
+  let submissionMessage = `Review submitted for ${currentMovie.title}!\n`;
+  
+  if (rating) {
+    submissionMessage += `Rating: ${rating} stars\n`;
+  }
+  
+  if (review) {
+    submissionMessage += `Review: "${review}"\n`;
+  }
+
+  alert(submissionMessage);
+  resetReviewForm();
+  
+  // Example of how you might save the data:
+  // saveReview({
+  //   movied: currentMovie.id,
+  //   title: currentMovie.title,
+  //   rating: rating,
+  //   text: review
+  // });
 }
 
 function showMoreOptions() {
@@ -345,22 +393,10 @@ function deleteMovie() {
   }
 }
 
-// Star rating functionality for new rating system
-document.addEventListener("change", (e) => {
-  if (e.target.name === "bottom-rating") {
-    const rating = e.target.value
-    alert(`Bottom rated ${rating} stars!`)
-  }
-
-  if (e.target.name === "top-rating") {
-    const rating = e.target.value
-    alert(`Top rated ${rating} stars!`)
-  }
-})
 
 // Close more options modal when clicking outside
 document.addEventListener("click", (e) => {
-  if (!e.target.closest(".menu-icon-below-rating") && !e.target.closest(".more-options-modal")) {
+  if (!e.target.closest(".menu-icon") && !e.target.closest(".more-options-modal")) {
     moreOptionsModal.style.display = "none"
   }
 })
