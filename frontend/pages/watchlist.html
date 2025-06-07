@@ -188,10 +188,16 @@
         function switchToReviews() {
             window.location.href = '../pages/reviews.html';
         }
+
+        
+         document.addEventListener('DOMContentLoaded', () => {
+      loadUserProfileForWatchedWatchlistReviews();
+    });
     </script>
 
     <!-- JavaScript file for functionality -->
     <script type="module" src="../script/watchlist.js"></script>
+    <script src="../script/profile.js"></script>
 
 </body>
 </html>

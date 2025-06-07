@@ -44,7 +44,7 @@
     <section class="user-profile-section">
         <div class="user-profile-container">
             <div class="user-info">
-                <img src="../assets/images/blank-profile.jpg" alt="User Profile" class="user-avatar">
+                <img src="../assets/images/blank-profile.jpg" alt="Profile"  class="user-avatar">
                 <span class="username">Username</span>
             </div>
             <div class="profile-tabs">
@@ -186,10 +186,14 @@
         function switchToReviews() {
             window.location.href = '../pages/reviews.html';
         }
+
+         document.addEventListener('DOMContentLoaded', () => {
+      loadUserProfileForWatchedWatchlistReviews();
+    });
     </script>
 
     <!-- JavaScript file for functionality -->
     <script type="module" src="../script/watched.js"></script>
-
+ <script src="../script/profile.js"></script>
 </body>
 </html>
