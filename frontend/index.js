@@ -35,21 +35,24 @@ class SceneItDashboard {
         console.log("SceneIt Dashboard initialized successfully!")
     }
 
-    // TEMPORARY USERNAME INITIALIZATION
-    initializeUsername() {
-        const urlParams = new URLSearchParams(window.location.search)
-        const username = urlParams.get("username")
-        const usernameElement = document.getElementById("username")
+    // REAL USERNAME INITIALIZATION (from localStorage)
+initializeUsername() {
+    const storedUsername = localStorage.getItem("username") || "";
+    const usernameElement = document.getElementById("username");
 
-        if (username && usernameElement) {
-        usernameElement.textContent = username
-        console.log(`Welcome ${username}!`)
-        } else if (!username) {
-        console.warn("No username found")
-        // Comment out redirect for testing
-        // window.location.href = "login.html"
-        }
+    // If no username is stored, redirect back to login
+    if (!storedUsername) {
+        console.warn("No username in localStorage; redirecting to login.");
+        window.location.href = "../pages/login.html";
+        return;
     }
+
+    // Otherwise display “Welcome back, <username>!”
+    if (usernameElement) {
+        usernameElement.textContent = storedUsername;
+        console.log(`Welcome ${storedUsername}!`);
+    }
+}
 
     // MOVIE CARDS SCROLLING FUNCTIONALITY
     initializeScrolling() {

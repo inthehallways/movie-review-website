@@ -8,6 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/profile.css">
     <link rel="icon" href="../assets/icons/sceneit-logo.png" type="image/png">
+    <style>
+    /* hide both header and content until JS flips them visible */
+    #profileHeader,
+    .profile-content {
+        visibility: hidden;
+    }
+    </style>
     <title>SceneIt | My Profile</title>
 </head>
 <body>
@@ -114,7 +121,7 @@
                                 
                                 <!-- Header Image Container -->
                                 <div class="header-image-container" id="headerImageContainer" style="display: none;">
-                                    <img id="headerImage" src="/placeholder.svg" alt="Header Image" draggable="false">
+                                    <img id="headerImage" src="../assets/images/blank-profile.jpg" alt="Header Image" draggable="false">
                                 </div>
                                 
                                 <!-- Upload Button -->

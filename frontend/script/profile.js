@@ -2,7 +2,7 @@
 // This file handles all interactive features in the Profile page, including the Edit Profile modal, except dropdown (which is in HTML)
 
 // TMDB API Configuration
-const TMDB_API_KEY = '8064455f5d0fa492a57d3904df2b0045'; // Backend dev should replace this with their own API key
+const TMDB_API_KEY = 'd2a72fb4b28ccba64124755d66b1b0f1'; // Backend dev should replace this with their own API key
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
@@ -15,37 +15,121 @@ let currentMovieSlot = null;
 let favoriteMovies = Array(5).fill(null);
 
 async function loadUserProfile() {
-    try {
-        const userId = getCurrentUserId()
-        const profileData = await fetchUserProfile(userId)
-        
-        // Update UI with loaded data
-        document.getElementById("profileUsername").textContent = profileData.username || "Username"
-        document.getElementById("bioDisplay").textContent = profileData.bio || "Tell us about yourself..."
-        
-        // Load header image if exists
-        if (profileData.headerImage) {
-        uploadedHeaderImage = profileData.headerImage
-        const profileHeader = document.getElementById("profileHeader")
-        profileHeader.style.backgroundImage = `url(${profileData.headerImage})`
-        }
-        
-        // Load avatar image if exists  
-        if (profileData.avatarImage) {
-        uploadedAvatarImage = profileData.avatarImage
-        document.getElementById("profileAvatar").src = profileData.avatarImage
-        document.getElementById("profilePicture").src = profileData.avatarImage
-        }
-        
-        // Load favorite movies
-        if (profileData.favoriteMovies) {
-        favoriteMovies = profileData.favoriteMovies
-        updateMainProfileFavorites()
-        }
-        
-    } catch (error) {
-        console.error('Error loading profile:', error)
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('Not logged in');
+
+    const resp = await fetch('http://localhost:3001/api/profile', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    });
+    const body = await resp.json();
+    if (!body.success) {
+      console.error('Profile GET error:', body.message);
+      return;
     }
+    // destructure correctly
+    const { profile, favoriteMovies: rawFavs } = body;
+
+    // ——— your existing bits ———
+    document.getElementById("profileUsername").textContent = profile.username || "Username";
+    document.getElementById("bioDisplay").textContent = profile.bio || "Tell us about yourself...";
+    if (profile.header_pic_url) {
+      uploadedHeaderImage = profile.header_pic_url;
+      const h = document.getElementById("profileHeader");
+      h.style.backgroundImage = `url(${profile.header_pic_url})`;
+      h.style.backgroundSize = 'cover';
+      h.style.backgroundPosition = 'center';
+    }
+    if (profile.profile_pic_url) {
+      uploadedAvatarImage = profile.profile_pic_url;
+      document.getElementById("profileAvatar").src = profile.profile_pic_url;
+      document.getElementById("profilePicture").src = profile.profile_pic_url;
+    }
+
+    // — flood all other avatar‐slots —
+    document.querySelectorAll('.avatar-display').forEach(img => {
+      img.src = profile.profile_pic_url || img.src;
+    });
+
+    // — flood all other username‐slots —
+    document.querySelectorAll('.username-display').forEach(el => {
+      el.textContent = profile.username || el.textContent;
+    });
+
+    // — build your favorites array as before —
+    const slots = Array(5).fill(null);
+    if (Array.isArray(rawFavs)) {
+      for (const fav of rawFavs) {
+        if (fav && typeof fav.slot === 'number'
+            && fav.slot >= 0 && fav.slot < 5) {
+          slots[fav.slot] = fav;
+        }
+      }
+    }
+    favoriteMovies = slots;
+
+    // render both main & edit grids
+    updateMainProfileFavorites();
+    initializeFavoriteFavorites(); // or initializeFavoriteMovies()
+
+    // finally un-hide
+    document.getElementById('profileHeader').style.visibility   = 'visible';
+    document.querySelector('.profile-content').style.visibility = 'visible';
+
+  } catch (err) {
+    console.error('Error loading profile in front-end:', err);
+  }
+}
+
+async function loadUserProfileForMovieModal() {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    const resp = await fetch('http://localhost:3001/api/profile', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    });
+    const body = await resp.json();
+    if (!body.success) {
+      console.error('Profile GET error:', body.message);
+      return;
+    }
+
+    const { profile } = body;
+
+    // Update modal’s profile pic & username
+    const avatar = document.querySelector('.avatar-display-modal');
+    const username = document.querySelector('.username-display-modal');
+
+    if (avatar) {
+      avatar.src = profile.profile_pic_url || "../assets/images/blank-profile.jpg";
+    }
+    if (username) {
+      username.textContent = profile.username || "Username";
+    }
+
+  } catch (err) {
+    console.error('Error loading profile for movie modal:', err);
+  }
+}
+
+
+
+
+function loadUserData(username) {
+    // Load persistent data
+    const reviews = JSON.parse(localStorage.getItem(`reviews_${username}`)) || [];
+    const watchlist = JSON.parse(localStorage.getItem(`watchlist_${username}`)) || [];
+    
+    // Render user-specific content
+    renderReviews(reviews);
+    renderWatchlist(watchlist);
 }
 
 // Mock API function
@@ -205,10 +289,6 @@ function restoreExistingImages() {
         
         const headerImg = document.getElementById("headerImage");
         headerImg.src = uploadedHeaderImage;
-        updateHeaderTransform();
-        document.getElementById("headerZoomLevel").textContent = Math.round(headerTransform.scale * 100) + '%';
-        
-        setupHeaderDragAndZoom();
     }
     
     if (uploadedAvatarImage) {
@@ -242,9 +322,8 @@ function previewHeaderImage(input) {
             
             // Reset transform
             headerTransform = { scale: 1, x: 0, y: 0 };
-            updateHeaderTransform();
             document.getElementById("headerZoomLevel").textContent = "100%";
-            
+            updateHeaderTransform();
             // Setup drag and zoom
             setupHeaderDragAndZoom();
         };
@@ -342,6 +421,13 @@ function updateAvatarTransform() {
     }
 }
 
+function updateHeaderTransform() {
+  const headerImg = document.getElementById("headerImage");
+  if (headerImg) {
+    headerImg.style.transform = `translate(${headerTransform.x}px, ${headerTransform.y}px) scale(${headerTransform.scale})`;
+  }
+}
+
 // Movie search functions
 function openMovieSearchModal(slotIndex) {
     currentMovieSlot = slotIndex;
@@ -421,80 +507,140 @@ function removeFavoriteMovie(index) {
     initializeFavoriteMovies();
 }
 
-function saveProfile() {
-    // Get values from modal inputs
-    const username = document.getElementById("editUsername").value;
-    const bio = document.getElementById("editBio").value;
+async function saveProfile() {
+  // 1) Get values from modal inputs
+  const username = document.getElementById("editUsername").value;
+  const bio = document.getElementById("editBio").value;
 
-    // Update main profile display
-    document.getElementById("profileUsername").textContent = username;
-    document.getElementById("bioDisplay").textContent = bio || "Tell us about yourself...";
+  // 2) Update main profile display immediately
+  document.getElementById("profileUsername").textContent = username;
+  document.getElementById("bioDisplay").textContent = bio || "Tell us about yourself...";
 
-    // Handle header image removal
-    if (uploadedHeaderImage === null) {
-        const profileHeader = document.getElementById("profileHeader");
-        profileHeader.style.backgroundImage = "";
-        profileHeader.style.backgroundSize = "";
-        profileHeader.style.backgroundPosition = "";
+  // 3) Update header image preview
+  const profileHeader = document.getElementById("profileHeader");
+  if (uploadedHeaderImage !== null) {
+    profileHeader.style.backgroundImage = `url(${uploadedHeaderImage})`;
+    const scalePercent = headerTransform.scale * 100;
+    const xPercent = 50 + (headerTransform.x / 8);
+    const yPercent = 50 + (headerTransform.y / 8);
+    profileHeader.style.backgroundSize = `${scalePercent}%`;
+    profileHeader.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
+  } else {
+    profileHeader.style.backgroundImage = "";
+    profileHeader.style.backgroundSize = "";
+    profileHeader.style.backgroundPosition = "";
+  }
+
+  // 4) Update avatar preview
+  let croppedAvatarUrl = null;
+  if (uploadedAvatarImage !== null) {
+    croppedAvatarUrl = await createCroppedAvatar();
+    document.getElementById("profileAvatar").src = croppedAvatarUrl;
+    document.getElementById("profilePicture").src = croppedAvatarUrl;
+    uploadedAvatarImage = croppedAvatarUrl;
+  } else {
+    document.getElementById("profileAvatar").src = "../assets/images/blank-profile.jpg";
+    document.getElementById("profilePicture").src = "../assets/images/blank-profile.jpg";
+  }
+
+  // 5) Update main profile favorites display
+  updateMainProfileFavorites();
+
+  // 6) Close modal (but keep images in memory for next edit)
+  closeEditModal();
+
+  // 7) Prepare to upload images (if needed)
+  let headerUrl = uploadedHeaderImage;
+  let avatarUrl = uploadedAvatarImage;
+
+  const token = localStorage.getItem('token');
+  if (!token) {
+    showSuccessMessage("Not authenticated", "error");
+    return;
+  }
+
+  try {
+    // Upload header image if it’s a data URL
+    if (uploadedHeaderImage && uploadedHeaderImage.startsWith("data:")) {
+      const headerBlob = dataURLtoBlob(uploadedHeaderImage);
+      const formData = new FormData();
+      formData.append('image', headerBlob, 'header.jpg');
+
+      const headerResp = await fetch('http://localhost:3001/api/upload', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token },
+        body: formData
+      });
+      const headerData = await headerResp.json();
+      if (headerData.success) {
+        headerUrl = headerData.url;
+      } else {
+        console.error('Header upload error:', headerData.message);
+      }
     }
 
-    // Handle avatar image removal  
-    if (uploadedAvatarImage === null) {
-        const avatarImg = document.getElementById("profileAvatar");
-        const navAvatarImg = document.getElementById("profilePicture");
-        
-        // Reset to default images
-        avatarImg.src = "../assets/images/blank-profile.jpg";
-        navAvatarImg.src = "../assets/images/blank-profile.jpg";
+    // Upload avatar image if it’s a data URL
+    if (uploadedAvatarImage && uploadedAvatarImage.startsWith("data:")) {
+      const avatarBlob = dataURLtoBlob(uploadedAvatarImage);
+      const formData = new FormData();
+      formData.append('image', avatarBlob, 'avatar.jpg');
+
+      const avatarResp = await fetch('http://localhost:3001/api/upload', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token },
+        body: formData
+      });
+      const avatarData = await avatarResp.json();
+      if (avatarData.success) {
+        avatarUrl = avatarData.url;
+      } else {
+        console.error('Avatar upload error:', avatarData.message);
+      }
     }
 
-    // Update header image if uploaded
-    if (uploadedHeaderImage !== null) {
-        const profileHeader = document.getElementById("profileHeader");
-        profileHeader.style.backgroundImage = `url(${uploadedHeaderImage})`;
-        
-        // Apply transform to background positioning
-        const scalePercent = headerTransform.scale * 100;
-        const xPercent = 50 + (headerTransform.x / 8); // Adjust sensitivity
-        const yPercent = 50 + (headerTransform.y / 8);
-        
-        profileHeader.style.backgroundSize = `${scalePercent}%`;
-        profileHeader.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
-    }
+    // 8) Prepare data for PUT /api/profile
+    const favMovieIDs = favoriteMovies.map(m => m ? m.id : null).filter(m => m !== null);
 
-    // Update avatar image if uploaded
-    if (uploadedAvatarImage !== null) {
-        createCroppedAvatar().then(croppedImageUrl => {
-            const avatarImg = document.getElementById("profileAvatar");
-            const navAvatarImg = document.getElementById("profilePicture");
-            
-            // Use the cropped image
-            avatarImg.src = croppedImageUrl;
-            navAvatarImg.src = croppedImageUrl;
-            
-            // Store the cropped version for future edits
-            uploadedAvatarImage = croppedImageUrl;
-        });
-    }
-
-// Update main profile favorites display
-updateMainProfileFavorites();
-
-// Close modal (but keep images for next time)
-closeEditModal();
-
-// Here you would typically save to a database
-console.log("Profile saved:", { 
-    username, 
-    bio, 
-    headerImage: uploadedHeaderImage ? "Updated" : "No change",
-    avatarImage: uploadedAvatarImage ? "Updated" : "No change",
-    favoriteMovies: favoriteMovies.filter(movie => movie !== null)
+    // 9) Save profile to the database
+    const response = await fetch('http://localhost:3001/api/profile', {
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + token
+  },
+  body: JSON.stringify({
+    username,              // ← add
+    bio,
+    header_pic_url: headerUrl || null,
+    profile_pic_url: avatarUrl || null,
+    favoriteMovies: favMovieIDs
+  })
 });
 
-// Show success message
-showSuccessMessage("Profile updated successfully!");
-}   
+    const data = await response.json();
+    if (!data.success) {
+      console.error('Error saving profile:', data.message);
+      showSuccessMessage(`Failed to save profile: ${data.message}`, 'error');
+      return;
+    }
+
+    showSuccessMessage("Profile updated successfully!");
+    await loadUserProfile();
+
+
+  } catch (err) {
+    console.error('Network error saving profile:', err);
+    showSuccessMessage("Network error—could not save profile", "error");
+  }
+}
+
+// Helper to convert data URL to Blob
+function dataURLtoBlob(dataUrl) {
+  const arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  for (let i = 0; i < n; i++) u8arr[i] = bstr.charCodeAt(i);
+  return new Blob([u8arr], { type: mime });
+}
 
 // New function to create cropped avatar
 function createCroppedAvatar() {
@@ -585,8 +731,9 @@ function showSuccessMessage(message) {
 // Stats button functionality
 document.addEventListener("DOMContentLoaded", function () {
     // Initialize main profile favorites
-    loadUserProfile() // Add this line
+    loadUserProfile();  // Add this line
     updateMainProfileFavorites();
+    initializeFavoriteMovies();
 
     // Movie search on Enter key
     document.getElementById("movieSearchInput").addEventListener("keypress", function(e) {
@@ -606,6 +753,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".watchlist").addEventListener("click", function () {
         window.location.href = "../pages/watchlist.html";
     });
+
+    document.getElementById('profileHeader').style.visibility   = 'visible';
+    document.querySelector('.profile-content').style.visibility = 'visible';
+
 });
 
 // Close modals when clicking outside

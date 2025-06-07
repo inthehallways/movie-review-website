@@ -1,201 +1,181 @@
-// This JavaScript file handles dummy data as a guide for Backend integration.
+// /script/api.js
 
+// If elsewhere you need to prefix TMDB images, expose this
 export const API_CONFIG = {
-    TMDB_API_KEY: '8064455f5d0fa492a57d3904df2b0045', // Backend dev should replace this with their own API key
-    TMDB_BASE_URL: "https://api.themoviedb.org/3",
-    TMDB_IMAGE_BASE: "https://image.tmdb.org/t/p/w500",
-}
+  TMDB_IMAGE_BASE: "https://image.tmdb.org/t/p/w500"
+};
 
-// Mock watched movies data for testing
+// 1) Fetch every watched movie for this user
 export async function getUserWatchedMovies(userId) {
-    const mockWatchedMovies = [
-        {
-            id: "101",
-            title: "The Matrix",
-            poster_path: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
-            genres: ["Action", "Sci-Fi"],
-            user_rating: 5,
-            is_liked: true,
-        },
-        {
-            id: "102",
-            title: "Inception",
-            poster_path: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
-            genres: ["Action", "Sci-Fi", "Thriller"],
-            user_rating: 4,
-            is_liked: false, 
-        },
-        {
-            id: "103",
-            title: "The Shawshank Redemption",
-            poster_path: "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
-            genres: ["Drama"],
-            user_rating: null,
-            is_liked: true, 
-        },
-        {
-            id: "104",
-            title: "Pulp Fiction",
-            poster_path: "/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
-            genres: ["Crime", "Drama"],
-            user_rating: 3,
-            is_liked: false,
-        },
-        {
-            id: "105",
-            title: "The Dark Knight",
-            poster_path: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-            genres: ["Action", "Crime", "Drama"],
-            user_rating: null,
-            is_liked: false,
-        },
-        {
-            id: "106",
-            title: "Forrest Gump",
-            poster_path: "/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg",
-            genres: ["Drama", "Romance"],
-            user_rating: 2,
-            is_liked: true,
-        },
-    ]
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("Missing authentication token");
 
-  return new Promise((resolve) => {
-    setTimeout(() => {
-        console.log("🎬 Loading watched movies:", mockWatchedMovies)
-        resolve(mockWatchedMovies)
-    }, 500)
-  })
-}
-
-// Handles star rating
-export async function updateMovieRating(userId, movieId, rating) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            console.log(`⭐ Rating updated: Movie ${movieId} rated ${rating} stars by user ${userId}`)
-
-            // Show success message in console for testing
-            if (rating === null) {
-                console.log(`🗑️ Rating reset for movie ${movieId}`)
-            } else {
-                console.log(`✅ Movie ${movieId} now has ${rating}/5 stars`)
-            }
-
-            resolve()
-        }, 200)
-    })    
-}
-
-// Handles when user removes a movie from watched list
-export async function removeMovieFromWatchedList(userId, movieId) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            console.log(`🗑️ Movie ${movieId} removed from watched list for user ${userId}`)
-            resolve()
-        }, 300)
-    })
-}
-
-// Handles when a user marks a movie from Watched as liked
-export async function toggleMovieLiked(userId, movieId, isLiked) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            console.log(`💖 Movie ${movieId} ${isLiked ? 'liked' : 'unliked'} by user ${userId}`)
-            resolve({ success: true, isLiked })
-        }, 200)
-     })
-}
-
-// Mock watchlist data for testing
-export async function getUserWatchlist(userId) {
-    const mockWatchlistMovies = [
-        {
-            id: "201",
-            title: "Dune",
-            poster_path: "/d5NXSklXo0qyIYkgV94XAgMIckC.jpg",
-            genres: ["Action", "Adventure", "Sci-Fi"],
-            added_date: "2024-01-15",
-        },
-        {
-            id: "202", 
-            title: "Spider-Man: No Way Home",
-            poster_path: "/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-            genres: ["Action", "Adventure", "Sci-Fi"],
-            added_date: "2024-01-10",   
-        },
-        {
-            id: "203",
-            title: "The Batman",
-            poster_path: "/b0PlSFdDwbyK0cf5RxwDpaOJQvQ.jpg", 
-            genres: ["Action", "Crime", "Drama"],
-            added_date: "2024-01-05",
-        },
-        {
-            id: "204",
-            title: "Top Gun: Maverick",
-            poster_path: "/62HCnUTziyWcpDaBO2i1DX17ljH.jpg",
-            genres: ["Action", "Drama"],
-            added_date: "2023-12-20",
-        },
-        {
-            id: "205",
-            title: "Everything Everywhere All at Once",
-            poster_path: "/w3LxiVYdWWRvEVdn5RYq6jIqkb1.jpg",
-            genres: ["Action", "Adventure", "Comedy"],
-            added_date: "2023-12-15",
-        },
-        {
-            id: "206",
-            title: "Avatar: The Way of Water",
-            poster_path: "/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg",
-            genres: ["Action", "Adventure", "Sci-Fi"],
-            added_date: "2023-12-01",
-        }
-    ]
-
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            console.log("📋 Loading watchlist movies:", mockWatchlistMovies)
-            resolve(mockWatchlistMovies)
-        }, 500)
-    })
-}
-
-// Handles when user removes a movie from watchlist
-export async function removeFromWatchlist(userId, movieId) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            console.log(`🗑️ Movie ${movieId} removed from watchlist for user ${userId}`)
-            resolve()
-        }, 300)
-    })
-}
-
-// Handles when user marks a movie in the watchlist as watched
-export async function markAsWatched(userId, movie) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            console.log(`👁️ Movie "${movie.title}" marked as watched for user ${userId}`)
-            resolve()
-        }, 300)
-    })
-}
-
-// Create a watched movie object from the watchlist movie
-export async function addToWatchedList(userId, movie) {
-    const watchedMovie = {
-        id: movie.id,
-        title: movie.title,
-        poster_path: movie.poster_path,
-        genres: movie.genres,
-        user_rating: null, // Initially no rating
-        added_date: new Date().toISOString() // Current date as watched date
+  const resp = await fetch("http://localhost:3001/api/watched", {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
     }
-  
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            console.log(`✅ Movie "${movie.title}" added to watched list for user ${userId}`)
-            console.log('Movie data:', watchedMovie)
-            resolve(watchedMovie)
-        }, 300)
+  });
+  const body = await resp.json();
+  if (!body.success) {
+    throw new Error(body.message || "Failed to load watched movies");
+  }
+
+ return body.watched.map(row => ({
+    id:           row.movie_id,                            // unchanged
+    title:        row.title,
+    poster_path:  row.poster_path,
+    genres:       row.genres ? row.genres.split(", ") : [],
+    user_rating:  row.user_rating !== null ? parseInt(row.user_rating, 10) : null,
+    is_liked:  !!row.is_liked,
+    watch_date:   row.watch_date
+  }));
+}
+
+// 2) Update a watched movie’s rating
+export async function updateMovieRating(userId, movieId, rating) {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("Missing authentication token");
+
+  const resp = await fetch(`http://localhost:3001/api/watched/${movieId}/rating`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({ rating })
+  });
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`Failed to update rating: ${text}`);
+  }
+  return await resp.json();
+}
+
+// 3) Remove a movie from “watched”
+export async function removeMovieFromWatchedList(userId, movieId) {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("Missing authentication token");
+
+  const resp = await fetch(`http://localhost:3001/api/watched/${movieId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    }
+  });
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`Failed to remove from watched: ${text}`);
+  }
+  return await resp.json();
+}
+
+// 4) Toggle a watched movie’s “liked” flag
+export async function toggleMovieLiked(userId, movieId, liked) {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("Missing authentication token");
+
+  const resp = await fetch(`http://localhost:3001/api/watched/${movieId}/liked`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({ liked })
+  });
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`Failed to toggle liked: ${text}`);
+  }
+  return await resp.json();
+}
+
+// 1) Fetch every watchlist‐movie for this user
+export async function getUserWatchlist(userId) {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("Missing authentication token");
+
+  const resp = await fetch("http://localhost:3001/api/watchlist", {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    }
+  });
+  const body = await resp.json();
+  if (!body.success) {
+    throw new Error(body.message || "Failed to load watchlist");
+  }
+
+  // Map each row into exactly the shape watchlist.js expects:
+  return body.watchlist.map(row => ({
+    id:           row.movie_id,                        // used as data-movie-id
+    title:        row.title,                           // movie title
+    poster_path:  row.poster_path,                     // full TMDB URL
+    genres:       row.genres ? row.genres.split(", ") : [], 
+    added_date:   row.added_date                        // JS Date string
+  }));
+}
+
+// 2) Remove from watchlist
+export async function removeFromWatchlist(userId, movieId) {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("Missing authentication token");
+
+  const resp = await fetch(`http://localhost:3001/api/watchlist/${movieId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    }
+  });
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`Failed to remove from watchlist: ${text}`);
+  }
+  return await resp.json();
+}
+
+// 3) Mark a movie as watched (moves it to /api/watched)
+export async function markAsWatched(userId, movie) {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("Missing authentication token");
+  // note: we post { movie_id, watch_date? } but watchlist.js doesn’t need to send rating here
+  const resp = await fetch("http://localhost:3001/api/watched", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({
+      movie_id: movie.id,
+      watch_date: new Date().toISOString()
     })
+  });
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`Failed to mark as watched: ${text}`);
+  }
+  return await resp.json();
+}
+
+// 4) Add to watched list in memory (optional—your watchlist.js calls this before markAsWatched)
+export async function addToWatchedList(userId, movie) {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("Missing authentication token");
+  // We’ll cheat here and just return a dummy object,
+  // since “watchlist.js” uses it only for console logging.
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({
+        id:          movie.id,
+        title:       movie.title,
+        poster_path: movie.poster_path,
+        genres:      movie.genres,
+        user_rating: null,
+        is_liked:    false,
+        watch_date:  new Date().toISOString()
+      });
+    }, 200);
+  });
 }
