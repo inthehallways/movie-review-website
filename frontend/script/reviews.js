@@ -1,8 +1,10 @@
+let reviewsData = [];   // ← Will hold the actual array of review objects
+let currentEditingReview = null;
+
 // TMDB API Configuration
 const API_KEY = "d2a72fb4b28ccba64124755d66b1b0f1"
 const IMG_URL = "https://image.tmdb.org/t/p/w500"
 
-let currentEditingReview = null
 
 // Dropdown functionality for profile menu
 function toggleDropdown() {
@@ -30,9 +32,78 @@ function switchToWatched() {
 }
 
 // Review System - Load reviews from localStorage
-function loadReviews() {
-  const reviews = localStorage.getItem("movieReviews")
-  return reviews ? JSON.parse(reviews) : []
+async function loadReviews() {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    alert("You are not logged in. Please log in first!");
+    window.location.href = "../pages/login.html";
+    return [];
+  }
+
+  try {
+    const response = await fetch("http://localhost:3001/api/reviews", {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    });
+
+    if (response.status === 401 || response.status === 403) {
+      // If token expired/invalid
+      alert("Session expired. Please log in again.");
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      window.location.href = "../pages/login.html";
+      return [];
+    }
+
+    const data = await response.json();
+
+if (!data.success) {
+  console.error("Error loading reviews:", data.message);
+  return [];
+}
+
+// 1) Take the raw array from the database
+const dbReviews = data.reviews; 
+//    each object has { review_id, title, review_text, rating, watched_date, created_at, poster_path, movie_id, … }
+
+// 2) If poster_path is null, replace it by fetching from TMDB
+const filledReviews = await Promise.all(
+  dbReviews.map(async (r) => {
+    if (!r.poster_path) {
+      try {
+        // Fetch full movie details from TMDB so we can grab its poster_path
+        const tmdb = await fetch(
+          `${BASE_URL}/movie/${r.movie_id}?api_key=${API_KEY}`
+        ).then((res) => res.json());
+
+        if (tmdb.poster_path) {
+          r.poster_path = tmdb.poster_path;
+        }
+      } catch (err) {
+        console.warn("TMDB lookup failed for movie_id", r.movie_id, err);
+      }
+    }
+    return r;
+  })
+);
+
+// 3) Map the “filled” array into the shape renderReviews expects
+return filledReviews.map((r) => ({
+  id:            r.review_id,
+  title:         r.title,
+  rating:        r.rating,
+  watchDate:     formatDate(r.watched_date),
+  reviewText:    r.review_text,
+  posterPath:    r.poster_path,  // now either the DB’s URL or the TMDB lookup
+  dateAdded:     r.created_at
+}));
+
+  } catch (err) {
+    console.error("Error fetching reviews:", err);
+    return [];
+  }
 }
 
 // Review System - Save reviews to localStorage
@@ -57,16 +128,14 @@ function toggleSortDropdown(type) {
 }
 
 function selectSort(type, value) {
-  const selectedSpan = document.getElementById(type + "Selected")
-  selectedSpan.textContent = value
+  const selectedSpan = document.getElementById(type + "Selected");
+  selectedSpan.textContent = value;
+  document.getElementById(type + "Dropdown").classList.remove("show");
 
-  // Close dropdown
-  document.getElementById(type + "Dropdown").classList.remove("show")
-
-  // Apply sorting logic
-  console.log(`Sorting by ${type}:`, value)
-  sortReviews(value)
+  // This value is literally "Latest Added", "Oldest Added", etc.
+  sortReviews(value);
 }
+
 
 // Close dropdowns when clicking outside
 document.addEventListener("click", (e) => {
@@ -76,46 +145,6 @@ document.addEventListener("click", (e) => {
     })
   }
 })
-
-// Sample reviews data (in a real app, this would come from a database)
-const reviewsData = [
-  {
-    id: 1,
-    title: "The Dark Knight",
-    rating: 5,
-    watchDate: "15/01/2025",
-    reviewText:
-      "An absolutely masterful piece of cinema. Christopher Nolan's direction combined with Heath Ledger's iconic performance as the Joker creates an unforgettable experience. The film perfectly balances action, drama, and psychological thriller elements.",
-    dateAdded: new Date("2025-01-15"),
-  },
-  {
-    id: 2,
-    title: "Inception",
-    rating: 4,
-    watchDate: "12/01/2025",
-    reviewText:
-      "A mind-bending journey through dreams within dreams. Nolan's complex narrative structure keeps you engaged throughout, though it can be confusing at times. The visual effects and cinematography are stunning.",
-    dateAdded: new Date("2025-01-12"),
-  },
-  {
-    id: 3,
-    title: "Parasite",
-    rating: 5,
-    watchDate: "08/01/2025",
-    reviewText:
-      "Bong Joon-ho delivers a brilliant social commentary wrapped in a thrilling narrative. The film's exploration of class divide is both subtle and powerful. Every scene is meticulously crafted.",
-    dateAdded: new Date("2025-01-08"),
-  },
-  {
-    id: 4,
-    title: "Interstellar",
-    rating: 4,
-    watchDate: "05/01/2025",
-    reviewText:
-      "An emotional and visually spectacular space epic. While the science can be overwhelming, the human story at its core is deeply moving. Hans Zimmer's score is absolutely phenomenal.",
-    dateAdded: new Date("2025-01-05"),
-  },
-]
 
 // Function to render reviews
 function renderReviews(reviews) {
@@ -190,29 +219,26 @@ function generateStarRating(rating) {
 
 // Function to sort reviews
 function sortReviews(sortType) {
-  const reviews = loadReviews()
-  const sortedReviews = [...reviews]
-
+  const sortedReviews = [...reviewsData]; // uses the array you already fetched
   switch (sortType) {
     case "Latest Added":
-      sortedReviews.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
-      break
+      sortedReviews.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+      break;
     case "Oldest Added":
-      sortedReviews.sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded))
-      break
+      sortedReviews.sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded));
+      break;
     case "Highest Rated":
-      sortedReviews.sort((a, b) => b.rating - a.rating)
-      break
+      sortedReviews.sort((a, b) => b.rating - a.rating);
+      break;
     case "Lowest Rated":
-      sortedReviews.sort((a, b) => a.rating - b.rating)
-      break
+      sortedReviews.sort((a, b) => a.rating - b.rating);
+      break;
     default:
-      // Default to latest added
-      sortedReviews.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
+      sortedReviews.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
   }
-
-  renderReviews(sortedReviews)
+  renderReviews(sortedReviews);
 }
+
 
 // Function to add a new review (for future use)
 function addReview(movieTitle, rating, watchDate, reviewText) {
@@ -240,29 +266,30 @@ function editReview(reviewId, updatedData) {
 
 // Edit Review Functions
 function openEditReview(reviewId) {
-  const reviews = loadReviews()
-  const review = reviews.find((r) => r.id === reviewId)
+  // 1) Look up the actual review object in reviewsData (which is a plain array)
+  const review = reviewsData.find((r) => r.id === reviewId);
 
   if (!review) {
-    alert("Review not found!")
-    return
+    alert("Review not found!");
+    return;
   }
 
-  currentEditingReview = review
+  currentEditingReview = review;
 
-  // Populate edit modal
-  document.getElementById("editMovieTitle").textContent = `Edit Review - ${review.title}`
-  document.getElementById("editReviewText").value = review.reviewText
+  // 2) Populate the edit modal fields
+  document.getElementById("editMovieTitle").textContent = `Edit Review – ${review.title}`;
+  document.getElementById("editReviewText").value = review.reviewText;
 
-  // Set rating
-  const ratingInput = document.querySelector(`input[name="edit-rating"][value="${review.rating}"]`)
+  // 3) Set the radio for the existing rating
+  const ratingInput = document.querySelector(`input[name="edit-rating"][value="${review.rating}"]`);
   if (ratingInput) {
-    ratingInput.checked = true
+    ratingInput.checked = true;
   }
 
-  // Show modal
-  document.getElementById("editReviewModal").style.display = "block"
+  // 4) Show the modal
+  document.getElementById("editReviewModal").style.display = "block";
 }
+
 
 function closeEditModal() {
   document.getElementById("editReviewModal").style.display = "none"
@@ -275,73 +302,119 @@ function closeEditModal() {
   })
 }
 
-function saveEditedReview() {
+async function saveEditedReview() {
   if (!currentEditingReview) {
-    alert("No review selected for editing!")
-    return
+    alert("No review selected for editing!");
+    return;
   }
 
-  const newReviewText = document.getElementById("editReviewText").value.trim()
-  const newRating = document.querySelector('input[name="edit-rating"]:checked')
+  // 1) Gather new values from the modal
+  const newReviewText = document.getElementById("editReviewText").value.trim();
+  const newRatingInput = document.querySelector('input[name="edit-rating"]:checked');
 
-  // Validation
-  if (!newReviewText) {
-    alert("Please write a review before saving.")
-    return
+  if (!newReviewText || newReviewText.length < 10) {
+    alert("Please write a more detailed review (at least 10 characters).");
+    return;
+  }
+  if (!newRatingInput) {
+    alert("Please select a rating before saving.");
+    return;
   }
 
-  if (newReviewText.length < 10) {
-    alert("Please write a more detailed review (at least 10 characters).")
-    return
+  const newRating = Number.parseInt(newRatingInput.value);
+
+  // 2) Call the backend PUT /api/reviews/:id
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Session expired. Please log in again.");
+    window.location.href = "../pages/login.html";
+    return;
   }
 
-  if (!newRating) {
-    alert("Please select a rating before saving.")
-    return
-  }
+  try {
+    const response = await fetch(`http://localhost:3001/api/reviews/${currentEditingReview.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({
+        review_text: newReviewText,
+        rating: newRating
+        // (If you want to allow editing watched_date, include watched_date here.)
+      })
+    });
 
-  // Update review
-  const reviews = loadReviews()
-  const reviewIndex = reviews.findIndex((r) => r.id === currentEditingReview.id)
-
-  if (reviewIndex !== -1) {
-    reviews[reviewIndex] = {
-      ...reviews[reviewIndex],
-      rating: Number.parseInt(newRating.value),
-      reviewText: newReviewText,
-      dateModified: new Date().toISOString(),
+    if (response.status === 401 || response.status === 403) {
+      alert("Session expired. Please log in again.");
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      window.location.href = "../pages/login.html";
+      return;
     }
 
-    saveReviews(reviews)
-    renderReviews(reviews)
-    closeEditModal()
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || "Failed to update review.");
 
-    alert(`Review for "${currentEditingReview.title}" has been updated!`)
-  } else {
-    alert("Error updating review. Please try again.")
+    // 3) Close the modal and re-fetch everything
+    closeEditModal();
+    reviewsData = await loadReviews();
+    renderReviews(reviewsData);
+    alert("Review updated successfully!");
+  } catch (err) {
+    console.error("Error updating review:", err);
+    alert("Error updating review. Please try again.");
   }
 }
+
 
 // Delete Review Function
-function openDeleteReview(reviewId) {
-  const reviews = loadReviews()
-  const review = reviews.find((r) => r.id === reviewId)
-
+async function openDeleteReview(reviewId) {
+  const review = reviewsData.find((r) => r.id === reviewId);
   if (!review) {
-    alert("Review not found!")
-    return
+    alert("Review not found!");
+    return;
   }
 
-  const confirmDelete = confirm(`Are you sure you want to delete your review for "${review.title}"?`)
+  const confirmDelete = confirm(`Are you sure you want to delete your review for "${review.title}"?`);
+  if (!confirmDelete) return;
 
-  if (confirmDelete) {
-    const updatedReviews = reviews.filter((r) => r.id !== reviewId)
-    saveReviews(updatedReviews)
-    renderReviews(updatedReviews)
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Session expired. Please log in again.");
+    window.location.href = "../pages/login.html";
+    return;
+  }
 
-    alert(`Review for "${review.title}" has been deleted!`)
+  try {
+    const response = await fetch(`http://localhost:3001/api/reviews/${reviewId}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    });
+
+    if (response.status === 401 || response.status === 403) {
+      alert("Session expired. Please log in again.");
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      window.location.href = "../pages/login.html";
+      return;
+    }
+
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || "Failed to delete review.");
+
+    // 1) Re-fetch all reviews so the list updates
+    reviewsData = await loadReviews();
+    renderReviews(reviewsData);
+    alert("Review deleted successfully!");
+  } catch (err) {
+    console.error("Error deleting review:", err);
+    alert("Error deleting review. Please try again.");
   }
 }
+
 
 // Close edit modal when clicking outside
 window.addEventListener("click", (e) => {
@@ -352,71 +425,26 @@ window.addEventListener("click", (e) => {
 })
 
 // Initialize the page
-document.addEventListener("DOMContentLoaded", () => {
-  // Check if there are existing reviews, if not, add sample data
-  let reviews = loadReviews()
+document.addEventListener("DOMContentLoaded", async () => {
+  // 1) Fetch from server, store into reviewsData
+  reviewsData = await loadReviews();
 
-  if (reviews.length === 0) {
-    // Add sample reviews for demonstration
-    const sampleReviews = [
-      {
-        id: Date.now() + 1,
-        movieId: 155,
-        title: "The Dark Knight",
-        posterPath: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-        rating: 5,
-        reviewText:
-          "An absolutely masterful piece of cinema. Christopher Nolan's direction combined with Heath Ledger's iconic performance as the Joker creates an unforgettable experience. The film perfectly balances action, drama, and psychological thriller elements.",
-        watchDate: "15/01/2025",
-        dateAdded: new Date("2025-01-15").toISOString(),
-        dateModified: new Date("2025-01-15").toISOString(),
-      },
-      {
-        id: Date.now() + 2,
-        movieId: 27205,
-        title: "Inception",
-        posterPath: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
-        rating: 4,
-        reviewText:
-          "A mind-bending journey through dreams within dreams. Nolan's complex narrative structure keeps you engaged throughout, though it can be confusing at times. The visual effects and cinematography are stunning.",
-        watchDate: "12/01/2025",
-        dateAdded: new Date("2025-01-12").toISOString(),
-        dateModified: new Date("2025-01-12").toISOString(),
-      },
-      {
-        id: Date.now() + 3,
-        movieId: 496243,
-        title: "Parasite",
-        posterPath: "/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
-        rating: 5,
-        reviewText:
-          "Bong Joon-ho delivers a brilliant social commentary wrapped in a thrilling narrative. The film's exploration of class divide is both subtle and powerful. Every scene is meticulously crafted.",
-        watchDate: "08/01/2025",
-        dateAdded: new Date("2025-01-08").toISOString(),
-        dateModified: new Date("2025-01-08").toISOString(),
-      },
-    ]
+  // 2) Render what we fetched
+  renderReviews(reviewsData);
 
-    // Save sample reviews to localStorage
-    saveReviews(sampleReviews)
-    reviews = sampleReviews
-  }
-
-  // Load and render reviews
-  renderReviews(reviews)
-
-  // Add keyboard shortcuts for edit modal
+  // 3) Keyboard shortcuts for the edit modal
   document.addEventListener("keydown", (e) => {
-    const modal = document.getElementById("editReviewModal")
+    const modal = document.getElementById("editReviewModal");
     if (modal.style.display === "block") {
       if (e.key === "Escape") {
-        closeEditModal()
+        closeEditModal();
       } else if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-        saveEditedReview()
+        saveEditedReview();
       }
     }
-  })
-})
+  });
+});
+
 
 // Utility function to format date
 function formatDate(dateString) {

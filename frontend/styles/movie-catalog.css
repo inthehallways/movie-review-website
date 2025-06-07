@@ -135,7 +135,7 @@ body {
   display: flex;
 }
 
-/* Search Bar */
+/*Search Bar*/
 .search-bar-container {
   display: flex;
   justify-content: flex-end;
@@ -294,11 +294,26 @@ body {
   max-width: 150px;
 }
 
+.footer-links {
+  display: flex;
+  gap: 15px;
+}
+
+.social-link img {
+  width: 30px;
+  height: 30px;
+  transition: transform 0.3s;
+}
+
+.social-link img:hover {
+  transform: scale(1.1);
+}
 
 .footer-text {
   font-size: 0.9em;
   color: #2c2c2c;
 }
+
 
 .modal {
   display: none;
@@ -356,7 +371,7 @@ body {
   justify-content: center;
   transition: background 0.2s ease;
 }
-
+ 
 .modal .close:hover {
   background: rgba(0, 0, 0, 0.5);
 }
@@ -383,13 +398,13 @@ body {
   color: #2c2c2c;
   text-align: left;
   font-family: "Inter", sans-serif;
-  font-size: 28px;
+  font-size: 30px;
   line-height: 120%;
   letter-spacing: -0.03em;
   font-weight: 600;
   position: absolute;
   left: 367px;
-  top: 40px;
+  top: 45px;
   width: 450px;
   word-wrap: break-word;
   hyphens: auto;
@@ -409,7 +424,7 @@ body {
   font-weight: 300;
   position: absolute;
   left: 367px;
-  top: 100px;
+  top: 110px;
   opacity: 0.8;
 }
 
@@ -423,7 +438,7 @@ body {
   font-weight: 400;
   position: absolute;
   left: 367px;
-  top: 120px;
+  top: 130px;
   opacity: 0.9;
   width: 450px;
   word-wrap: break-word;
@@ -439,9 +454,9 @@ body {
   font-weight: 300;
   position: absolute;
   left: 367px;
-  top: 145px;
+  top: 155px;
   width: 450px;
-  max-height: 85px;
+  max-height: 75px;
   overflow-y: auto;
   opacity: 0.9;
   scrollbar-width: none;
@@ -859,4 +874,71 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+}
+
+.btn-watch {
+  background-color: #28a745;   /* green */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.btn-unwatch {
+  background-color: #dc3545;   /* red */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-add-watchlist {
+  background-color: #007bff;   /* blue */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.btn-remove-watchlist {
+  background-color: #ffc107;   /* amber */
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.profile-modal {
+  display: flex;                /* Lay out avatar + username side by side */
+  align-items: center;
+  gap: 0.5rem;
+  position: absolute;           /* keep position if needed */
+  left: 365px;                  /* tweak these */
+  top: 275px;                   /* tweak these */
+  background: transparent;      /* no background circle for the container */
+  box-shadow: none;             /* remove the shadow from the container */
+  border: none;                 /* remove the white border from the container */
+  overflow: visible;            /* let text flow! */
+}
+
+.avatar-display-modal {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;           /* just the avatar circle */
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.username-display-modal {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }

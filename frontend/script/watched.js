@@ -1,7 +1,13 @@
 // JavaScript for SceneIt Watched Page
 // This file handles the watched movies functionality including loading, rendering, and managing movies in the watched list.
 
-import { API_CONFIG, getUserWatchedMovies, updateMovieRating, removeMovieFromWatchedList, toggleMovieLiked } from "./api.js"
+import {
+  API_CONFIG,
+  getUserWatchedMovies,
+  updateMovieRating,
+  removeMovieFromWatchedList,
+  toggleMovieLiked
+} from "./api.js"
 
 let currentWatchedMovies = []
 const currentSort = {
@@ -18,11 +24,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function loadWatchedMovies() {
     try {
-        const userId = getCurrentUserId()
-        currentWatchedMovies = await getUserWatchedMovies(userId)
-        renderMovies()
+       const userId = getCurrentUserId();
+       currentWatchedMovies = await getUserWatchedMovies(userId);
+        renderMovies();
     } catch (error) {
-        console.error("Error loading watched movies:", error)
+        console.error("Error loading watched movies:", error);
     }
 }
 
@@ -296,7 +302,7 @@ function createWatchedMovieCard(movie) {
     }
 
     const posterUrl = movie.poster_path
-        ? `${API_CONFIG.TMDB_IMAGE_BASE}${movie.poster_path}`
+        ? movie.poster_path
         : "../assets/images/poster-placeholder.png"
 
     // Create star rating 
@@ -431,5 +437,5 @@ function setupAllStarHoverEffects() {
 
 // Utility functions
 function getCurrentUserId() {
-    return localStorage.getItem("userId") || "1" // Temporary
+  return localStorage.getItem("userId"); // must be the GUID, not “1”
 }
