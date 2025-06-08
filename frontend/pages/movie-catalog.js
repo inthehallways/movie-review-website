@@ -22,18 +22,15 @@ const nameSelect = document.getElementById("nameSelect")
 let currentMovies = []
 let currentMovie = null
 
-// Review System - Load reviews from localStorage
 function loadReviews() {
   const reviews = localStorage.getItem("movieReviews")
   return reviews ? JSON.parse(reviews) : []
 }
 
-// Review System - Save reviews to localStorage
 function saveReviews(reviews) {
   localStorage.setItem("movieReviews", JSON.stringify(reviews))
 }
 
-// Review System - Save a new review
 function saveReview(movieData, rating, reviewText, watchDate) {
   const reviews = loadReviews()
   const existingReviewIndex = reviews.findIndex((review) => review.movieId === movieData.id)
@@ -60,7 +57,6 @@ function saveReview(movieData, rating, reviewText, watchDate) {
   return newReview
 }
 
-// Review System - Get review for current movie
 function getCurrentMovieReview() {
   if (!currentMovie) return null
   const reviews = loadReviews()
@@ -74,7 +70,6 @@ document.addEventListener("DOMContentLoaded", () => {
   yearSelect.addEventListener("change", applyFilters)
   nameSelect.addEventListener("change", applyNameSort)
 
-  // Add event listeners for the action buttons in the modal
   const watchedButton = modal.querySelector(".marked-as-watched")
   const likesButton = modal.querySelector(".add-to-likes")
   const watchlistButton = modal.querySelector(".add-to-watchlist")
@@ -83,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
   likesButton.addEventListener("click", addToLikes)
   watchlistButton.addEventListener("click", addToWatchlist)
 
-  // Character counter for review
   const reviewTextarea = document.querySelector(".add-a-review")
   const characterCounter = document.querySelector(".character-counter")
   const MAX_CHARS = 500
@@ -133,7 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         dateDisplay.textContent = formattedDate
 
-        // Mark as watched automatically
         const watchedButton = modal.querySelector(".marked-as-watched")
         const watchedText = watchedButton.querySelector(".watched-text")
         watchedButton.classList.add("watched")
@@ -168,12 +161,11 @@ searchInput.addEventListener("input", (e) => {
     } else {
       fetchPopularMovies()
     }
-  }, 500) // 500ms debounce
+  }, 500) 
 })
 
 async function fetchPopularMovies() {
   try {
-    // Fetch from multiple pages to get more movies
     const [page1, page2] = await Promise.all([
       fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`),
       fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=2`),
@@ -181,8 +173,7 @@ async function fetchPopularMovies() {
 
     const [data1, data2] = await Promise.all([page1.json(), page2.json()])
 
-    // Number of movie posters that will show up on screen
-    currentMovies = [...data1.results, ...data2.results].slice(0, 36)
+    currentMovies = [...data1.results, ...data2.results].slice(0, 24)
     displayMovies(currentMovies)
   } catch (err) {
     console.error("Error fetching popular movies:", err)
@@ -198,7 +189,7 @@ async function searchMovies(query) {
 
     const [data1, data2] = await Promise.all([page1.json(), page2.json()])
 
-    // Number of movies that will how up when you search
+
     currentMovies = [...data1.results, ...data2.results].slice(0, 24)
     displayMovies(currentMovies)
   } catch (err) {
@@ -278,7 +269,7 @@ function applyNameSort() {
   if (sortValue === "asc") {
     currentMovies.sort((a, b) => a.title.localeCompare(b.title))
   } else if (sortValue === "desc") {
-    currentMovies.sort((a, b) => b.title.localeCompare(a.title))
+    currentMovies.sort((a, b) => b.title.localeCompare(b.title))
   }
 
   displayMovies(currentMovies)
@@ -338,11 +329,27 @@ async function showModal(movie) {
 
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : "Unknown"
 
-  modal.querySelector(".movie-title").textContent = `${movie.title} (${releaseYear})`
+  const titleElement = modal.querySelector(".movie-title")
+  const directedByElement = modal.querySelector(".directed-by")
+  const descriptionElement = modal.querySelector(".movie-description")
+
+  titleElement.textContent = `${movie.title} (${releaseYear})`
   modal.querySelector(".release-date").textContent = ""
 
-  modal.querySelector(".directed-by").textContent = director ? `Directed by ${director.name}` : "Director Unknown"
-  modal.querySelector(".movie-description").textContent = movie.overview || "No description available."
+  directedByElement.textContent = director ? `Directed by ${director.name}` : "Director Unknown"
+  descriptionElement.textContent = movie.overview || "No description available."
+
+  requestAnimationFrame(() => {
+    const titleHeight = titleElement.offsetHeight
+    const titleTop = 45 
+
+    const directedByTop = titleTop + titleHeight + 2 
+    directedByElement.style.top = `${directedByTop}px`
+
+    const directedByHeight = directedByElement.offsetHeight
+    const descriptionTop = directedByTop + directedByHeight + 15 
+    descriptionElement.style.top = `${descriptionTop}px`
+  })
 
   modal.querySelector(".modal-movie-poster").style.backgroundImage = `url(${posterURL})`
   modal.querySelector(".modal-movie-poster").style.backgroundSize = "cover"
@@ -363,7 +370,6 @@ async function showModal(movie) {
 function loadExistingReview() {
   const existingReview = getCurrentMovieReview()
   if (existingReview) {
-    // Set the rating
     const ratingInput = modal.querySelector(`input[name="movie-rating"][value="${existingReview.rating}"]`)
     const ratingLabel = document.getElementById("ratingLabel")
 
@@ -378,7 +384,6 @@ function loadExistingReview() {
       reviewTextarea.value = existingReview.reviewText
       reviewTextarea.placeholder = "Edit your review..."
 
-      // Update character counter
       const characterCounter = document.querySelector(".character-counter")
       if (characterCounter) {
         characterCounter.textContent = `${existingReview.reviewText.length}/500`
@@ -386,14 +391,12 @@ function loadExistingReview() {
       }
     }
 
-    // Set watched status if available
     if (existingReview.watchDate && existingReview.watchDate !== "Not watched") {
       const watchedButton = modal.querySelector(".marked-as-watched")
       const watchedText = watchedButton.querySelector(".watched-text")
       watchedButton.classList.add("watched")
       watchedText.textContent = "Watched"
 
-      // Update the watched date display
       const dateDisplay = modal.querySelector(".dd-mm-yyyy")
       if (dateDisplay) {
         dateDisplay.textContent = existingReview.watchDate
@@ -408,16 +411,13 @@ function markAsWatched() {
     const dateDisplay = document.querySelector(".dd-mm-yyyy")
 
     if (hiddenDateInput && dateDisplay) {
-      // Set today's date as default
       const today = new Date()
       const todayString = today.toISOString().split("T")[0]
       hiddenDateInput.value = todayString
 
-      // Show calendar immediately
       hiddenDateInput.focus()
       hiddenDateInput.showPicker()
 
-      // Auto-format and display today's date
       const day = today.getDate().toString().padStart(2, "0")
       const month = (today.getMonth() + 1).toString().padStart(2, "0")
       const year = today.getFullYear()
@@ -503,7 +503,6 @@ function deleteMovie() {
   }
 }
 
-// Handle rating selection and text change
 document.addEventListener("change", (e) => {
   if (e.target.name === "movie-rating") {
     const rating = e.target.value
@@ -521,7 +520,6 @@ document.addEventListener("click", (e) => {
     const input = document.getElementById(e.target.getAttribute("for"))
     const ratingLabel = document.getElementById("ratingLabel")
 
-    // If clicking on already selected star, remove the rating
     if (input && input.checked) {
       setTimeout(() => {
         input.checked = false
@@ -573,7 +571,6 @@ function resetModalState() {
     ratingLabel.textContent = "Rating"
   }
 
-  // Reset watched date display
   const dateDisplay = modal.querySelector(".dd-mm-yyyy")
   if (dateDisplay) {
     dateDisplay.textContent = "DD/MM/YYYY"
@@ -614,6 +611,7 @@ function submitReview() {
       return
     }
 
+    // Validate review text
     if (!review) {
       showNotification("Please write a review before submitting.")
       reviewTextarea.focus()
@@ -626,6 +624,7 @@ function submitReview() {
       return
     }
 
+    // Get watch date from display or use current date
     const dateDisplay = modal.querySelector(".dd-mm-yyyy")
     let watchDate = dateDisplay ? dateDisplay.textContent : null
 
@@ -653,14 +652,13 @@ function submitReview() {
   }
 }
 
-// Show notification instead of alert
 function showNotification(message, type = "info") {
   // Create notification element
   const notification = document.createElement("div")
   notification.className = `notification ${type}`
   notification.textContent = message
 
-  // Style the notification
+
   Object.assign(notification.style, {
     position: "fixed",
     bottom: "20px",
@@ -675,9 +673,10 @@ function showNotification(message, type = "info") {
     animation: "fadeIn 0.3s ease",
   })
 
+
   document.body.appendChild(notification)
 
-  // Remove after 3 seconds
+
   setTimeout(() => {
     notification.style.animation = "fadeOut 0.3s ease"
     setTimeout(() => {
@@ -686,6 +685,7 @@ function showNotification(message, type = "info") {
   }, 3000)
 }
 
+// Add this to your existing modal display code
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && modal.style.display === "block") {
     modal.style.display = "none"
