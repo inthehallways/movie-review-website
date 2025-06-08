@@ -16,30 +16,28 @@
     <div class="navbar">
         <div class="navbar-left">
             <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" height="40">
-            <span class="dashboard-label">SceneIt</span>
+            <!-- <span class="dashboard-label">Dashboard</span> -->
         </div>
 
         <div class="navbar-center">
             <ul class="nav-links">
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="../pages/watchlist.html">Watchlist</a></li>
-                <li><a href="../pages/movie-catalog.html">Movie Catalog</a></li>
+            <li><a href="#home" class="active" data-text="Home"><span>Home</span></a></li>            
+            <li><a href="../frontend/pages/watchlist.html" data-text="Watchlist"><span>Watchlist</span></a></li>
+            <li><a href="../frontend/pages/movie-catalog.html" data-text="Movie Catalog"><span>Movie Catalog</span></a></li>
             </ul>
         </div>
 
         <div class="navbar-right">
             <div class="profile-container">
-                <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()" />
+                <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()"/>
                 <div class="dropdown-menu" id="dropdownMenu">
-                    <a href="../pages/profile.html">View Profile</a>
-                    <a href="../pages/watchlist.html">Watchlist</a>
-                    <a href="../pages/reviews.html" class="active">My Reviews</a>
-                   <a href="#" id="logoutBtn">Logout</a>
-
+                    <a href="../frontend/pages/profile.html">View Profile</a>
+                    <a href="../frontend/pages/login.html">Logout</a>
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
+
 
     <!-- Search Bar -->
     <div class="search-bar-container">
