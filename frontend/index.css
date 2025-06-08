@@ -16,22 +16,53 @@ body {
 	flex-direction: column;
 	padding-top: 30px;
     overflow-x: hidden;
+    position: relative;
 }
 
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.3; 
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    ),
+    repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    );
+    background-size: 3px 3px;
+    z-index: -1;
+}
+
+/* Navbar Container */
 .navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #F49B98;
-    padding: 12px 30px;
+    background: #F2F2E4;
+    padding: 15px 30px;
     border-bottom: 1px solid #2c2c2c;
     position: fixed;
-	top: 0;           
+    top: 0;           
     left: 0;      
     width: 100%; 
-    z-index: 9999;    
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Navbar Sections */
 .navbar-left,
 .navbar-right {
     flex: 1; 
@@ -43,18 +74,19 @@ body {
     gap: 10px;
 }
 
-.dashboard-label {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #2c2c2c;
-}
-
 .navbar-center {
     flex: 2;
     display: flex;
     justify-content: center;
 }
 
+.dashboard-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c2c2c;
+}
+
+/* Navigation Links */
 .nav-links {
     display: flex;
     gap: 25px;
@@ -63,34 +95,102 @@ body {
     margin: 0;
 }
 
+/* Base Button Styles */
 .nav-links li a {
+    display: inline-block;
     color: #2c2c2c;
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid #2c2c2c;
+    background-color: transparent;
+    position: relative;
+    transition: all 0.2s ease;
+    box-shadow: 3px 4px 0px rgba(0, 0, 0, 1);
+    overflow: hidden;
+}
+
+.nav-links li a span {
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.nav-links li a:hover span {
+    transform: translateY(-138%);
+}
+
+/* Navbar Text Animation */
+.nav-links li a::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 8px 16px;
+    transition: transform 0.5s ease;
+}
+
+.nav-links li a:hover::after {
+    transform: translateY(-100%);
 }
 
 .nav-links li a:hover {
-    color: #73578d;
+    background-color: #FFEEAD;
+    transform: translate(1px, 2px);
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
 }
 
-/* Profile container */
+/* Active/Current Page Button */
+.nav-links li a.active {
+    color: #fff;
+    font-weight: 700;
+    background-color: #F49B98;
+}
+
+.nav-links li a.active:hover {
+    background-color: #e98582;
+    transform: translate(1px, 2px);
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+}
+
+/* Pressed/Clicked State */
+.nav-links li a:active,
+.nav-links li a.active:active {
+    transform: translate(3px, 4px) !important;
+    box-shadow: none !important;
+    transition: none;
+}
+
+/* Profile Container */
 .profile-container {
     margin-left: auto;
     position: relative;
     display: inline-block;
 }
 
-/* Profile image */
 .profile-pic {
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    border: 1px solid #2c2c2c;
+    border: 2px solid #2c2c2c;
+    box-shadow: 3px 3px 0px rgba(0, 0, 0, 1);
     cursor: pointer;
     object-fit: cover;
+    transition: all 0.2s ease;
 }
 
+.profile-pic:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+}
+
+.profile-pic:active {
+    transform: translate(3px, 3px);
+    box-shadow: none;
+}
+
+/* Dropdown Menu */
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -103,6 +203,7 @@ body {
     box-shadow: 3px 5px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     width: 230px;
+    height: 135px;
     flex-direction: column; 
     align-items: center;
     gap: 10px;
@@ -111,6 +212,7 @@ body {
 .dropdown-menu a {
     display: block;
     width: 100%;
+    margin-top: 5px;
     background-color: #F49B98;
     color: #333;
     padding: 8px 0;
@@ -119,12 +221,19 @@ body {
     text-align: center;
     font-weight: 500;
     text-decoration: none;
-    box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.25);
-    transition: background-color 0.3s ease;
+    box-shadow: 2px 3px 0px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
 }
 
 .dropdown-menu a:hover {
     background-color: #e98582;
+    transform: translate(1px, 1px);
+    box-shadow: 1px 2px 0px rgba(0, 0, 0, 0.25);
+}
+
+.dropdown-menu a:active {
+    transform: translate(2px, 3px);
+    box-shadow: none;
 }
 
 .dropdown-menu.show {
@@ -133,27 +242,68 @@ body {
 
 /* Hero Section */
 .hero {
-	background-color: #F2F2E4;
+    background-color: #F2F2E4;
 	background-image: url('../frontend/assets/images/first-home-bg.png');
-	background-size: contain;
-    background-position: center;
 	background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
 	height: 100vh; 
+	position: relative; 
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.3;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    ),
+    repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    );
+    background-size: 3px 3px;
+    z-index: 1;
 }
 
 .hero-text {
     color: #2c2c2c; 
     text-align: center;
     margin-top: 110px; 
-    font-weight: 500;
+    font-weight: 550;
     font-size: 2rem;
     text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+    position: relative;
 	text-decoration: none;
+    min-height: 60px;
 }
 
 .custom-username {
     font-style: italic;
+}
+
+/* Cursor style */
+#cursor {
+    display: inline-block;
+    color: #2c2c2c;
+    font-weight: bold;
+    animation: blink 0.7s steps(1) infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
 }
 
 /* Main dashboard layout */
@@ -181,12 +331,14 @@ body {
     height: 50px;
     border-radius: 20px;
     background-color: #fff;
-    border: 1px solid #000;
+    border: 2px solid #000;
+    box-shadow: 3px 4px 0px rgba(0, 0, 0, 1);
     box-sizing: border-box;
     margin: 0 auto 50px auto;
     display: flex;
     justify-content: center;
     align-items: center;
+    animation: shine 6s infinite linear;
 }
 
 .section-header p {
@@ -229,6 +381,12 @@ body {
     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15);
     border: 1px solid #333;
     min-width: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stats-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1);
 }
 
 .stats-number {
@@ -249,8 +407,35 @@ body {
     margin-top: -80px;
     z-index: 2;
     position: relative;
-    min-height: 600px;
+    min-height: 500px;
     padding: 50px 20px;
+}
+
+.popular-films::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.3; 
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    ),
+    repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    );
+    background-size: 3px 3px;
+    z-index: -1;
 }
 
 /* Upcoming Releases Section */
@@ -263,6 +448,33 @@ body {
     padding: 50px 20px;
 }
 
+.upcoming-releases::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.3; 
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    ),
+    repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    );
+    background-size: 3px 3px;
+    z-index: -1;
+}
+
 .scroll-container {
     position: relative;
     width: 100%;
@@ -272,9 +484,10 @@ body {
 /* Shared scrollable container styles */
 .upcoming-movie-cards-scroll,
 .popular-movie-cards-scroll {
+    border-radius: 12px;
     display: flex;
     gap: 20px;
-    padding: 20px 0;
+    padding: 5px 0;
     overflow-x: auto;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
@@ -301,6 +514,7 @@ body {
     transition: transform 0.3s ease;
     cursor: pointer;
     scroll-snap-align: start;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .movie-card:hover {
@@ -308,10 +522,10 @@ body {
 }
 
 .movie-poster {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  overflow: hidden;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
 }
 
 .movie-card img {
@@ -343,6 +557,7 @@ body {
     opacity: 1;
     transform: translateY(0);
 }
+
 .scroll-hover {
     position: absolute;
     top: 0;
@@ -350,6 +565,7 @@ body {
     width: 80px;
     z-index: 10;
     cursor: pointer;
+    border-radius: 12px;
 }
 
 .left-hover {
@@ -366,7 +582,7 @@ body {
 .img-banner {
     background-color: #f49b98;
     margin-top: -80px;
-    z-index: 1;
+    z-index: -1;
     position: relative;
     border: 1px solid #000;
     border-radius: 48px;
@@ -412,11 +628,13 @@ body {
 
 /* Footer Section */
 .footer {
-	background: #FFF;
+    background-color: #f2f2e4;
     border-top: 1px solid #2c2c2c;
 	color: #2c2c2c;
 	padding: 40px 20px;
 	text-align: center;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 1);
+    z-index: 3;
 }
 
 .footer-container {

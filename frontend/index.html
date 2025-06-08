@@ -16,14 +16,14 @@
     <div class="navbar">
         <div class="navbar-left">
             <img src="../frontend/assets/icons/sceneit-logo.png" alt="SceneIt Logo" height="40">
-            <span class="dashboard-label">Dashboard</span>
+            <!-- <span class="dashboard-label">Dashboard</span> -->
         </div>
 
         <div class="navbar-center">
             <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="../frontend/pages/watchlist.html">Watchlist</a></li>
-            <li><a href="../frontend/pages/movie-catalog.html">Movie Catalog</a></li>
+            <li><a href="#home" class="active" data-text="Home"><span>Home</span></a></li>            
+            <li><a href="../frontend/pages/watchlist.html" data-text="Watchlist"><span>Watchlist</span></a></li>
+            <li><a href="../frontend/pages/movie-catalog.html" data-text="Movie Catalog"><span>Movie Catalog</span></a></li>
             </ul>
         </div>
 
@@ -33,8 +33,6 @@
                 <img src="../frontend/assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()"/>
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="../frontend/pages/profile.html">View Profile</a>
-                    <a href="../frontend/pages/watched.html">Watched</a>
-                    <a href="../frontend/pages/reviews.html">My Reviews</a>
                     <a href="../frontend/pages/login.html">Logout</a>
                 </div>
             </div>
@@ -59,11 +57,16 @@
     </script>
 
 	<!-- Hero Section -->
-	<section id="home" class="hero">
-		<div class="hero-text">
-        	<p id="welcome-message">Welcome back, <span id="username" class="custom-username"></span> !</p>
-		</div>
-	</section>
+    <section id="home" class="hero">
+        <div class="hero-text">
+            <p>
+                <span id="welcomePart"></span>
+                <span id="username" class="custom-username"></span>
+                <span id="punctuation"></span>
+                <span id="cursor">|</span>
+            </p>
+        </div>
+    </section>
 
     <!-- Dashboard Section -->
     <section id="dashboard-section" class="dashboard section">
@@ -101,7 +104,6 @@
                     <div class="popular-movie-cards-scroll" id="popular-movies-scroll">   
                         <!-- Movie cards are to be handled by index.js -->
                         </div>
-                    </div>
                     <div class="scroll-hover right-hover" id="popularRightScroll"></div>
                 </div>
             </div>
