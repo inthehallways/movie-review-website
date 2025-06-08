@@ -324,7 +324,7 @@ body::before {
     margin-top: 10px;
 }
 
-/* Dashboard header texts */
+/* Section Headers */
 .section-header {
     width: 100%;
     max-width: 300px;
@@ -338,13 +338,41 @@ body::before {
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: shine 6s infinite linear;
+    position: relative;
+    overflow: hidden;
+}
+
+.section-header::after{
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.8) 50%,
+        transparent 70%
+    );
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    animation: diagonal-sweep 5s ease-in-out infinite;
+}
+
+@keyframes diagonal-sweep {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
 }
 
 .section-header p {
     font-size: 18px;
     font-weight: 600;
     margin: 0;
+    position: relative;
 }
 
 /* Shared section styles */
