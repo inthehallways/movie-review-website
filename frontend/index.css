@@ -16,6 +16,34 @@ body {
 	flex-direction: column;
 	padding-top: 30px;
     overflow-x: hidden;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.3; 
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    ),
+    repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    );
+    background-size: 3px 3px;
+    z-index: -1;
 }
 
 /* Navbar Container */
@@ -214,13 +242,40 @@ body {
 
 /* Hero Section */
 .hero {
-	background-color: #F2F2E4;
+    background-color: #F2F2E4;
 	background-image: url('../frontend/assets/images/first-home-bg.png');
-	background-size: contain;
-    background-position: center;
 	background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
 	height: 100vh; 
+	position: relative; 
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.3;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    ),
+    repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    );
+    background-size: 3px 3px;
+    z-index: 1;
 }
 
 .hero-text {
@@ -230,6 +285,7 @@ body {
     font-weight: 550;
     font-size: 2rem;
     text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+    position: relative;
 	text-decoration: none;
 }
 
@@ -338,8 +394,35 @@ body {
     margin-top: -80px;
     z-index: 2;
     position: relative;
-    min-height: 600px;
+    min-height: 500px;
     padding: 50px 20px;
+}
+
+.popular-films::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.3; 
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    ),
+    repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    );
+    background-size: 3px 3px;
+    z-index: -1;
 }
 
 /* Upcoming Releases Section */
@@ -352,6 +435,33 @@ body {
     padding: 50px 20px;
 }
 
+.upcoming-releases::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.3; 
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    ),
+    repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 2px
+    );
+    background-size: 3px 3px;
+    z-index: -1;
+}
+
 .scroll-container {
     position: relative;
     width: 100%;
@@ -361,9 +471,10 @@ body {
 /* Shared scrollable container styles */
 .upcoming-movie-cards-scroll,
 .popular-movie-cards-scroll {
+    border-radius: 12px;
     display: flex;
     gap: 20px;
-    padding: 20px 0;
+    padding: 5px 0;
     overflow-x: auto;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
@@ -398,10 +509,10 @@ body {
 }
 
 .movie-poster {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  overflow: hidden;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
 }
 
 .movie-card img {
@@ -441,6 +552,7 @@ body {
     width: 80px;
     z-index: 10;
     cursor: pointer;
+    border-radius: 12px;
 }
 
 .left-hover {
@@ -457,7 +569,7 @@ body {
 .img-banner {
     background-color: #f49b98;
     margin-top: -80px;
-    z-index: 1;
+    z-index: -1;
     position: relative;
     border: 1px solid #000;
     border-radius: 48px;
