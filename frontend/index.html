@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head></head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,6 +56,9 @@
                 dropdown.classList.remove("show");
             }
         });
+        document.addEventListener('DOMContentLoaded', () => {
+      loadUserProfileFornavbar();
+    });
     </script>
 
 	<!-- Hero Section -->
@@ -149,6 +152,7 @@
 
     <!-- JavaScript for the Dashboard functionality -->
     <script src="index.js"></script>
+    <script src="../frontend/script/profile.js"></script>
 
 </body>
 </html>

@@ -154,6 +154,36 @@ async function loadUserProfileForWatchedWatchlistReviews() {
   }
 }
 
+async function loadUserProfileFornavbar() {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    const resp = await fetch('http://localhost:3001/api/profile', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    });
+    const body = await resp.json();
+    if (!body.success) {
+      console.error('Profile GET error:', body.message);
+      return;
+    }
+
+    const { profile } = body;
+
+    // Update modal’s profile pic & username
+    const avatar = document.querySelector('.profile-pic');
+  
+    if (avatar) {
+      avatar.src = profile.profile_pic_url || "../assets/images/blank-profile.jpg";
+    }
+  
+  } catch (err) {
+    console.error('Error loading profile for movie modal:', err);
+  }
+}
 
 function loadUserData(username) {
     // Load persistent data
