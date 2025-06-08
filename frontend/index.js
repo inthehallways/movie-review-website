@@ -39,19 +39,6 @@ class SceneItDashboard {
 initializeUsername() {
     const storedUsername = localStorage.getItem("username") || "";
     const usernameElement = document.getElementById("username");
-
-    // If no username is stored, redirect back to login
-    if (!storedUsername) {
-        console.warn("No username in localStorage; redirecting to login.");
-        window.location.href = "../pages/login.html";
-        return;
-    }
-
-    // Otherwise display “Welcome back, <username>!”
-    if (usernameElement) {
-        usernameElement.textContent = storedUsername;
-        console.log(`Welcome ${storedUsername}!`);
-    }
 }
 
     // MOVIE CARDS SCROLLING FUNCTIONALITY
@@ -338,9 +325,9 @@ initializeUsername() {
 
 // Typewriter effect function
 document.addEventListener('DOMContentLoaded', function() {
-    const username = 'arsyn';
+     const storedUsername = localStorage.getItem("username") || "";
     const welcomeText = 'Welcome back, ';
-    const fullText = welcomeText + username + '!';
+    const fullText = welcomeText + storedUsername + '!';
     
     const welcomePart = document.getElementById('welcomePart');
     const usernamePart = document.getElementById('username');

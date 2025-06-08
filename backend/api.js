@@ -19,6 +19,47 @@ const dbConfig = {
     }
 };
 
+async function processMovies(movies, ps) {
+    for (const [index, movie] of movies.entries()) {
+        try {
+            // Fetch detailed movie info (including credits for director)
+            const detailsResponse = await axios.get(
+                `${BASE_URL}/movie/${movie.id}?api_key=${API_KEY}&append_to_response=credits`
+            );
+            const details = detailsResponse.data;
+
+            // Extract director name
+            const director = details.credits.crew.find(p => p.job === 'Director')?.name || 'Unknown';
+
+            // Format genres as comma-separated string
+            const genres = details.genres?.map(g => g.name).join(', ') || 'Unknown';
+
+            // Prepare parameters for database
+            const params = {
+                movie_id: movie.id, // Use TMDB's id directly
+                title: movie.title || 'Untitled',
+                release_date: movie.release_date || null,
+                description: details.overview || 'No description available',
+                poster_url: movie.poster_path ? `${IMG_URL}${movie.poster_path}` : null,
+                genre: genres,
+                director: director,
+                backdrop_url: movie.backdrop_path ? `${IMG_URL}${movie.backdrop_path}` : null
+            };
+
+            // Execute upsert (MERGE)
+            await ps.execute(params);
+            console.log(`✅ [${index + 1}/${movies.length}] Inserted: ${movie.title} (ID: ${movie.id})`);
+
+            // Rate limiting: 200ms delay between API calls
+            if (index < movies.length - 1) {
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+        } catch (err) {
+            console.error(`❌ Error processing "${movie.title}" (ID: ${movie.id}):`, err.message);
+        }
+    }
+}
+
 async function fetchAndStoreMovies() {
     let pool;
     let ps;
@@ -28,8 +69,12 @@ async function fetchAndStoreMovies() {
         console.log("✅ Connected to SQL Server");
 
         // Fetch popular movies
-        const response = await axios.get(`${BASE_URL}/movie/popular?api_key=${API_KEY}`);
-        const movies = response.data.results;
+        // Get the first page to find out how many pages in total
+        const firstPageResponse = await axios.get(`${BASE_URL}/movie/popular?api_key=${API_KEY}&page=1`);
+        const totalPages = firstPageResponse.data.total_pages;
+
+        console.log(`ℹ️ Total pages to fetch: ${totalPages}`);
+
 
         // Prepare statement
         ps = new sql.PreparedStatement(pool);
@@ -62,7 +107,12 @@ async function fetchAndStoreMovies() {
                 VALUES (source.movie_id, source.title, source.release_date, source.description, source.poster_url, source.genre, source.director, source.backdrop_url, GETDATE());
         `);
 
+          for (let page = 1; page <= totalPages; page++) {
+            console.log(`🔄 Fetching page ${page}...`);
+            const response = await axios.get(`${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`);
+            const movies = response.data.results;
 
+            
         // Process movies with rate limiting
         for (const [index, movie] of movies.entries()) {
             try {
@@ -103,6 +153,7 @@ async function fetchAndStoreMovies() {
                 console.error(`❌ Error processing "${movie.title}":`, innerErr.message);
             }
         }
+    }
 
         console.log('✅ All movies processed successfully.');
 
