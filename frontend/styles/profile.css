@@ -243,7 +243,6 @@ body::before{
 /* Header Section */
 .custom-header {
     background: linear-gradient(135deg, #f0efe2 0%, #e8e6d8 100%);
-    background-image: url("../assets/images/header-placeholder.jpg");
     height: 400px;
     width: 100%;
     position: relative;

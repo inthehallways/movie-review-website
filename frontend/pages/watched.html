@@ -32,7 +32,7 @@
                 <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()" />
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="../pages/profile.html">View Profile</a>
-                    <a href="../pages/login.html">Logout</a>
+                    <a href="#" id="logoutBtn">Logout</a>
                 </div>
             </div>
         </div>
@@ -190,6 +190,15 @@
     });
      document.addEventListener('DOMContentLoaded', () => {
       loadUserProfileFornavbar();
+    });
+    </script>
+
+    <script type="module">
+        import { fairyDustCursor } from "https://unpkg.com/cursor-effects@latest/dist/esm.js";
+  
+        // Initialize with your website's colors
+        new fairyDustCursor({
+        colors: ["#F49B98", "#988bd3", "#FFEEAD", "#2c2c2c", "#95CEB3"]
     });
     </script>
 
