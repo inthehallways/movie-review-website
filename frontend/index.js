@@ -333,6 +333,39 @@ class SceneItDashboard {
     }
 }
 
+// Typewriter effect function
+document.addEventListener('DOMContentLoaded', function() {
+    const username = 'arsyn';
+    const welcomeText = 'Welcome back, ';
+    const fullText = welcomeText + username + '!';
+    
+    const welcomePart = document.getElementById('welcomePart');
+    const usernamePart = document.getElementById('username');
+    const punctuationPart = document.getElementById('punctuation');
+    
+    let i = 0;
+    const speed = 100;
+    
+    function typeWriter() {
+        if (i < fullText.length) {
+            const char = fullText.charAt(i);
+            
+            if (i < welcomeText.length) {
+                welcomePart.textContent += char;
+            } else if (i < welcomeText.length + username.length) {
+                usernamePart.textContent += char;
+            } else {
+                punctuationPart.textContent += char;
+            }
+            
+            i++;
+            setTimeout(typeWriter, speed);
+        }
+    }
+    
+    setTimeout(typeWriter, 1000);
+});
+
 // Initialize the dashboard when the script loads
 const dashboard = new SceneItDashboard()
 

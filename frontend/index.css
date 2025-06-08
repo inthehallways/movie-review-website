@@ -287,10 +287,23 @@ body::before {
     text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
     position: relative;
 	text-decoration: none;
+    min-height: 60px;
 }
 
 .custom-username {
     font-style: italic;
+}
+
+/* Cursor style */
+#cursor {
+    display: inline-block;
+    color: #2c2c2c;
+    font-weight: bold;
+    animation: blink 0.7s steps(1) infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
 }
 
 /* Main dashboard layout */
