@@ -1,1 +1,1 @@
-SELECT * FROM watched_movies;
+SELECT * FROM reviews;

@@ -3,6 +3,14 @@
 
 import { API_CONFIG, getUserWatchlist, removeFromWatchlist, markAsWatched, addToWatchedList } from "./api.js"
 
+// Logout function
+document.getElementById('logoutBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  localStorage.removeItem('username');
+  localStorage.removeItem('token');
+  window.location.href = '../pages/login.html';
+});
+
 let currentWatchlist = []
 const currentSort = { date: "Newest Added", genre: "All Genres" }
 

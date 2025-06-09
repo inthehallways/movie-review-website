@@ -1,6 +1,14 @@
 // JavaScript for SceneIt Dashboard
 // This file handles all interactive features in the Homepage except dropdown (which is in HTML)
 
+// Logout function
+ document.getElementById('logoutBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  localStorage.removeItem('username');
+  localStorage.removeItem('token');
+  window.location.href = '../frontend/pages/login.html';
+});
+
 class SceneItDashboard {
     constructor() {
         this.scrollInterval = null
@@ -12,12 +20,13 @@ class SceneItDashboard {
         this.TMDB_BASE_URL = "https://api.themoviedb.org/3"
         this.TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500" // For movie posters
 
+        
         // Initialize when DOM is loaded
         if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", () => this.init())
         } else {
         this.init()
-        }
+        }        
     }
 
     init() {
@@ -156,6 +165,7 @@ class SceneItDashboard {
         return movieCard
     }
 
+    
     // INTEGRATION OF TMDB API TO MOVIE CARDS
     async fetchPopularMovies() {
         try {
@@ -291,49 +301,28 @@ class SceneItDashboard {
 
     // Handles user stats 
     async loadUserStats() {
-    try {
-        const userId = this.getCurrentUserId()
-        
-        // These would be real API calls
-        const [reviewsCount, watchedCount, watchlistCount] = await Promise.all([
-        this.fetchUserReviewsCount(userId),
-        this.fetchUserWatchedCount(userId), 
-        this.fetchUserWatchlistCount(userId)
-        ])
-        
-        // Update the UI
-        document.getElementById('reviews-count').textContent = reviewsCount
-        document.getElementById('watched-count').textContent = watchedCount
-        document.getElementById('watchlist-count').textContent = watchlistCount
-        
-    } catch (error) {
-        console.error('Error loading user stats:', error)
-        // Show fallback values
-        document.getElementById('reviews-count').textContent = '0'
-        document.getElementById('watched-count').textContent = '0'
-        document.getElementById('watchlist-count').textContent = '0'
-    }
-    }
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error("Not authenticated");
 
-    // Mock API functions for backend dev
-    async fetchUserReviewsCount(userId) {
-    // Backend will implement: GET /api/users/{userId}/reviews/count
-    return 12 // Mock data
-    }
+    const resp = await fetch('http://localhost:3001/api/profile/stats', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const body = await resp.json();
+    if (!body.success) throw new Error(body.message);
 
-    async fetchUserWatchedCount(userId) {
-    // Backend will implement: GET /api/users/{userId}/watched/count  
-    return 45 // Mock data
-    }
+    const { reviewsThisMonth, watchedTotal, watchlistTotal } = body.stats;
+    document.getElementById('reviews-count').textContent  = reviewsThisMonth;
+    document.getElementById('watched-count').textContent  = watchedTotal;
+    document.getElementById('watchlist-count').textContent = watchlistTotal;
 
-    async fetchUserWatchlistCount(userId) {
-    // Backend will implement: GET /api/users/{userId}/watchlist/count
-    return 8 // Mock data
-    }
-
-    getCurrentUserId() {
-    return localStorage.getItem("userId") || "1" // Temporary
-    }
+  } catch (err) {
+    console.error('Error loading user stats:', err);
+    document.getElementById('reviews-count') .textContent = '0';
+    document.getElementById('watched-count') .textContent = '0';
+    document.getElementById('watchlist-count').textContent = '0';
+  }
+}
 }
 
 // Typewriter effect function
@@ -376,4 +365,4 @@ const dashboard = new SceneItDashboard()
 // Uncomment the following lines if you want to use this in a module system
 // if (typeof module !== "undefined" && module.exports) {
 //  module.exports = SceneItDashboard
-//}
+//

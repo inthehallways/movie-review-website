@@ -1,5 +1,14 @@
+// Logout function
+document.getElementById('logoutBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  localStorage.removeItem('username');
+  localStorage.removeItem('token');
+  window.location.href = '../pages/login.html';
+});
+
 let reviewsData = [];   // ← Will hold the actual array of review objects
 let currentEditingReview = null;
+
 
 // TMDB API Configuration
 const API_KEY = "d2a72fb4b28ccba64124755d66b1b0f1"
@@ -191,10 +200,10 @@ function renderReviews(reviews) {
                     <p class="review-text">${review.reviewText}</p>
                 </div>
                 <div class="review-actions">
-                    <button class="review-action-btn edit-btn" onclick="openEditReview(${review.id})" title="Edit Review">
+                    <button class="review-action-btn edit-btn" onclick="openEditReview('${review.id}')" title="Edit Review">
                         ✏️
                     </button>
-                    <button class="review-action-btn delete-btn" onclick="openDeleteReview(${review.id})" title="Delete Review">
+                    <button class="review-action-btn delete-btn" onclick="openDeleteReview('${review.id}')" title="Delete Review">
                         🗑️
                     </button>
                 </div>
@@ -291,9 +300,9 @@ function openEditReview(reviewId) {
 }
 
 
-function closeEditModal() {
-  document.getElementById("editReviewModal").style.display = "none"
-  currentEditingReview = null
+function closeReviewModal() {
+  document.getElementById("editReviewModal").style.display = "none";
+  currentEditingReview = null;
 
   // Reset form
   document.getElementById("editReviewText").value = ""
@@ -357,7 +366,7 @@ async function saveEditedReview() {
     if (!data.success) throw new Error(data.message || "Failed to update review.");
 
     // 3) Close the modal and re-fetch everything
-    closeEditModal();
+    closeReviewModal();
     reviewsData = await loadReviews();
     renderReviews(reviewsData);
     alert("Review updated successfully!");
@@ -420,7 +429,7 @@ async function openDeleteReview(reviewId) {
 window.addEventListener("click", (e) => {
   const modal = document.getElementById("editReviewModal")
   if (e.target === modal) {
-    closeEditModal()
+    closeReviewModal();
   }
 })
 
@@ -437,13 +446,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const modal = document.getElementById("editReviewModal");
     if (modal.style.display === "block") {
       if (e.key === "Escape") {
-        closeEditModal();
+        closeReviewModal();
       } else if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
         saveEditedReview();
       }
     }
   });
-});
+}); 
 
 
 // Utility function to format date

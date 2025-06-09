@@ -9,6 +9,14 @@ import {
   toggleMovieLiked
 } from "./api.js"
 
+// Logout function
+document.getElementById('logoutBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  localStorage.removeItem('username');
+  localStorage.removeItem('token');
+  window.location.href = '../pages/login.html';
+});
+
 let currentWatchedMovies = []
 const currentSort = {
     genre: "All Genres",

@@ -177,17 +177,17 @@ app.post('/api/reviews', authenticateToken, async (req, res) => {
   const userId = req.user.user_id;
   const { movie_id, title, review_text, rating, watched_date } = req.body;
 
- if (!movie_id || !title) {
-  return res.status(400).json({
-    success: false,
-    message: 'Missing required fields',
-    required: ['movie_id', 'title']
-  });
-}
+  if (!movie_id || !title) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing required fields',
+      required: ['movie_id', 'title']
+    });
+  }
 
   try {
     const pool = await getPool();
-    // a) Check if this user already reviewed that movie_id
+    // Check if this user already reviewed this movie
     const existingReview = await pool.request()
       .input('movie_id', sql.Int, movie_id)
       .input('user_id',  sql.UniqueIdentifier, userId)
@@ -202,7 +202,7 @@ app.post('/api/reviews', authenticateToken, async (req, res) => {
       // UPDATE
       const reviewId = existingReview.recordset[0].review_id;
       await pool.request()
-        .input('review_id',   sql.Int,   reviewId)
+        .input('review_id',   sql.UniqueIdentifier, reviewId)
         .input('review_text', sql.NVarChar(sql.MAX), review_text || null)
         .input('rating',      sql.Int,   rating)
         .input('watched_date',sql.DateTime, watched_date ? new Date(watched_date) : new Date())
@@ -217,6 +217,7 @@ app.post('/api/reviews', authenticateToken, async (req, res) => {
     } else {
       // INSERT
       await pool.request()
+        .input('review_id',    sql.UniqueIdentifier, crypto.randomUUID())  // Generate new UUID
         .input('user_id',      sql.UniqueIdentifier, userId)
         .input('movie_id',     sql.Int,   movie_id)
         .input('title',        sql.NVarChar(255), title)
@@ -225,9 +226,9 @@ app.post('/api/reviews', authenticateToken, async (req, res) => {
         .input('watched_date', sql.DateTime, watched_date ? new Date(watched_date) : new Date())
         .query(`
           INSERT INTO dbo.reviews 
-            (user_id, movie_id, title, review_text, rating, watched_date, created_at, updated_at)
+            (review_id, user_id, movie_id, title, review_text, rating, watched_date, created_at, updated_at)
           VALUES 
-            (@user_id, @movie_id, @title, @review_text, @rating, @watched_date, GETDATE(), GETDATE())
+            (@review_id, @user_id, @movie_id, @title, @review_text, @rating, @watched_date, GETDATE(), GETDATE())
         `);
     }
 
@@ -241,6 +242,7 @@ app.post('/api/reviews', authenticateToken, async (req, res) => {
     });
   }
 });
+
 
 
 // (new version) LEFT JOIN ensures we still get every review row,
@@ -275,7 +277,7 @@ app.get('/api/reviews', authenticateToken, async (req, res) => {
 // ── PUT /api/reviews/:id   (edit a single review) ───────────────────────────────
 app.put('/api/reviews/:id', authenticateToken, async (req, res) => {
   const userId = req.user.user_id;
-  const reviewId = parseInt(req.params.id, 10);
+  const reviewId = req.params.id;  // no longer parseInt — it's a UUID
   const { review_text, rating, watched_date } = req.body;
 
   if (!review_text || rating === undefined || isNaN(rating)) {
@@ -285,7 +287,7 @@ app.put('/api/reviews/:id', authenticateToken, async (req, res) => {
     const pool = await getPool();
     // a) Ensure that this review belongs to the logged-in user
     const check = await pool.request()
-      .input('review_id', sql.Int, reviewId)
+      .input('review_id', sql.UniqueIdentifier, reviewId)
       .input('user_id',   sql.UniqueIdentifier, userId)
       .query(`
         SELECT review_id
@@ -299,7 +301,7 @@ app.put('/api/reviews/:id', authenticateToken, async (req, res) => {
 
     // b) Perform the UPDATE
     await pool.request()
-      .input('review_id',   sql.Int,   reviewId)
+      .input('review_id',   sql.UniqueIdentifier, reviewId)
       .input('review_text', sql.NVarChar(sql.MAX), review_text)
       .input('rating',      sql.Int,   rating)
       .input('watched_date',sql.DateTime, watched_date ? new Date(watched_date) : new Date())
@@ -323,12 +325,12 @@ app.put('/api/reviews/:id', authenticateToken, async (req, res) => {
 // ── DELETE /api/reviews/:id   (delete a single review) ─────────────────────────
 app.delete('/api/reviews/:id', authenticateToken, async (req, res) => {
   const userId = req.user.user_id;
-  const reviewId = parseInt(req.params.id, 10);
+  const reviewId = req.params.id;  // UUID
   try {
     const pool = await getPool();
     // a) Ensure that this review belongs to the logged-in user
     const check = await pool.request()
-      .input('review_id', sql.Int, reviewId)
+      .input('review_id', sql.UniqueIdentifier, reviewId)
       .input('user_id',   sql.UniqueIdentifier, userId)
       .query(`
         SELECT review_id
@@ -342,7 +344,7 @@ app.delete('/api/reviews/:id', authenticateToken, async (req, res) => {
 
     // b) Delete it
     await pool.request()
-      .input('review_id', sql.Int, reviewId)
+      .input('review_id', sql.UniqueIdentifier, reviewId)
       .query(`
         DELETE FROM dbo.reviews
         WHERE review_id = @review_id
@@ -355,6 +357,7 @@ app.delete('/api/reviews/:id', authenticateToken, async (req, res) => {
   }
 });
 
+
 // ─── In server.js ───
 
 // (Keep all of your existing “reviews” and “auth” code above.)
@@ -365,6 +368,7 @@ app.delete('/api/reviews/:id', authenticateToken, async (req, res) => {
 
 // ── GET /api/watchlist ──
 // Return every watchlist row for the logged‐in user.
+// ── GET /api/watchlist ──
 app.get('/api/watchlist', authenticateToken, async (req, res) => {
   const userId = req.user.user_id;
   try {
@@ -374,10 +378,10 @@ app.get('/api/watchlist', authenticateToken, async (req, res) => {
       .query(`
         SELECT
           w.movie_id                    AS movie_id,
-          w.date_added                  AS added_date,      -- rename for front‐end
+          w.date_added                  AS added_date,      
           m.title                       AS title,
-          m.poster_url                  AS poster_path,     -- TMDB URL
-          m.genre                       AS genres           -- comma‐separated string
+          m.poster_url                  AS poster_path,     
+          m.genre                       AS genres           
         FROM dbo.watchlist AS w
         JOIN dbo.movies AS m
           ON w.movie_id = m.movie_id
@@ -385,8 +389,8 @@ app.get('/api/watchlist', authenticateToken, async (req, res) => {
       `);
 
     return res.json({
-      success:   true,
-      watchlist: result.recordset   // array of { movie_id, added_date, title, poster_path, genres }
+      success: true,
+      watchlist: result.recordset
     });
   } catch (err) {
     console.error('Error in GET /api/watchlist:', err);
@@ -396,13 +400,10 @@ app.get('/api/watchlist', authenticateToken, async (req, res) => {
 
 
 // ── POST /api/watchlist ──
-// Add one movie to the user’s watchlist.  Expect { movie_id } in the body.
-//
-// If you also want to store “genre” on insert, you could accept it here (or leave NULL).
-// ── In server.js, replace your existing POST /api/watchlist with this ──
 app.post('/api/watchlist', authenticateToken, async (req, res) => {
-  const userId  = req.user.user_id;
+  const userId = req.user.user_id;
   const { movie_id } = req.body;
+
   if (!movie_id) {
     return res.status(400).json({ success: false, message: 'Missing movie_id' });
   }
@@ -410,10 +411,10 @@ app.post('/api/watchlist', authenticateToken, async (req, res) => {
   try {
     const pool = await getPool();
 
-    // 1) Check if already in watchlist for this user
+    // Check if already in watchlist
     const existing = await pool.request()
       .input('user_id',  sql.UniqueIdentifier, userId)
-      .input('movie_id', sql.Int,              movie_id)
+      .input('movie_id', sql.Int, movie_id)
       .query(`
         SELECT watchlist_id
         FROM dbo.watchlist
@@ -422,14 +423,13 @@ app.post('/api/watchlist', authenticateToken, async (req, res) => {
       `);
 
     if (existing.recordset.length > 0) {
-      // Already in watchlist → return success with a friendly message
       return res.json({ success: true, message: 'Already in watchlist' });
     }
 
-    // 2) Otherwise insert
+    // Insert with a generated UUID for watchlist_id (DB default)
     await pool.request()
       .input('user_id',  sql.UniqueIdentifier, userId)
-      .input('movie_id', sql.Int,              movie_id)
+      .input('movie_id', sql.Int, movie_id)
       .query(`
         INSERT INTO dbo.watchlist (user_id, movie_id)
         VALUES (@user_id, @movie_id)
@@ -443,26 +443,22 @@ app.post('/api/watchlist', authenticateToken, async (req, res) => {
 });
 
 
-
-// ─── DELETE /api/watchlist/:movieId ───
-// (optional if you want “Remove from Watchlist” on the catalog page)
-//
-// You can call this to let users remove a movie from their watchlist.
+// ── DELETE /api/watchlist/:movieId ──
 app.delete('/api/watchlist/:movieId', authenticateToken, async (req, res) => {
-  const userId   = req.user.user_id;
-  const movieId  = parseInt(req.params.movieId, 10);
+  const userId  = req.user.user_id;
+  const movieId = parseInt(req.params.movieId, 10);
 
   try {
     const pool = await getPool();
 
-    // Only delete if it belongs to this user
+    // Check if this user’s watchlist has this movie
     const check = await pool.request()
       .input('user_id',  sql.UniqueIdentifier, userId)
-      .input('movie_id', sql.Int,            movieId)
+      .input('movie_id', sql.Int, movieId)
       .query(`
-        SELECT watchlist_id 
-        FROM dbo.watchlist 
-        WHERE user_id = @user_id 
+        SELECT watchlist_id
+        FROM dbo.watchlist
+        WHERE user_id = @user_id
           AND movie_id = @movie_id
       `);
 
@@ -470,12 +466,13 @@ app.delete('/api/watchlist/:movieId', authenticateToken, async (req, res) => {
       return res.status(404).json({ success: false, message: 'Not found in watchlist' });
     }
 
+    // Delete the entry by user_id and movie_id
     await pool.request()
-      .input('movie_id', sql.Int, movieId)
       .input('user_id',  sql.UniqueIdentifier, userId)
+      .input('movie_id', sql.Int, movieId)
       .query(`
         DELETE FROM dbo.watchlist
-        WHERE user_id  = @user_id
+        WHERE user_id = @user_id
           AND movie_id = @movie_id
       `);
 
@@ -485,6 +482,7 @@ app.delete('/api/watchlist/:movieId', authenticateToken, async (req, res) => {
     return res.status(500).json({ success: false, message: 'Server error', error: err.message });
   }
 });
+
 
 // ─── In server.js, right below the watchlist routes ───
 
@@ -704,22 +702,28 @@ app.post('/api/upload', authenticateToken, upload.single('image'), (req, res) =>
 // ─────────────────────────────────────────────────────────────────
 
 // improved: join on movies and build a fixed‐length array
+// ── GET /api/profile ──
 app.get('/api/profile', authenticateToken, async (req, res) => {
   const userId = req.user.user_id;
   try {
     const pool = await getPool();
 
-    // 1) get profile row as before…
+    // Fetch profile
     const profileResult = await pool.request()
       .input('user_id', sql.UniqueIdentifier, userId)
-      .query(`SELECT username, bio, header_pic_url, profile_pic_url FROM dbo.profile WHERE user_id = @user_id`);
+      .query(`
+        SELECT username, bio, header_pic_url, profile_pic_url
+        FROM dbo.profile
+        WHERE user_id = @user_id
+      `);
     const profile = profileResult.recordset[0] || {};
 
-    // 2) fetch favorite slot + movie details
+    // Fetch favorite movies (now including favorite_id)
     const favResult = await pool.request()
       .input('user_id', sql.UniqueIdentifier, userId)
       .query(`
         SELECT 
+          fm.favorite_id,
           fm.slot,
           m.movie_id     AS id,
           m.poster_url   AS poster_path,
@@ -732,18 +736,21 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
         ORDER BY fm.slot
       `);
 
-    // build a length‐5 array, filling in by slot
+    // Build favoriteMovies array
     const favoriteMovies = Array(5).fill(null);
     for (const row of favResult.recordset) {
-      if (row.slot >= 0 && row.slot < 5) favoriteMovies[row.slot] = row;
+      if (row.slot >= 0 && row.slot < 5) {
+        favoriteMovies[row.slot] = row;
+      }
     }
 
     return res.json({ success: true, profile, favoriteMovies });
   } catch (err) {
     console.error("Error in GET /api/profile:", err);
-    return res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({ success: false, message: "Server error", error: err.message });
   }
 });
+
 
 
 // ── PUT /api/profile ──
@@ -754,35 +761,35 @@ app.put('/api/profile', authenticateToken, async (req, res) => {
   try {
     const pool = await getPool();
 
-    // Upsert profile
+    // Upsert profile row
     await pool.request()
-    .input('user_id',         sql.UniqueIdentifier, userId)
-    .input('username',        sql.VarChar(100),     username)
-    .input('bio',             sql.NVarChar(sql.MAX),bio || null)
-    .input('header_pic_url',  sql.NVarChar(sql.MAX),header_pic_url || null)
-    .input('profile_pic_url', sql.NVarChar(sql.MAX),profile_pic_url || null)
-    .query(`
-      MERGE INTO dbo.profile AS target
-      USING (SELECT @user_id AS user_id) AS source
-      ON target.user_id = source.user_id
-      WHEN MATCHED THEN
-        UPDATE 
-          SET username = @username,
-              bio = @bio,
-              header_pic_url  = @header_pic_url,
-              profile_pic_url = @profile_pic_url,
-              updated_at      = GETDATE()
-      WHEN NOT MATCHED THEN
-        INSERT (user_id, username, bio, header_pic_url, profile_pic_url)
-        VALUES (@user_id, @username, @bio, @header_pic_url, @profile_pic_url);
-    `);
+      .input('user_id',         sql.UniqueIdentifier, userId)
+      .input('username',        sql.VarChar(100),     username)
+      .input('bio',             sql.NVarChar(sql.MAX), bio || null)
+      .input('header_pic_url',  sql.NVarChar(sql.MAX), header_pic_url || null)
+      .input('profile_pic_url', sql.NVarChar(sql.MAX), profile_pic_url || null)
+      .query(`
+        MERGE INTO dbo.profile AS target
+        USING (SELECT @user_id AS user_id) AS source
+        ON target.user_id = source.user_id
+        WHEN MATCHED THEN
+          UPDATE SET
+            username        = @username,
+            bio             = @bio,
+            header_pic_url  = @header_pic_url,
+            profile_pic_url = @profile_pic_url,
+            updated_at      = GETDATE()
+        WHEN NOT MATCHED THEN
+          INSERT (user_id, username, bio, header_pic_url, profile_pic_url)
+          VALUES (@user_id, @username, @bio, @header_pic_url, @profile_pic_url);
+      `);
 
-    // Clear existing favorite movies
+    // Clear old favorite movies
     await pool.request()
       .input('user_id', sql.UniqueIdentifier, userId)
       .query(`DELETE FROM dbo.favorite_movies WHERE user_id = @user_id`);
 
-    // Insert new favorite movies
+    // Insert updated favorite movies (if any)
     if (favoriteMovies && favoriteMovies.length > 0) {
       for (let i = 0; i < favoriteMovies.length; i++) {
         const movieId = favoriteMovies[i];
@@ -790,7 +797,10 @@ app.put('/api/profile', authenticateToken, async (req, res) => {
           .input('user_id', sql.UniqueIdentifier, userId)
           .input('movie_id', sql.Int, movieId)
           .input('slot', sql.Int, i)
-          .query(`INSERT INTO dbo.favorite_movies (user_id, movie_id, slot) VALUES (@user_id, @movie_id, @slot)`);
+          .query(`
+            INSERT INTO dbo.favorite_movies (user_id, movie_id, slot)
+            VALUES (@user_id, @movie_id, @slot)
+          `);
       }
     }
 
@@ -801,6 +811,58 @@ app.put('/api/profile', authenticateToken, async (req, res) => {
   }
 });
 
+
+// ─────────────────────────────────────────────────────────────────
+// GET /api/profile/stats
+// returns { reviewsThisMonth, watchedTotal, watchlistTotal }
+// ─────────────────────────────────────────────────────────────────
+app.get('/api/profile/stats', authenticateToken, async (req, res) => {
+  const userId = req.user.user_id;
+  try {
+    const pool = await getPool();
+
+    // 1) Count reviews this calendar month:
+    const reviewsResult = await pool.request()
+      .input('user_id', sql.UniqueIdentifier, userId)
+      .query(`
+        SELECT COUNT(*) AS count
+        FROM dbo.reviews
+        WHERE user_id = @user_id
+          AND YEAR(watched_date)  = YEAR(GETDATE())
+          AND MONTH(watched_date) = MONTH(GETDATE())
+      `);
+
+    // 2) Total watched movies:
+    const watchedResult = await pool.request()
+      .input('user_id', sql.UniqueIdentifier, userId)
+      .query(`
+        SELECT COUNT(*) AS count
+        FROM dbo.watched_movies
+        WHERE user_id = @user_id
+      `);
+
+    // 3) Total watchlist entries:
+    const watchlistResult = await pool.request()
+      .input('user_id', sql.UniqueIdentifier, userId)
+      .query(`
+        SELECT COUNT(*) AS count
+        FROM dbo.watchlist
+        WHERE user_id = @user_id
+      `);
+
+    return res.json({
+      success: true,
+      stats: {
+        reviewsThisMonth: reviewsResult.recordset[0].count,
+        watchedTotal:     watchedResult.recordset[0].count,
+        watchlistTotal:   watchlistResult.recordset[0].count
+      }
+    });
+  } catch (err) {
+    console.error('Error in GET /api/profile/stats:', err);
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
 
 
 // Error handling middleware
