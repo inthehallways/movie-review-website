@@ -404,7 +404,7 @@ async function handleMarkAsWatched(movie) {
       <div class="watched-icon-container">
         <span class="material-symbols-outlined">visibility</span>
       </div>
-      <div class="watched-text">Watched ✓</div>
+      <div class="watched-text">Watched</div>
     `;
     watchedButton.setAttribute("disabled", "true");
     watchedButton.style.opacity = "0.6";
@@ -456,7 +456,7 @@ async function handleAddToWatchlist(movie) {
       <div class="watchlist-icon-container">
         <span class="material-symbols-outlined">bookmark</span>
       </div>
-      <div class="watchlist-text">In Watchlist ✓</div>
+      <div class="watchlist-text">In Watchlist</div>
     `;
     watchlistButton.setAttribute("disabled", "true");
     watchlistButton.style.opacity = "0.6";

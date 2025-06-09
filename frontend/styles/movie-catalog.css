@@ -665,7 +665,7 @@ body::before{
 
 .marked-as-watched.watched .material-symbols-outlined {
   font-variation-settings: "FILL" 1;
-  color: #4caf50;
+  color: #064a09;
 }
 
 .add-to-likes.liked .material-symbols-outlined {
@@ -675,7 +675,7 @@ body::before{
 
 .add-to-watchlist.in-watchlist .material-symbols-outlined {
   font-variation-settings: "FILL" 1;
-  color: #2196f3;
+  color: #024c88;
 }
 
 .watched-text,

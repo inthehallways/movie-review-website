@@ -1,4 +1,4 @@
-// Logout function
+// Logout 
 document.getElementById('logoutBtn').addEventListener('click', (e) => {
   e.preventDefault();
   localStorage.removeItem('username');
@@ -228,6 +228,7 @@ function generateStarRating(rating) {
 
 // Function to sort reviews
 function sortReviews(sortType) {
+  
   const sortedReviews = [...reviewsData]; // uses the array you already fetched
   switch (sortType) {
     case "Latest Added":
