@@ -442,7 +442,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 2) Render what we fetched
   renderReviews(reviewsData);
 
-  // 3) Keyboard shortcuts for the edit modal
+  // 3) Make sure the sort label is “Latest Added”
+  document.getElementById("dateSelected").textContent = "Latest Added";
+
+  // 4) Actually apply that sort
+  sortReviews("Latest Added");
+
+  // 5) Keyboard shortcuts for the edit modal
   document.addEventListener("keydown", (e) => {
     const modal = document.getElementById("editReviewModal");
     if (modal.style.display === "block") {
@@ -453,7 +459,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
   });
-}); 
+});
 
 
 // Utility function to format date

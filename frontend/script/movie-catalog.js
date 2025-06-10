@@ -677,9 +677,6 @@ async function showModal(movie) {
   modal.querySelector(".modal-movie-poster").style.backgroundSize = "cover"
   modal.querySelector(".modal-movie-poster").style.backgroundPosition = "center"
 
-  // Load existing review if any
-  loadExistingReview()
-
   modal.style.display = "block"
 
   modal.querySelector(".close").onclick = () => {
@@ -733,7 +730,7 @@ async function loadExistingReview() {
         const watchedText = watchedButton.querySelector(".watched-text");
         watchedButton.classList.add("watched");
         watchedText.textContent = "Watched";
-        const dateDisplay = modal.querySelector(".dd-mm-yyyy");
+        const dateDisplay = modal.querySelector(".date-container .dd-mm-yyyy");
         if (dateDisplay) {
           const dateObj = new Date(review.watched_date);
           const formattedDate = `${dateObj.getDate().toString().padStart(2, "0")}/${
@@ -1113,7 +1110,7 @@ const rating = selectedRating ? Number.parseInt(selectedRating.value) : null;
 
 
   // Get watch date
-  const dateDisplay = modal.querySelector(".dd-mm-yyyy");
+  const dateDisplay = modal.querySelector(".date-container .dd-mm-yyyy");
   let watchDate = dateDisplay && dateDisplay.textContent !== "DD/MM/YYYY" 
     ? dateDisplay.textContent 
     : null;
