@@ -284,7 +284,6 @@ body::before{
   box-shadow: 0 0 0 2px rgba(244, 155, 152, 0.2);
 }
 
-/* Search wrapper - Replace emoji with proper icon */
 .search-wrapper::after {
   content: "";
   position: absolute;
@@ -475,7 +474,6 @@ body::before{
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s ease;
 }
  
 .modal .close:hover {
@@ -899,7 +897,6 @@ body::before{
   margin-left: 23px;
   text-overflow: ellipsis;
   white-space: nowrap;
-
 }
 
 .watched-on {
@@ -1022,22 +1019,22 @@ body::before{
 }
 
 .profile-modal {
-  display: flex;                /* Lay out avatar + username side by side */
+  display: flex;                
   align-items: center;
   gap: 0.5rem;
-  position: absolute;           /* keep position if needed */
-  left: 365px;                  /* tweak these */
-  top: 275px;                   /* tweak these */
-  background: transparent;      /* no background circle for the container */
-  box-shadow: none;             /* remove the shadow from the container */
-  border: none;                 /* remove the white border from the container */
-  overflow: visible;            /* let text flow! */
+  position: absolute;           
+  left: 365px;                 
+  top: 275px;                  
+  background: transparent;      
+  box-shadow: none;           
+  border: none;                
+  overflow: visible;          
 }
 
 .avatar-display-modal {
   width: 46px;
   height: 46px;
-  border-radius: 50%;           /* just the avatar circle */
+  border-radius: 50%;           
   object-fit: cover;
   border: 2px solid #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -1048,4 +1045,825 @@ body::before{
   color: #333;
   font-size: 0.9rem;
   white-space: nowrap; 
+}
+
+/* Breakpoints for Responsiveness */
+
+@media (min-width: 1200px) {
+    .review-box {
+        width: 387px;
+        left: 369px;
+        top: 350px;
+        height: 120px;
+    }
+    
+    .profile-modal {
+        left: 365px;
+        top: 275px;
+    }
+    
+    .username-display {
+        left: 420px;
+        top: 290px;
+    }
+    
+    .date-container {
+        left: 198px;
+        top: 390px;
+    }
+    
+    .watched-on {
+        left: 119px;
+        top: 393px;
+    }
+}
+
+/* Medium to Large Screens (≤1199px) */
+@media (max-width: 1199px) {
+    .search-bar-container {
+        padding: 30px 30px 20px;
+    }
+    
+    .movies-header {
+        padding: 0 30px 10px;
+    }
+    
+    .divider {
+        margin: 10px 30px 20px;
+    }
+    
+    .movie-grid {
+        padding: 20px;
+        gap: 15px;
+    }
+    
+    .movie-card {
+        width: 180px;
+        height: 270px;
+    }
+    
+    .modal-content {
+        width: 750px;
+        height: 520px;
+    }
+    
+    .movies {
+        width: 750px;
+        height: 520px;
+    }
+    
+    .modal-movie-description-background {
+        width: 750px;
+        height: 220px;
+    }
+    
+    .modal-movie-poster {
+        width: 220px;
+        height: 295px;
+        left: 50px;
+        top: 45px;
+    }
+    
+    .movie-title {
+        left: 290px;
+        top: 40px;
+        width: 420px;
+        font-size: 26px;
+    }
+    
+    .release-date {
+        left: 290px;
+        top: 95px;
+    }
+    
+    .directed-by {
+        left: 290px;
+        top: 115px;
+        width: 420px;
+    }
+    
+    .movie-description {
+        left: 290px;
+        top: 140px;
+        width: 420px;
+    }
+    
+    .button-container-modal {
+        left: 50px;
+        top: 365px;
+        width: 220px;
+        height: 125px;
+        margin-top: 5px;
+    }
+    
+    .review-box {
+        width: 380px;
+        left: 310px;
+        top: 290px;
+        height: 120px;
+        margin-top: 20px;
+    }
+    
+    .profile-modal {
+        left: 310px;
+        top: 245px;
+    }
+    
+    .username-display {
+        left: 365px;
+        top: 260px;
+    }
+    
+    .date-container {
+        left: 180px;
+        top: 345px;
+        width: 94px;
+        height: 19px;
+    }
+    
+    .watched-on {
+        left: 101px;
+        top: 348px;
+    }
+}
+
+/* Tablets and Landscape Phones (≤768px) */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 8px 15px;
+    }
+    
+    .navbar-center {
+        flex: 1.5;
+    }
+    
+    .nav-links {
+        gap: 15px;
+    }
+    
+    .nav-links li a {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .dashboard-label {
+        font-size: 1rem;
+    }
+    
+    .search-bar-container {
+        padding: 20px 15px 15px;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .search-wrapper input {
+        width: 200px;
+    }
+    
+    .movies-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 15px 10px;
+    }
+    
+    .movies-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .catalog-sort {
+        gap: 8px;
+        flex-wrap: nowrap;
+    }
+    
+    .sort-dropdown {
+        padding: 6px 20px 6px 8px;
+        font-size: 0.8rem;
+        min-width: 80px;
+    }
+    
+    .divider {
+        margin: 10px 15px 15px;
+    }
+    
+    .movie-grid {
+        padding: 15px;
+        gap: 12px;
+        justify-content: center;
+    }
+    
+    .movie-card {
+        width: 160px;
+        height: 240px;
+    }
+    
+    .modal-content {
+        width: 90%;
+        max-width: 700px;
+        height: 520px;
+        margin: 5% auto;
+    }
+    
+    .movies {
+        width: 100%;
+        height: 520px;
+    }
+    
+    .modal-movie-description-background {
+        width: 100%;
+        height: 210px;
+    }
+    
+    .modal-movie-poster {
+        width: 200px;
+        height: 270px;
+        left: 40px;
+        top: 40px;
+    }
+    
+    .movie-title {
+        left: 260px;
+        top: 35px;
+        width: calc(100% - 280px);
+        font-size: 24px;
+    }
+    
+    .release-date {
+        left: 260px;
+        top: 85px;
+    }
+    
+    .directed-by {
+        left: 260px;
+        top: 105px;
+        width: calc(100% - 280px);
+    }
+    
+    .movie-description {
+        left: 260px;
+        top: 130px;
+        width: calc(100% - 280px);
+        max-height: 65px;
+    }
+    
+    .button-container-modal {
+        width: 200px;
+        height: 130px;
+        left: 40px;
+        top: 340px;
+        margin-top: 15px;
+    }
+    
+    .review-box {
+        width: calc(100% - 300px);
+        height: 110px;
+        left: 280px;
+        top: 270px;
+    }
+    
+    .profile-modal {
+        left: 280px;
+        top: 225px;
+    }
+    
+    .username-display {
+        left: 335px;
+        top: 240px;
+    }
+    
+    .date-container {
+        left: 150px;
+        top: 325px;
+        width: 94px;
+        height: 19px;
+    }
+    
+    .watched-on {
+        left: 60px;
+        top: 328px;
+    }
+    
+    .more-options-modal {
+        left: calc(100% - 140px);
+        top: 280px;
+    }
+}
+
+/* Mobile Phones (≤480px) */
+@media (max-width: 480px) {
+    .navbar {
+        padding: 8px 12px;
+        justify-content: space-between;
+    }
+    
+    .dashboard-label {
+        display: none;
+    }
+    
+    .navbar-left {
+        flex: 0 0 auto;
+    }
+    
+    .navbar-center {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .navbar-right {
+        flex: 0 0 auto;
+    }
+    
+    .nav-links {
+        gap: 8px;
+        justify-content: center;
+    }
+    
+    .nav-links li a {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+        border-radius: 15px;
+    }
+    
+    .search-bar-container {
+        padding: 15px 15px;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .search-bar-container label {
+        font-size: 0.8rem;
+    }
+    
+    .search-wrapper input {
+        width: 180px;
+        font-size: 13px;
+        padding: 6px 35px 6px 10px;
+    }
+    
+    .movies-header {
+        display: block;
+        padding: 0 15px 10px;
+    }
+    
+    .movies-header h2 {
+        font-size: 1.3rem;
+        margin: 0 0 10px 0;
+        display: block;
+    }
+    
+    .catalog-sort {
+        display: block;
+    }
+    
+    .catalog-sort span {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    
+    .sort-dropdown {
+        display: inline-block;
+        width: auto;
+        margin-right: 8px;
+        font-size: 0.75rem;
+        padding: 6px 15px 6px 8px;
+        background-position: right 5px center;
+        background-size: 12px;
+    }
+    
+    #genreSelect::after,
+    #yearSelect::after {
+        content: "|";
+        position: absolute;
+        right: -4px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+        pointer-events: none;
+    }
+    
+    #genreSelect,
+    #yearSelect,
+    #nameSelect {
+        position: relative;
+    }
+    
+    .divider {
+        margin: 15px 15px;
+    }
+    
+    .movie-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    .movie-card {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 2/3;
+    }
+    
+    .modal-content {
+        width: 95%;
+        height: auto;
+        min-height: 600px;
+        margin: 3% auto;
+        border-radius: 15px;
+    }
+    
+    .movies {
+        width: 100%;
+        height: auto;
+        min-height: 550px;
+        border-radius: 15px;
+        border: none;
+    }
+    
+    .modal-movie-description-background {
+        width: 100%;
+        height: 250px;
+    }
+    
+    .modal-movie-poster {
+        width: 140px;
+        height: 190px;
+        left: 15px;
+        top: 30px;
+    }
+    
+    .movie-title {
+        left: 170px;
+        top: 30px;
+        width: calc(100% - 185px);
+        font-size: 16px;
+        line-height: 1.2;
+    }
+    
+    .release-date {
+        left: 170px;
+        top: 70px;
+        font-size: 11px;
+    }
+    
+    .directed-by {
+        left: 170px;
+        top: 85px;
+        width: calc(100% - 185px);
+        font-size: 11px;
+    }
+    
+    .movie-description {
+        left: 170px;
+        top: 105px;
+        width: calc(100% - 185px);
+        max-height: 110px;
+        font-size: 11px;
+    }
+        
+    .watched-on {
+        left: 15px;
+        top: 270px;
+        font-size: 12px;
+        display: inline-block;
+    }
+    
+    .date-container {
+        left: 90px;
+        top: 268px;
+        width: 80px;
+        height: 20px;
+        display: inline-block;
+        justify-content: center;
+    }
+
+    .dd-mm-yyyy {
+        font-size: 11px;
+        color: #555;
+        text-align: center;
+        width: 100%;
+        margin-left: 18px;
+    }
+  
+    .button-container-modal {
+        margin-left: 25px;
+        width: calc(100% - 80px);
+        height: 100px;
+        left: 15px;
+        top: 300px; 
+    }
+    
+    .action-buttons-section {
+        height: 60px;
+    }
+    
+    .marked-as-watched,
+    .add-to-likes,
+    .add-to-watchlist {
+        font-size: 10px;
+    }
+    
+    .modal-rating-container {
+        height: 60px;
+    }
+    
+    .star-rating label {
+        font-size: 18px;
+    }
+    
+    .profile-modal {
+        left: 15px;
+        top: 420px;
+        margin-top: 15px;
+    }
+    
+    .username-display {
+        left: 65px;
+        top: 430px;
+        font-size: 13px;
+    }
+    
+    .review-box {
+        margin-top: 40px;
+        width: calc(100% - 30px);
+        height: 80px;
+        left: 15px;
+        top: 460px;
+    }
+    
+    .add-a-review {
+        height: 50px;
+        font-size: 12px;
+    }
+    
+    .submit-review-btn {
+        font-size: 11px;
+        padding: 5px 10px;
+    }
+    
+    .more-options-modal {
+        left: calc(100% - 120px);
+        top: 470px;
+    }
+
+    .footer-logo img {
+	      max-width: 50px;
+    }
+    
+    .footer-text p {
+        font-size: 0.5em;
+    }
+}
+
+/* Small Mobile Phones (≤320px) */
+@media (max-width: 320px) {
+    .navbar {
+        padding: 6px 8px;
+    }
+    
+    .nav-links {
+        gap: 4px;
+    }
+    
+    .nav-links li a {
+        padding: 3px 6px;
+        font-size: 0.65rem;
+    }
+    
+    .search-bar-container {
+        padding: 12px 12px;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .search-bar-container label {
+        font-size: 0.75rem;
+    }
+    
+    .search-wrapper input {
+        width: 150px;
+        font-size: 12px;
+        padding: 5px 30px 5px 8px;
+    }
+    
+    .movies-header {
+        display: block;
+        padding: 0 12px 8px;
+    }
+    
+    .movies-header h2 {
+        font-size: 1.2rem;
+        margin: 0 0 8px 0;
+        display: block;
+    }
+    
+    .catalog-sort {
+        display: block;
+    }
+    
+    .catalog-sort span {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+    
+    .sort-dropdown {
+        display: inline-block;
+        width: auto;
+        margin-right: 6px;
+        font-size: 0.7rem;
+        padding: 5px 12px 5px 6px;
+        background-position: right 4px center;
+        background-size: 10px;
+    }
+    
+    #genreSelect::after,
+    #yearSelect::after {
+        content: "|";
+        position: absolute;
+        right: -3px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+        pointer-events: none;
+    }
+    
+    #genreSelect,
+    #yearSelect,
+    #nameSelect {
+        position: relative;
+    }
+    
+    .divider {
+        margin: 12px 12px;
+    }
+    
+    .movie-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .movie-card {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 2/3;
+    }
+    
+    .modal-content {
+        width: 98%;
+        height: auto;
+        min-height: 580px;
+        margin: 2% auto;
+        border-radius: 12px;
+    }
+    
+    .movies {
+        width: 100%;
+        height: auto;
+        min-height: 530px;
+        border-radius: 12px;
+    }
+    
+    .modal-movie-description-background {
+        width: 100%;
+        height: 240px;
+    }
+    
+    .modal-movie-poster {
+        width: 120px;
+        height: 170px;
+        left: 12px;
+        top: 25px;
+    }
+    
+    .movie-title {
+        left: 145px;
+        top: 25px;
+        width: calc(100% - 155px);
+        font-size: 15px;
+        line-height: 1.2;
+    }
+    
+    .release-date {
+        left: 145px;
+        top: 60px;
+        font-size: 10px;
+    }
+    
+    .directed-by {
+        left: 145px;
+        top: 75px;
+        width: calc(100% - 155px);
+        font-size: 10px;
+    }
+    
+    .movie-description {
+        left: 145px;
+        top: 95px;
+        width: calc(100% - 155px);
+        max-height: 100px;
+        font-size: 10px;
+    }
+        
+    .watched-on {
+        left: 12px;
+        top: 255px; 
+        font-size: 11px;
+        display: inline-block;
+    }
+    
+    .date-container {
+        left: 90px;
+        top: 250px;
+        width: 80px;
+        height: 20px;
+        display: inline-block;
+        justify-content: center;
+    }
+
+    .dd-mm-yyyy {
+        font-size: 11px;
+        color: #555;
+        text-align: center;
+        width: 100%;
+        margin-left: 18px;
+    }
+    
+    .button-container-modal {
+        margin-left: 20px;
+        width: calc(100% - 60px);
+        height: 95px;
+        left: 12px;
+        top: 285px; 
+    }
+    
+    .action-buttons-section {
+        height: 55px;
+        padding: 1px;
+    }
+    
+    .marked-as-watched,
+    .add-to-likes,
+    .add-to-watchlist {
+        font-size: 8px;
+    }
+    
+    .modal-rating-container {
+        height: 65px;
+    }
+    
+    .star-rating label {
+        font-size: 16px;
+    }
+    
+    .profile-modal {
+        left: 12px;
+        top: 395px;
+        margin-top: 12px;
+    }
+    
+    .username-display {
+        left: 60px;
+        top: 405px;
+        font-size: 12px;
+    }
+    
+    .review-box {
+        margin-top: 35px;
+        width: calc(100% - 24px);
+        height: 75px;
+        left: 12px;
+        top: 435px;
+    }
+    
+    .add-a-review {
+        height: 45px;
+        font-size: 11px;
+    }
+    
+    .submit-review-btn {
+        font-size: 10px;
+        padding: 4px 8px;
+    }
+    
+    .more-options-modal {
+        left: calc(100% - 110px);
+        top: 445px;
+    }
+
+    .footer-logo img {
+	      max-width: 50px;
+    }
+    
+    .footer-text p {
+        font-size: 0.5em;
+    }
 }

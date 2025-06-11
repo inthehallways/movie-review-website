@@ -190,6 +190,15 @@ body::before {
     box-shadow: none;
 }
 
+.avatar-display-modal {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;          
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
 /* Dropdown Menu */
 .dropdown-menu {
     display: none;
@@ -680,11 +689,291 @@ body::before {
 	font-size:0.9em;
 	color: #2c2c2c;
 }
-.avatar-display-modal {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;           /* just the avatar circle */
-  object-fit: cover;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+/* Breakpoints for Responsiveness */
+
+/* Tablet Styles (768px - 1199px) */
+@media (max-width: 1199px) {
+    .navbar {
+        padding: 12px 20px;
+    }
+    
+    .nav-links {
+        gap: 15px;
+    }
+    
+    .nav-links li a {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .hero-text {
+        margin-top: 90px;
+        font-size: 1.8rem;
+    }
+    
+    .user-stats-cards {
+        gap: 40px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .stats-card {
+        padding: 50px 30px;
+        min-width: 250px;
+    }
+    
+    .movie-card {
+        width: 180px;
+        min-width: 180px;
+    }
+
+    .img-banner {
+        min-height: 400px; 
+        margin-top: -50px; 
+    }
+    
+    .img-banner-content {
+        top: -90px; 
+        width: 100vw;
+        overflow: visible; 
+        z-index: 3;
+    }
+    
+    .img-banner-content img {
+        width: 100%;
+        height: auto;
+        min-height: 400px; 
+        z-index: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 10px 15px;
+    }
+    
+    .nav-links {
+        gap: 12px;
+    }
+    
+    .nav-links li a {
+        padding: 5px 10px;
+        font-size: 0.85rem;
+    }
+    
+    .hero-text {
+        margin-top: 80px;
+        font-size: 1.6rem;
+    }
+    
+    .user-stats {
+        padding: 40px 20px; 
+    }
+
+    .user-stats-cards {
+        gap: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 100px; 
+    }
+    
+    .stats-card {
+        padding: 40px 25px;
+        min-width: 220px;
+    }
+    
+    .movie-card {
+        width: 160px;
+        min-width: 160px;
+    }
+
+    .popular-films {
+        min-height: 450px; 
+    }
+
+    .img-banner {
+        min-height: 350px; 
+        margin-top: -40px; 
+    }
+    
+    .img-banner-content {
+        top: -40px;
+        width: 100vw;
+        overflow: visible;
+        z-index: 3;
+    }
+    
+    .img-banner-content img {
+        width: 100%;
+        height: auto;
+        min-height: 300px;
+        z-index: 3;
+    }
+}
+
+/* Mobile Phones (≤480px) */
+@media (max-width: 480px) {
+    html, body {
+        overflow-x: hidden; 
+    }
+    .navbar {
+        padding: 8px 12px;
+        justify-content: space-between;
+    }
+    
+    .dashboard-label {
+        display: none;
+    }
+    
+    .navbar-left {
+        flex: 0 0 auto;
+    }
+    
+    .navbar-center {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .navbar-right {
+        flex: 0 0 auto;
+    }
+    
+    .nav-links {
+        gap: 8px;
+        justify-content: center;
+    }
+    
+    .nav-links li a {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+        border-radius: 15px;
+    }
+    
+    .hero {
+        background-image: url('../frontend/assets/images/mobile_hero.png');
+    }
+    
+    .user-stats {
+        min-height: 350px;
+        padding: 20px 10px;
+    }
+    
+    .section-header {
+        max-width: 200px;
+        height: 40px;
+        margin-bottom: 20px;
+    }
+    
+    .user-stats-cards {
+        gap: 15px; 
+        padding: 0 10px;
+    }
+    
+    .stats-card {
+        padding: 15px 10px;
+        min-width: 120px;
+        max-width: 140px;
+        height: 100px; 
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .stats-card:nth-child(1),
+    .stats-card:nth-child(2) {
+        flex: 0 1 calc(50% - 7.5px);
+    }
+    
+    .stats-card:nth-child(3) {
+        flex: 0 1 120px;
+        margin: 0 auto;
+    }
+    
+    .stats-number {
+        font-size: 24px; 
+        margin-bottom: 5px;
+    }
+    
+    .stats-label {
+        font-size: 12px; 
+        line-height: 1.2;
+    }
+
+    .popular-films {
+        min-height: 400px; 
+    }
+
+    .img-banner {
+        min-height: 400px; 
+        margin-top: -60px; 
+        overflow: visible;
+    }
+    
+    .img-banner-content {
+        top: -40px; 
+        width: 135vw;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 500px; 
+        overflow: hidden;
+    }
+    
+    .img-banner-content img {
+        width: 120%;
+        height: 500px;
+        object-fit: cover; 
+        object-position: left;
+    }
+    
+    .decorative-footer-image {
+        margin-top: -120px; 
+        width: 120vw; 
+        height: 400px; 
+        overflow: hidden;
+        left: 50%;
+        transform: translateX(-50%);
+        position: relative;
+    }
+    
+    .decorative-footer-image img {
+        width: 120%; 
+        height: 400px; 
+        object-fit: cover; 
+        object-position: center bottom;
+        min-width: unset;
+        max-width: unset;
+    }
+
+    .footer-logo img {
+        max-width: 50px;
+    }
+
+    .footer-text p {
+        font-size: 0.5em;
+    }
+}
+
+/* Extra small screens (≤360px) */
+@media (max-width: 360px) {
+    .navbar {
+        padding: 6px 8px;
+    }
+    
+    .nav-links {
+        gap: 5px;
+    }
+    
+    .nav-links li a {
+        padding: 3px 6px;
+        font-size: 0.7rem;
+    }
+
+    .footer-logo img {
+        max-width: 50px;
+    }
+    
+    .footer-text p {
+        font-size: 0.5em;
+    }
 }

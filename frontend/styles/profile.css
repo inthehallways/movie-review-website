@@ -1098,3 +1098,445 @@ body::before{
 	font-size:0.9em;
 	color: #2c2c2c;
 }
+
+/* Breakpoints for Responsiveness */
+
+/* Base styles Top 5 Films section */
+.favorites-grid {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
+    justify-content: flex-start;
+}
+
+.favorites-grid::-webkit-scrollbar {
+    height: 6px;
+}
+
+.favorites-grid::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.favorites-grid::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.favorites-grid::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+.favorite-movie {
+    width: 190px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+/* Base styles for editing Top 5 films */
+.edit-favorites-grid {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
+}
+
+.edit-favorites-grid::-webkit-scrollbar {
+    height: 6px;
+}
+
+.edit-favorites-grid::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.edit-favorites-grid::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.edit-favorites-grid::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+.edit-favorite-card {
+    width: 150px;
+    height: 225px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Medium to Large Screens (≤1199px) */
+@media (max-width: 1199px) {
+    .profile-content {
+        padding: 0 1.5rem;
+    }
+    
+    .custom-header {
+        height: 300px;
+    }
+    
+    .profile-avatar-wrapper {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .username {
+        font-size: 2rem;
+    }
+    
+    .favorites-grid {
+        gap: 1rem;
+    }
+    
+    .edit-favorites-grid {
+        gap: 0.8rem;
+    }
+    
+    .edit-favorite-card {
+        width: 140px;
+        height: 210px;
+    }
+}
+
+/* Tablets and Landscape Phones (≤768px) */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 8px 15px;
+    }
+    
+    .navbar-center {
+        flex: 1.5;
+    }
+    
+    .nav-links {
+        gap: 15px;
+    }
+    
+    .nav-links li a {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .dashboard-label {
+        font-size: 1rem;
+    }
+    
+    .custom-header {
+        height: 250px;
+    }
+    
+    .profile-content {
+        padding: 0 1rem;
+    }
+    
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1rem;
+        margin-top: -60px;
+    }
+    
+    .profile-avatar-wrapper {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .username {
+        font-size: 1.8rem;
+    }
+    
+    .username-section {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .profile-stats {
+        flex-direction: row; 
+        gap: 1rem;
+        padding: 1rem;
+        max-width: 800px; 
+        margin: 0 auto; 
+    }
+    
+    .stats-button {
+        padding: 0.75rem 1.5rem; 
+        width: auto;
+        flex: 1; 
+        text-align: center;
+        font-size: 0.9rem;
+    }
+    
+    .favorites-grid {
+        gap: 1rem;
+    }
+    
+    .favorite-movie {
+        width: 150px;
+    }
+    
+    .movie-poster {
+        height: 225px;
+    }
+    
+    .edit-favorites-grid {
+        gap: 0.75rem;
+    }
+    
+    .edit-favorite-card {
+        width: 120px;
+        height: 180px;
+    }
+    
+    .modal-container {
+        padding: 1rem;
+    }
+    
+    .modal-content {
+        max-height: 95vh;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+    
+    .modal-footer {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .cancel-btn,
+    .save-btn {
+        width: 100%;
+    }
+}
+
+/* Mobile Phones (≤480px) */
+@media (max-width: 480px) {
+    .navbar {
+        padding: 8px 12px;
+        justify-content: space-between;
+    }
+    
+    .dashboard-label {
+        display: none;
+    }
+    
+    .navbar-left {
+        flex: 0 0 auto;
+    }
+    
+    .navbar-center {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .navbar-right {
+        flex: 0 0 auto;
+    }
+    
+    .nav-links {
+        gap: 8px;
+        justify-content: center;
+    }
+    
+    .nav-links li a {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+        border-radius: 15px;
+    }
+    
+    .custom-header {
+        height: 250px;
+    }
+    
+    .profile-content {
+        padding: 0 0.5rem;
+    }
+    
+    .profile-header {
+        margin-top: -70px;
+    }
+    
+    .profile-avatar-wrapper {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .username {
+        font-size: 1.5rem;
+    }
+    
+    .edit-profile-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .profile-stats {
+        padding: 0.75rem 0.5rem;
+        gap: 0.4rem;
+    }
+
+    .stats-button {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.75rem;
+        border-radius: 6px;
+    }
+
+    .profile-bio,
+    .favorites-container {
+        padding: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.1rem;
+    }
+    
+    .favorites-grid {
+        gap: 0.75rem;
+    }
+    
+    .favorite-movie {
+        width: 120px;
+    }
+    
+    .movie-poster {
+        height: 180px;
+    }
+    
+    .edit-favorites-grid {
+        gap: 0.5rem;
+    }
+    
+    .edit-favorite-card {
+        width: 100px;
+        height: 150px;
+    }
+    
+    .add-movie-btn {
+        font-size: 0.7rem;
+        gap: 0.25rem;
+    }
+    
+    .add-movie-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .remove-favorite-btn {
+        width: 20px;
+        height: 20px;
+        top: 3px;
+        right: 3px;
+    }
+    
+    .remove-favorite-btn svg {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .modal-container {
+        padding: 0.5rem;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.2rem;
+    }
+    
+    .current-header {
+        height: 150px;
+    }
+    
+    .current-avatar {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .movie-search-modal {
+        max-width: 95%;
+    }
+    
+    .search-input-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .search-btn {
+        width: 100%;
+    }
+
+    .footer-logo img {
+	max-width: 50px;
+    }
+    
+    .footer-text p {
+        font-size: 0.5em;
+    }
+}
+
+/* Extra small screens (≤360px) */
+@media (max-width: 360px) {
+
+    body, html {
+        overflow-x: hidden;
+    }
+
+    .navbar {
+        padding: 6px 8px;
+    }
+    
+    .nav-links {
+        gap: 5px;
+    }
+    
+    .nav-links li a {
+        padding: 3px 6px;
+        font-size: 0.7rem;
+    }
+
+    .profile-stats {
+        padding: 0.75rem 0.5rem;
+        gap: 0.4rem;
+    }
+
+    .stats-button {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.75rem;
+        border-radius: 6px;
+    }
+    
+    .favorite-movie {
+        width: 100px;
+    }
+    
+    .movie-poster {
+        height: 150px;
+    }
+    
+    .edit-favorite-card {
+        width: 90px;
+        height: 135px;
+    }
+
+    .footer-logo img {
+	max-width: 50px;
+    }
+    
+    .footer-text p {
+        font-size: 0.5em;
+    }
+}
