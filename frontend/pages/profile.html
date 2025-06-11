@@ -254,5 +254,19 @@
     <!-- JavaScript for Profile functionality -->
     <script src="../script/profile.js"> </script>
 
+    <!-- Cursor Effects -->
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(async () => {
+                const module = await import("https://cdn.jsdelivr.net/npm/cursor-effects@latest/dist/esm.js");
+                const { fairyDustCursor } = module;
+                
+                new fairyDustCursor({
+                    colors: ["#F49B98", "#988bd3", "#FFEEAD", "#2c2c2c", "#95CEB3"]
+                });
+            }, 200);
+        });
+    </script>
+
 </body>
 </html>

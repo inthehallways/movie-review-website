@@ -79,8 +79,6 @@ async function loadUserProfile() {
     document.getElementById('profileHeader').style.visibility   = 'visible';
     document.querySelector('.profile-content').style.visibility = 'visible';
 
-    initializeCursor();
-    
   } catch (err) {
     console.error('Error loading profile in front-end:', err);
   }
@@ -821,8 +819,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('profileHeader').style.visibility   = 'visible';
     document.querySelector('.profile-content').style.visibility = 'visible';
-
-    initializeCursor();
 });
 
 // Close modals when clicking outside
@@ -837,16 +833,6 @@ document.getElementById("movieSearchModal").addEventListener("click", function(e
         closeMovieSearchModal();
     }
 });
-
-function initializeCursor() {
-  import("https://unpkg.com/cursor-effects@latest/dist/esm.js")
-    .then(module => {
-      const { fairyDustCursor } = module;
-      new fairyDustCursor({
-        colors: ["#F49B98", "#988bd3", "#FFEEAD", "#2c2c2c", "#95CEB3"]
-      });
-    });
-}
 
 // Add CSS animation for success message
 const style = document.createElement('style');
