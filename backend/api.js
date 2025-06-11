@@ -2,22 +2,12 @@ const axios = require('axios');
 const sql = require('mssql');
 
 // TMDB Configuration
-const API_KEY = "d2a72fb4b28ccba64124755d66b1b0f1";
+const API_KEY = "SECRET_NO_CLUE";
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMG_URL = "https://image.tmdb.org/t/p/w500";
 
 // Database Configuration
-const dbConfig = {
-    user: 'Allen',
-    password: 'kalisqlserver',
-    server: 'KALI\\SQLEXPRESS',
-    database: 'SceneITDB',
-    options: {
-        encrypt: false,
-        trustServerCertificate: true,
-        enableArithAbort: true // Recommended for newer SQL Server drivers
-    }
-};
+//Removed for privacy
 
 async function processMovies(movies, ps) {
     for (const [index, movie] of movies.entries()) {

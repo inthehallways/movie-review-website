@@ -11,7 +11,7 @@ let currentEditingReview = null;
 
 
 // TMDB API Configuration
-const API_KEY = "d2a72fb4b28ccba64124755d66b1b0f1"
+const API_KEY = "SECRET_NO_CLUE"
 const IMG_URL = "https://image.tmdb.org/t/p/w500"
 
 

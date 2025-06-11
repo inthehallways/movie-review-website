@@ -2,7 +2,7 @@
 // This file handles all interactive features in the Profile page, including the Edit Profile modal, except dropdown (which is in HTML)
 
 // TMDB API Configuration
-const TMDB_API_KEY = 'd2a72fb4b28ccba64124755d66b1b0f1'; // Backend dev should replace this with their own API key
+const TMDB_API_KEY = 'SECRET_NO_CLUE';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
