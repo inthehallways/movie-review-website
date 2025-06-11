@@ -8,5 +8,4 @@ node_modules/
 uploads/
 
 # Sensitive config files
-db.js
-api.js
+/backend/db.js
