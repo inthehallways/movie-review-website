@@ -25,13 +25,10 @@ async function handleUnwatch(movie) {
     currentWatched = currentWatched.filter(id => id !== movie.id);
     displayMovies(currentMovies);
 
-    // 2) **Reset the modal button UI** back to “Mark as Watched”:
-    const watchedButton = modal.querySelector(".marked-as-watched");
-    watchedButton.classList.remove("watched");              // remove the green fill
-    watchedButton.removeAttribute("disabled");              // re-enable it
-    watchedButton.style.opacity = "1";                       // restore full opacity
-    watchedButton.querySelector(".watched-text").textContent = "Mark as Watched";
-    // (If you set an innerHTML elsewhere, you can also re‐set the icon if needed.)
+      // remove the stored date
+      delete currentWatchedData[movie.id]
+     // re-paint the modal so date vanishes
+      resetModalState(movie.id)
 
   } catch (err) {
     console.error('Error in handleUnwatch:', err);
@@ -368,6 +365,7 @@ async function handleMarkAsWatched(movie) {
   }
 
   try {
+    const today = new Date();
     const resp = await fetch('http://localhost:3001/api/watched', {
       method: 'POST',
       headers: {
@@ -377,9 +375,10 @@ async function handleMarkAsWatched(movie) {
       body: JSON.stringify({
         movie_id:   movie.id,
         rating:     null,
-        watch_date: new Date()
+        watch_date: today
       })
     });
+
     const body = await resp.json();
     if (!body.success) {
       console.error('Server said:', body.message);
@@ -387,33 +386,57 @@ async function handleMarkAsWatched(movie) {
       return;
     }
 
-    // ─── This part already existed ───
+    // ─── Push to watched list ───
     currentWatched.push(movie.id);
     displayMovies(currentMovies);
 
-    // ─── NEW: create an entry in currentWatchedData for this movieId ───
+    // ─── Store additional data ───
+    const isoDate = today.toISOString().split("T")[0]; // safe already
     currentWatchedData[movie.id] = {
       rating:    null,
       liked:     false,
-      watchDate: new Date().toISOString().split("T")[0]
+      watchDate: isoDate
     };
 
-    // ─── then disable & re‐label the modal button as before ───
+    // ─── Format date for UI (DD/MM/YY) ───
+    const day   = today.getDate().toString().padStart(2, "0");
+    const month = (today.getMonth() + 1).toString().padStart(2, "0");
+    const year  = today.getFullYear().toString().slice(-2);
+    const formattedDate = `${day}/${month}/${year}`;
+
+    // now that our in-memory data is set, re-paint the modal:
+    resetModalState(movie.id)
+
+    // ─── Update modal button ───
     const watchedButton = modal.querySelector(".marked-as-watched");
-    watchedButton.innerHTML = `
-      <div class="watched-icon-container">
-        <span class="material-symbols-outlined">visibility</span>
-      </div>
-      <div class="watched-text">Watched</div>
-    `;
-    watchedButton.setAttribute("disabled", "true");
-    watchedButton.style.opacity = "0.6";
+    if (watchedButton) {
+      watchedButton.innerHTML = `
+        <div class="watched-icon-container">
+          <span class="material-symbols-outlined">visibility</span>
+        </div>
+        <div class="watched-text">Watched</div>
+      `;
+      watchedButton.setAttribute("disabled", "true");
+      watchedButton.style.opacity = "0.6";
+    }
+
+    // ─── Optionally show notification ───
+    if (typeof showNotification === 'function') {
+      showNotification(`Marked "${movie.title}" as watched on ${formattedDate}!`);
+    }
+
+    // ─── Optional: update hidden input ───
+    const hiddenDateInput = document.querySelector(".hidden-date-input");
+    if (hiddenDateInput) {
+      hiddenDateInput.value = isoDate;
+    }
 
   } catch (err) {
     console.error('Error in handleMarkAsWatched:', err);
     alert('Network/server error.');
   }
 }
+
 
 
 
@@ -639,6 +662,7 @@ async function showModal(movie) {
   currentMovie = movie
   resetModalState(movie.id);
   await loadExistingReview();
+  resetModalState(movie.id);
 
   const movieDetails = await fetchMovieDetails(movie.id)
 
@@ -1020,6 +1044,18 @@ function resetModalState(movieId) {
   const watchlistText   = watchlistButton.querySelector(".watchlist-text");
   const ratingInputs    = modal.querySelectorAll('input[name="movie-rating"]');
   const dateContainer   = modal.querySelector(".date-container");
+  const dateDisplay   = modal.querySelector('.date-container .dd-mm-yyyy')
+
+if (currentWatchedData[movieId]?.watchDate) {
+    // currentWatchedData[movieId].watchDate is "YYYY-MM-DD"
+    const [year, month, day] = currentWatchedData[movieId].watchDate.split('-')
+    const shortYear = year.slice(-2)
+    const formatted = `${day}/${month}/${shortYear}`    // e.g. "09/05/24"
+
+    dateDisplay.textContent = formatted
+  } else {
+    dateDisplay.textContent = ''
+  }
 
   // 1) Was this movie ever marked “watched”?
   const isWatched = currentWatched.includes(movieId);
@@ -1076,9 +1112,6 @@ function resetModalState(movieId) {
     const ratingLabel = document.getElementById("ratingLabel");
     if (ratingLabel) ratingLabel.textContent = "Rating";
   }
-
-  // 5) Clear date container if not watched, or re‐render if needed (you already do this elsewhere)
-  if (dateContainer) dateContainer.innerHTML = "";
 
   // 6) Hide any “moreOptionsModal” and clear review text as before
   moreOptionsModal.style.display = "none";
