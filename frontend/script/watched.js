@@ -1,6 +1,17 @@
 // JavaScript for SceneIt Watched Page
 // This file handles the watched movies functionality including loading, rendering, and managing movies in the watched list.
 
+const bc = new BroadcastChannel("sceneit-sync");
+bc.onmessage = (ev) => {
+  if (ev.data.type === "rating-updated") {
+    const m = currentWatchedMovies.find(m => m.id == ev.data.movieId);
+    if (m) {
+      m.user_rating = ev.data.newRating;
+      renderMovies();
+    }
+  }
+};
+
 import {
   API_CONFIG,
   getUserWatchedMovies,
@@ -135,69 +146,82 @@ function setupEventListeners() {
 }
 
 async function setRating(clickedStar, rating) {
-  const movieCard = clickedStar.closest(".movie-card")
-  const movieId = movieCard.getAttribute("data-movie-id")
-  const stars = movieCard.querySelectorAll(".star")
+  const movieCard = clickedStar.closest(".movie-card");
+  const movieId = movieCard.getAttribute("data-movie-id");
+  const stars = movieCard.querySelectorAll(".star");
 
   try {
-    const userId = getCurrentUserId()
-    await updateMovieRating(userId, movieId, rating)
+    const userId = getCurrentUserId();
+    await updateMovieRating(userId, movieId, rating); // updates watched_movies & reviews
 
-    // Update UI
+    // Update UI stars
     stars.forEach((star, index) => {
       if (index < rating) {
-        star.textContent = "★"
-        star.classList.add("filled")
-        star.style.color = "#ffd700"
+        star.textContent = "★";
+        star.classList.add("filled");
+        star.style.color = "#ffd700";
       } else {
-        star.textContent = "☆"
-        star.classList.remove("filled")
-        star.style.color = "#ddd"
+        star.textContent = "☆";
+        star.classList.remove("filled");
+        star.style.color = "#ddd";
       }
-    })
+    });
 
-    movieCard.setAttribute("data-rating", rating)
+    movieCard.setAttribute("data-rating", rating);
 
-    // Update local data
-    const movie = currentWatchedMovies.find((m) => m.id == movieId)
-    if (movie) movie.user_rating = rating
+    // Update local watched data
+    const movie = currentWatchedMovies.find((m) => m.id == movieId);
+    if (movie) movie.user_rating = rating;
 
-    // Re-setup hover effects for this card after rating change
-    setTimeout(() => setupStarHoverEffectsForCard(movieCard), 50)
+    // Re-apply hover effects
+    setTimeout(() => setupStarHoverEffectsForCard(movieCard), 50);
+
+    // 🔄 Refresh Reviews (if present)
+    if (typeof loadReviews === "function" && typeof renderReviews === "function") {
+      reviewsData = await loadReviews();
+      renderReviews(reviewsData);
+    }
   } catch (error) {
-    console.error("Error updating rating:", error)
+    console.error("Error updating rating:", error);
   }
 }
 
 async function resetRating(resetButton) {
-  const movieCard = resetButton.closest(".movie-card")
-  const movieId = movieCard.getAttribute("data-movie-id")
-  const stars = movieCard.querySelectorAll(".star")
+  const movieCard = resetButton.closest(".movie-card");
+  const movieId = movieCard.getAttribute("data-movie-id");
+  const stars = movieCard.querySelectorAll(".star");
 
   try {
-    const userId = getCurrentUserId()
-    await updateMovieRating(userId, movieId, null)
+    const userId = getCurrentUserId();
+    await updateMovieRating(userId, movieId, null); // resets rating in watched_movies & reviews
 
-    // Reset UI
+    // Reset UI stars
     stars.forEach((star) => {
-      star.textContent = "☆"
-      star.classList.remove("filled")
-      star.style.color = "#ddd"
-    })
+      star.textContent = "☆";
+      star.classList.remove("filled");
+      star.style.color = "#ddd";
+    });
 
-    movieCard.removeAttribute("data-rating")
-    resetButton.style.display = "none"
+    movieCard.removeAttribute("data-rating");
+    resetButton.style.display = "none";
 
-    // Update local data
-    const movie = currentWatchedMovies.find((m) => m.id == movieId)
-    if (movie) movie.user_rating = null
+    // Update local watched data
+    const movie = currentWatchedMovies.find((m) => m.id == movieId);
+    if (movie) movie.user_rating = null;
 
-    // Re-setup hover effects for this card after reset
-    setTimeout(() => setupStarHoverEffectsForCard(movieCard), 50)
+    // Re-apply hover effects
+    setTimeout(() => setupStarHoverEffectsForCard(movieCard), 50);
+
+    // 🔄 Refresh Reviews (if present)
+    if (typeof loadReviews === "function" && typeof renderReviews === "function") {
+      reviewsData = await loadReviews();
+      renderReviews(reviewsData);
+    }
   } catch (error) {
-    console.error("Error resetting rating:", error)
+    console.error("Error resetting rating:", error);
   }
 }
+
 
 // Handles when user removes movie from Watched
 async function removeMovieFromWatched(movieId) {

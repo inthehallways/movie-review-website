@@ -1,3 +1,5 @@
+const bc = new BroadcastChannel("sceneit-sync");
+
 // Logout 
 document.getElementById('logoutBtn').addEventListener('click', (e) => {
   e.preventDefault();
@@ -318,7 +320,6 @@ async function saveEditedReview() {
     return;
   }
 
-  // 1) Gather new values from the modal
   const newReviewText = document.getElementById("editReviewText").value.trim();
   const newRatingInput = document.querySelector('input[name="edit-rating"]:checked');
 
@@ -326,14 +327,9 @@ async function saveEditedReview() {
     alert("Please write a more detailed review (at least 10 characters).");
     return;
   }
-  if (!newRatingInput) {
-    alert("Please select a rating before saving.");
-    return;
-  }
 
-  const newRating = Number.parseInt(newRatingInput.value);
+  const newRating = newRatingInput ? Number.parseInt(newRatingInput.value) : undefined;
 
-  // 2) Call the backend PUT /api/reviews/:id
   const token = localStorage.getItem("token");
   if (!token) {
     alert("Session expired. Please log in again.");
@@ -342,6 +338,7 @@ async function saveEditedReview() {
   }
 
   try {
+    // Step 1: update review text and rating in reviews table
     const response = await fetch(`http://localhost:3001/api/reviews/${currentEditingReview.id}`, {
       method: "PUT",
       headers: {
@@ -350,8 +347,7 @@ async function saveEditedReview() {
       },
       body: JSON.stringify({
         review_text: newReviewText,
-        rating: newRating
-        // (If you want to allow editing watched_date, include watched_date here.)
+        ...(newRating !== undefined && { rating: newRating })
       })
     });
 
@@ -366,16 +362,37 @@ async function saveEditedReview() {
     const data = await response.json();
     if (!data.success) throw new Error(data.message || "Failed to update review.");
 
-    // 3) Close the modal and re-fetch everything
+    // Step 2: also update the watched_movies table's rating
+    if (newRating !== undefined) {
+      await fetch(`http://localhost:3001/api/watched/${currentEditingReview.movieId}/rating`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({ rating: newRating })
+      });
+
+      // 🔄 Step 3: broadcast change to watched.js
+      bc.postMessage({
+        type: "rating-updated",
+        movieId: currentEditingReview.movieId,
+        newRating: newRating
+      });
+    }
+
     closeReviewModal();
     reviewsData = await loadReviews();
-    renderReviews(reviewsData);
+    const currentSort = document.getElementById("dateSelected").textContent;
+    sortReviews(currentSort);
     alert("Review updated successfully!");
+    
   } catch (err) {
     console.error("Error updating review:", err);
     alert("Error updating review. Please try again.");
   }
 }
+
 
 
 // Delete Review Function

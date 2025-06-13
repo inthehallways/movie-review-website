@@ -277,15 +277,17 @@ app.get('/api/reviews', authenticateToken, async (req, res) => {
 // ── PUT /api/reviews/:id   (edit a single review) ───────────────────────────────
 app.put('/api/reviews/:id', authenticateToken, async (req, res) => {
   const userId = req.user.user_id;
-  const reviewId = req.params.id;  // no longer parseInt — it's a UUID
+  const reviewId = req.params.id;
   const { review_text, rating, watched_date } = req.body;
 
-  if (!review_text || rating === undefined || isNaN(rating)) {
-    return res.status(400).json({ success: false, message: "Missing or invalid fields" });
+  if (!review_text) {
+    return res.status(400).json({ success: false, message: "Review text is required" });
   }
+
   try {
     const pool = await getPool();
-    // a) Ensure that this review belongs to the logged-in user
+
+    // 1. Check ownership
     const check = await pool.request()
       .input('review_id', sql.UniqueIdentifier, reviewId)
       .input('user_id',   sql.UniqueIdentifier, userId)
@@ -295,25 +297,70 @@ app.put('/api/reviews/:id', authenticateToken, async (req, res) => {
         WHERE review_id = @review_id
           AND user_id   = @user_id
       `);
+
     if (check.recordset.length === 0) {
       return res.status(403).json({ success: false, message: "Not authorized to edit this review" });
     }
 
-    // b) Perform the UPDATE
-    await pool.request()
+  // 2.a) fetch movie_id for this review so we can sync watched_movies
+   const orig = await pool.request()
+     .input('review_id', sql.UniqueIdentifier, reviewId)
+     .query(`
+       SELECT movie_id
+       FROM dbo.reviews
+       WHERE review_id = @review_id
+     `);
+   const movieId = orig.recordset[0]?.movie_id;
+
+    // 2. Build dynamic update query
+    const request = pool.request()
       .input('review_id',   sql.UniqueIdentifier, reviewId)
-      .input('review_text', sql.NVarChar(sql.MAX), review_text)
-      .input('rating',      sql.Int,   rating)
-      .input('watched_date',sql.DateTime, watched_date ? new Date(watched_date) : new Date())
+      .input('review_text', sql.NVarChar(sql.MAX), review_text);
+
+    // --- Safely handle watched_date ---
+    if (watched_date) {
+      request.input('watched_date', sql.DateTime, new Date(watched_date));
+    } else {
+      const original = await pool.request()
+        .input('review_id', sql.UniqueIdentifier, reviewId)
+        .query('SELECT watched_date FROM dbo.reviews WHERE review_id = @review_id');
+
+      const existingDate = original.recordset[0]?.watched_date || new Date();
+      request.input('watched_date', sql.DateTime, existingDate);
+    }
+
+    // --- Build dynamic update fields ---
+    let updateFields = `
+      review_text = @review_text,
+      watched_date = @watched_date,
+      updated_at = GETDATE()
+    `;
+
+    if (rating !== undefined && !isNaN(rating)) {
+      request.input('rating', sql.Int, rating);
+      updateFields = `rating = @rating, ` + updateFields;
+    }
+
+    await request.query(`
+      UPDATE dbo.reviews
+      SET ${updateFields}
+      WHERE review_id = @review_id
+    `);
+
+// 3) sync watched_movies.rating
+  if (rating !== undefined) {
+    await pool.request()
+      .input('user_id',  sql.UniqueIdentifier, userId)
+      .input('movie_id', sql.Int,               movieId)
+      .input('rating',   sql.Int,               rating)
       .query(`
-        UPDATE dbo.reviews
-        SET
-          review_text  = @review_text,
-          rating       = @rating,
-          watched_date = @watched_date,
-          updated_at   = GETDATE()
-        WHERE review_id = @review_id
+        UPDATE dbo.watched_movies
+        SET rating     = @rating,
+            updated_at = GETDATE()
+        WHERE user_id  = @user_id
+          AND movie_id = @movie_id
       `);
+  }
 
     return res.json({ success: true, message: "Review updated successfully" });
   } catch (err) {
@@ -321,6 +368,8 @@ app.put('/api/reviews/:id', authenticateToken, async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error", error: err.message });
   }
 });
+
+
 
 // ── DELETE /api/reviews/:id   (delete a single review) ─────────────────────────
 app.delete('/api/reviews/:id', authenticateToken, async (req, res) => {
@@ -640,6 +689,20 @@ app.put('/api/watched/:movieId/rating', authenticateToken, async (req, res) => {
         SET rating = @rating, updated_at = GETDATE()
         WHERE user_id = @user_id AND movie_id = @movie_id
       `);
+
+    // ── mirror into dbo.reviews.rating ─────────────────────────────────
+    await pool.request()
+      .input('user_id',  sql.UniqueIdentifier, userId)
+      .input('movie_id', sql.Int,              movieId)
+      .input('rating',   sql.Int,              rating)  // or null
+      .query(`
+        UPDATE dbo.reviews
+        SET rating     = @rating,
+            updated_at = GETDATE()
+        WHERE user_id  = @user_id
+          AND movie_id = @movie_id
+      `);
+    // ─────────────────────────────────────────────────────────────────────
 
     return res.json({ success: true, message: 'Rating updated.' });
   } catch (err) {

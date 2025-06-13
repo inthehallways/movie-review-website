@@ -70,7 +70,7 @@ async function handleRemoveFromWatchlist(movie) {
 }
 
 // TMDB API Configuration
-const API_KEY = "d2a72fb4b28ccba64124755d66b1b0f1"
+const API_KEY = "SECRET_NO_CLUE"
 const BASE_URL = "https://api.themoviedb.org/3"
 const IMG_URL = "https://image.tmdb.org/t/p/w500"
 
@@ -200,7 +200,7 @@ watchlistButton.addEventListener("click", () => {
   }
 
   const dateContainer = document.querySelector(".date-container")
-  const dateDisplay = document.querySelector(".dd-mm-yyyy")
+  const dateDisplay = document.querySelector(".yyyy-mm-dd")
   const hiddenDateInput = document.querySelector(".hidden-date-input")
 
   if (dateContainer && dateDisplay && hiddenDateInput) {
@@ -275,11 +275,18 @@ async function loadUserWatched() {
     // body.watched = [ { movie_id, watch_date, rating, liked, … }, … ]
     currentWatchedData = {}; 
     body.watched.forEach(row => {
-      currentWatchedData[row.movie_id] = {
-        rating:   row.rating  === null ? null : parseInt(row.rating, 10),
-        liked:    !!row.is_liked,    // ← use “is_liked” from the API response
-        watchDate: row.watch_date // if you need to display it
-      };
+      // normalize watch_date into a pure YYYY-MM-DD string
+    const raw = row.watch_date;
+    const iso = raw instanceof Date
+                ? raw.toISOString().split('T')[0]
+                : String(raw).split('T')[0];
+
+    currentWatchedData[row.movie_id] = {
+      rating:    row.rating  === null ? null : parseInt(row.rating, 10),
+      liked:     !!row.is_liked,
+      watchDate: iso
+    };
+
     });
 
     // Also keep an array of just the IDs for quick “includes()” checks:
@@ -754,7 +761,7 @@ async function loadExistingReview() {
         const watchedText = watchedButton.querySelector(".watched-text");
         watchedButton.classList.add("watched");
         watchedText.textContent = "Watched";
-        const dateDisplay = modal.querySelector(".date-container .dd-mm-yyyy");
+        const dateDisplay = modal.querySelector(".date-container .yyyy-mm-dd");
         if (dateDisplay) {
           const dateObj = new Date(review.watched_date);
           const formattedDate = `${dateObj.getDate().toString().padStart(2, "0")}/${
@@ -1044,7 +1051,7 @@ function resetModalState(movieId) {
   const watchlistText   = watchlistButton.querySelector(".watchlist-text");
   const ratingInputs    = modal.querySelectorAll('input[name="movie-rating"]');
   const dateContainer   = modal.querySelector(".date-container");
-  const dateDisplay   = modal.querySelector('.date-container .dd-mm-yyyy')
+  const dateDisplay   = modal.querySelector('.date-container .yyyy-mm-dd')
 
 if (currentWatchedData[movieId]?.watchDate) {
     // currentWatchedData[movieId].watchDate is "YYYY-MM-DD"
@@ -1143,10 +1150,21 @@ const rating = selectedRating ? Number.parseInt(selectedRating.value) : null;
 
 
   // Get watch date
-  const dateDisplay = modal.querySelector(".date-container .dd-mm-yyyy");
-  let watchDate = dateDisplay && dateDisplay.textContent !== "DD/MM/YYYY" 
-    ? dateDisplay.textContent 
-    : null;
+  const dateDisplay = modal.querySelector(".date-container .yyyy-mm-dd");
+  // Get watch date - improved logic
+  let watchDate = null;
+
+  // First check if movie is already marked as watched
+  if (currentWatched.includes(currentMovie.id) && currentWatchedData[currentMovie.id]?.watchDate) {
+    // Use the stored ISO date directly (already in YYYY-MM-DD format)
+    watchDate = currentWatchedData[currentMovie.id].watchDate;
+  } else {
+    // Check if user just set a date in the modal
+    const dateDisplay = modal.querySelector(".date-container .yyyy-mm-dd");
+    if (dateDisplay && dateDisplay.textContent && dateDisplay.textContent !== "YYYY/MM/DD") {
+      watchDate = formatDateForDB(dateDisplay.textContent);
+    }
+  }
 
 // Check for token in localStorage; if missing, force login
 const token = localStorage.getItem('token');
@@ -1184,12 +1202,27 @@ const reviewData = {
 
 // Helper function to format date for database
 function formatDateForDB(dateString) {
-  if (!dateString) return null;
+if (!dateString || dateString === "YYYY/MM/DD") return null;
   
-  // Assuming dateString is in DD/MM/YYYY format
-  const [day, month, year] = dateString.split('/');
+  const parts = dateString.split('/');
+  if (parts.length !== 3) return null;
+  
+  let [day, month, year] = parts;
+  
+  // Convert 2-digit year to 4-digit year
+  if (year.length === 2) {
+    const currentYear = new Date().getFullYear();
+    const currentCentury = Math.floor(currentYear / 100) * 100;
+    year = currentCentury + parseInt(year);
+  }
+  
+  // Ensure proper padding
+  day = day.padStart(2, '0');
+  month = month.padStart(2, '0');
+  
   return `${year}-${month}-${day}`; // YYYY-MM-DD format for SQL
 }
+
 function showNotification(message, type = "info") {
   // Create notification element
   const notification = document.createElement("div")
@@ -1233,9 +1266,6 @@ document.addEventListener("keydown", (e) => {
 
 async function saveReviewToDatabase(reviewData) {
   try {
-    if (!reviewData.watched_date) {
-      reviewData.watched_date = new Date().toISOString();
-    }
     const apiUrl = 'http://localhost:3001/api/reviews';
     
     console.log('Sending review data to:', apiUrl);
