@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/watched.css">
+    <link rel="icon" href="../assets/icons/sceneit-logo.png" type="image/png">
+    <title>SceneIt | Watched</title>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" height="40">
+            <span class="dashboard-label">SceneIt</span>
+        </div>
+
+        <div class="navbar-center">
+            <ul class="nav-links">
+            <li><a href="../index.html" data-text="Home"><span>Home</span></a></li>            
+            <li><a href="../pages/watchlist.html" data-text="Watchlist"><span>Watchlist</span></a></li>
+            <li><a href="../pages/movie-catalog.html" data-text="Movie Catalog"><span>Movie Catalog</span></a></li>
+            </ul>
+        </div>
+
+        <div class="navbar-right">
+            <div class="profile-container">
+                <img src="../assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()" />
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="../pages/profile.html">View Profile</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Section -->
+    <section class="user-profile-section">
+        <div class="user-profile-container">
+            <div class="user-info">
+                <img src="../assets/images/blank-profile.jpg" alt="Profile"  class="user-avatar">
+                <span class="username">Username</span>
+            </div>
+            <div class="profile-tabs">
+                <button class="tab-button" data-tab="watchlist" onclick="switchToWatchlist()">WATCHLIST</button>
+                <button class="tab-button" data-tab="reviews" onclick="switchToReviews()">MY REVIEWS</button>
+                <button class="tab-button active" data-tab="watched">WATCHED</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+
+            <!-- Header Section -->
+            <div class="content-header">
+                <h1 class="page-title">Watched</h1>
+                <div class="sort-section">
+                    <span class="sort-label">SORT BY</span>
+                    <div class="sort-dropdowns">
+                        <!-- Genre Dropdown -->
+                        <div class="dropdown-container">
+                            <button class="dropdown-button" onclick="toggleSortDropdown('genre')">
+                                <span id="genreSelected">All Genres</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu-sort" id="genreDropdown">
+                                <div class="dropdown-item" onclick="selectSort('genre', 'All Genres')">All Genres</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Action')">Action</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Comedy')">Comedy</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Drama')">Drama</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Horror')">Horror</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Romance')">Romance</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Sci-Fi')">Sci-Fi</div>
+                                <div class="dropdown-item" onclick="selectSort('genre', 'Thriller')">Thriller</div>
+                            </div>
+                        </div>
+
+                        <!-- User Rating Dropdown -->
+                        <div class="dropdown-container">
+                            <button class="dropdown-button" onclick="toggleSortDropdown('rating')">
+                                <span id="ratingSelected">All Ratings</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu-sort" id="ratingDropdown">
+                                <div class="dropdown-item" onclick="selectSort('rating', 'All Ratings')">All Ratings</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '5 Stars')">★★★★★</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '4 Stars')">★★★★☆</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '3 Stars')">★★★☆☆</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '2 Stars')">★★☆☆☆</div>
+                                <div class="dropdown-item" onclick="selectSort('rating', '1 Stars')">★☆☆☆☆</div>
+                            </div>
+                        </div>
+
+                        <!-- Watch Date Dropdown -->
+                        <div class="dropdown-container">
+                            <button class="dropdown-button" onclick="toggleSortDropdown('date')">
+                                <span id="dateSelected">All Dates</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu-sort" id="dateDropdown">
+                                <div class="dropdown-item" onclick="selectSort('date', 'All Dates')">All Dates</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'This Week')">This Week</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'This Month')">This Month</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Last 3 Months')">Last 3 Months</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'This Year')">This Year</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Last Year')">Last Year</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Oldest First')">Oldest First</div>
+                                <div class="dropdown-item" onclick="selectSort('date', 'Newest First')">Newest First</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="content-divider">
+            
+            <!-- Movies Grid -->
+            <div class="movies-grid" id="moviesGrid">
+                <!-- Movie cards will be dynamically generated by watched.js -->
+                 
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="../assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
+            </div>
+            <p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
+        </div>
+    </footer>
+
+    <!-- Script for Dropdown Menu -->
+    <script>
+        function toggleDropdown() {
+            const menu = document.getElementById("dropdownMenu");
+            menu.classList.toggle("show");
+        }
+
+        window.addEventListener('click', function(e) {
+            const dropdown = document.getElementById("dropdownMenu");
+            const profileContainer = document.querySelector(".profile-container");
+
+            if (!profileContainer.contains(e.target)) {
+                dropdown.classList.remove("show");
+            }
+        });
+
+        // Keep these functions in HTML for immediate access
+        function toggleSortDropdown(type) {
+            const dropdown = document.getElementById(type + 'Dropdown');
+            const allDropdowns = document.querySelectorAll('.dropdown-menu-sort');
+            
+            // Close all other dropdowns
+            allDropdowns.forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.remove('show');
+                }
+            });
+            
+            // Toggle current dropdown
+            dropdown.classList.toggle('show');
+        }
+        
+        function switchToWatchlist() {
+            window.location.href = '../pages/watchlist.html';
+        }
+
+        function switchToReviews() {
+            window.location.href = '../pages/reviews.html';
+        }
+
+         document.addEventListener('DOMContentLoaded', () => {
+      loadUserProfileForWatchedWatchlistReviews();
+    });
+     document.addEventListener('DOMContentLoaded', () => {
+      loadUserProfileFornavbar();
+    });
+    </script>
+
+    <script type="module">
+        import { fairyDustCursor } from "https://unpkg.com/cursor-effects@latest/dist/esm.js";
+  
+        // Initialize with your website's colors
+        new fairyDustCursor({
+        colors: ["#F49B98", "#988bd3", "#FFEEAD", "#2c2c2c", "#95CEB3"]
+    });
+    </script>
+
+    <!-- JavaScript file for functionality -->
+    <script type="module" src="../script/watched.js"></script>
+ <script src="../script/profile.js"></script>
+</body>
+</html>

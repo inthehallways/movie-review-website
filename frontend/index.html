@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head></head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="icon" href="../frontend/assets/icons/sceneit-logo.png" type="image/png">
+    <title>SceneIt | Dashboard </title>
+</head>
+<body>
+
+	<!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="../frontend/assets/icons/sceneit-logo.png" alt="SceneIt Logo" height="40">
+            <!-- <span class="dashboard-label">Dashboard</span> -->
+        </div>
+
+        <div class="navbar-center">
+            <ul class="nav-links">
+            <li><a href="#home" class="active" data-text="Home"><span>Home</span></a></li>            
+            <li><a href="../frontend/pages/watchlist.html" data-text="Watchlist"><span>Watchlist</span></a></li>
+            <li><a href="../frontend/pages/movie-catalog.html" data-text="Movie Catalog"><span>Movie Catalog</span></a></li>
+            </ul>
+        </div>
+
+        <!-- For User Profile and Dropdown Menu-->
+        <div class="navbar-right">
+            <div class="profile-container">
+                <img src="../frontend/assets/images/blank-profile.jpg" alt="Profile" class="profile-pic" id="profilePicture" onclick="toggleDropdown()"/>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="../frontend/pages/profile.html">View Profile</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for Dropdown Menu -->
+    <script>
+        function toggleDropdown() {
+            const menu = document.getElementById("dropdownMenu");
+            menu.classList.toggle("show");
+        }
+
+        window.addEventListener('click', function(e) {
+            const dropdown = document.getElementById("dropdownMenu");
+            const profileContainer = document.querySelector(".profile-container");
+
+            if (!profileContainer.contains(e.target)) {
+                dropdown.classList.remove("show");
+            }
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+      loadUserProfileFornavbar();
+    });
+    </script>
+
+	<!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-text">
+            <p>
+                <span id="welcomePart"></span>
+                <span id="username" class="custom-username"></span>
+                <span id="punctuation"></span>
+                <span id="cursor">|</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard-section" class="dashboard section">
+        <div class="dashboard-wrapper">
+            <div class="section-header">
+                <p>User Stats</p>
+            </div>
+
+            <!-- User Stats Section -->
+            <div class="section user-stats">
+                <div class="user-stats-cards">
+                    <div class="stats-card">
+                        <div class="stats-number" id="reviews-count">--</div>
+                        <div class="stats-label">Reviews This Month</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-number" id="watched-count">--</div>
+                        <div class="stats-label">Total Movies Watched</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-number" id="watchlist-count">--</div>
+                        <div class="stats-label">Total Watchlist</div>
+                    </div>
+                    </div>
+            </div>
+
+            <!-- Popular Films Section  -->
+            <div class="section popular-films">
+                <div class="section-header">
+                    <p>Popular Films</p>
+                </div>
+                
+                <div class="scroll-container">
+                    <div class="scroll-hover left-hover" id="popularLeftScroll"></div>
+                    <div class="popular-movie-cards-scroll" id="popular-movies-scroll">   
+                        <!-- Movie cards are to be handled by index.js -->
+                        </div>
+                    <div class="scroll-hover right-hover" id="popularRightScroll"></div>
+                </div>
+            </div>
+
+            <!-- Decorative image for the section -->
+            <div class="section img-banner">
+                <div class="img-banner-content">
+                    <img src="../frontend/assets/images/pink-section.png" alt="Pink Banner"/>
+                </div>
+            </div>
+
+            <!-- Upcoming Releases Section -->
+            <div class="section upcoming-releases">
+                <div class="section-header">
+                    <p>Upcoming Releases</p>
+                </div>
+                
+                <div class="scroll-container">
+                    <div class="scroll-hover left-hover" id="upcomingLeftScroll"></div>
+                    <div class="upcoming-movie-cards-scroll" id="upcoming-movie-cards">
+                        <!-- Movie cards are to be handled by index.js -->
+                    </div>
+                    <div class="scroll-hover right-hover" id="upcomingRightScroll"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Decorative image above footer -->
+    <div class="decorative-footer-image">
+        <img src="../frontend/assets/images/last-section.png" alt="Decorative Image Banner" />
+    </div>
+
+    <!-- Footer Section -->
+	<footer class="footer">
+		<div class="footer-container">
+			<div class="footer-logo">
+				<img src="../frontend/assets/icons/sceneit-logo.png" alt="SceneIt Logo" width="70"/>
+			</div>
+			<p class="footer-text"> ⓒ 2025 SceneIt. All Rights Reserved. </p>
+			
+		</div>
+	</footer>
+
+    <!-- JavaScript for the Dashboard functionality -->
+    <script src="index.js"></script>
+    <script src="../frontend/script/profile.js"></script>
+
+    <!-- Cursor Effects -->
+    <script type="module">
+        import { fairyDustCursor } from "https://unpkg.com/cursor-effects@latest/dist/esm.js";
+  
+        // Initialize with your website's colors
+        new fairyDustCursor({
+        colors: ["#F49B98", "#988bd3", "#FFEEAD", "#2c2c2c", "#95CEB3"]
+    });
+    </script>
+
+</body>
+</html>
